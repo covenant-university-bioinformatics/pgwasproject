@@ -1,0 +1,11 @@
+.img_cover {
+  background-size: cover !important;
+  .image_logo {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transform: scale(1.15);
+    object-position: center center;
+    border-radius: 5px;
+  }
+}

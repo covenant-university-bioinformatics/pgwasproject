@@ -1,0 +1,28 @@
+.appbar{
+  background-color: #060606 !important;
+  box-shadow: none;
+  padding: 10px 0;
+  borderBottom: 2px solid #00285e;
+
+  .toolbar {
+    display: flex;
+    justify-content: space-between;
+
+    .logoContainer{
+
+    }
+
+    .links{
+      a {
+        text-decoration: none;
+        color: #fff;
+        //font-size: 1.2rem !important;
+      }
+      span{
+        font-size: 1.1rem ;
+      }
+    }
+
+  }
+
+}
