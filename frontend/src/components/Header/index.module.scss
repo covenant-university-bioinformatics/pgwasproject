@@ -1,0 +1,82 @@
+@import "../../partials/mixins";
+
+.appbar {
+  background-color: #060606 !important;
+  height: 84px;
+  box-shadow: none;
+  padding: 10px 0;
+  border-bottom: 2px solid #00285e;
+
+  .toolbar {
+    display: flex;
+    justify-content: space-between;
+
+    .logo_donut {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      height: inherit;
+      .sidebar_donut{
+        position: absolute;
+        right: -40px;
+        display: none;
+        @include specialMax(959px) {
+          display: block;
+        }
+      }
+      .logoContainer {
+        //width: 100%;
+        //height: 100%;
+        //border-right: 2px solid grey;
+        .Logo {
+          font-size: 1.3rem;
+          color: $color-white;
+          //padding: 1rem 1rem 1rem 0;
+          text-align: center;
+          cursor: pointer;
+          @include respondMax(ipad-port) {
+            font-size: 0.9rem;
+          }
+          a {
+            text-decoration: none;
+            color: #fff;
+          }
+          span {
+            display: inline-block;
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: $logo-color;
+            @include respondMax(ipad-port) {
+              font-size: 1.1rem;
+            }
+          }
+        }
+      }
+    }
+
+    .links {
+      a {
+        text-decoration: none;
+        color: #fff;
+        margin-left: 0.625rem;
+        @include respondMax(ipad-land) {
+          margin-left: 0;
+        }
+        button {
+          @include respondMax(ipad-port) {
+            padding: 0;
+            min-width: 30px;
+          }
+        }
+        //font-size: 1.2rem !important;
+        &:hover {
+          color: #ca0dac;
+        }
+      }
+      span {
+        font-size: 1.1rem;
+      }
+    }
+  }
+}
