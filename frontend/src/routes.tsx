@@ -16,6 +16,10 @@ import Deleteriousness from "./components/Deleteriousness";
 import Regulation from "./components/Regulation";
 import Liftover from "./components/Liftover";
 import Footer from "./components/Footer";
+import Test from "./components/Test";
+import Finemap from "./components/Finemap";
+import Susie from "./components/Susie";
+import Paintor from "./components/Paintor";
 
 type Props = {};
 
@@ -25,14 +29,18 @@ const Routes: React.FC<Props> = (props) => {
       <Header />
       <Switch>
         <Route path="/dashboard" exact component={HomeComingSoon} />
+        <Route path="/test" exact component={Test} />
         <Route path="/tutorials" exact component={HomeComingSoon} />
         <Route path="/sign_in" exact component={HomeComingSoon} />
         <Route path="/sign_up" exact component={HomeComingSoon} />
         <Route path="/imputation" exact component={Imputation} />
-        <Route path="/annotation" exact component={Annotation} />
+        <Route path="/annotation" component={Annotation} />
+        <Route path="/bayes_finemap" component={Finemap} />
+        <Route path="/bayes_susie" component={Susie} />
+        <Route path="/bayes_paintor" component={Paintor} />
         <Route path="/deleteriousness" exact component={Deleteriousness} />
         <Route path="/Regulation" exact component={Regulation} />
-        <Route path="/liftover" exact component={Liftover} />
+        <Route path="/liftover" component={Liftover} />
         <Route path="/ld_structure" component={LDStructure} />
         <Route path="/" exact component={ToolsHome} />
         <Route
@@ -41,8 +49,17 @@ const Routes: React.FC<Props> = (props) => {
               | PropsWithChildren<RouteComponentProps<any>>
               | PropsWithChildren<any>
           ) => (
-            <h1 style={{ padding: "10rem" }}>
-              404 Not Found! <Link to={props.match.url}>Go Home </Link>
+            <h1
+              style={{
+                padding: "10rem",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                minHeight: "100vh",
+                backgroundColor: "rgba(0,0,0,0.5)",
+              }}
+            >
+              404 Not Found! &nbsp; <Link to={props.match.url}> Go Home</Link>
             </h1>
           )}
         />

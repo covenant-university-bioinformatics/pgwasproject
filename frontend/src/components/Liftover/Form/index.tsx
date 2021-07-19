@@ -12,12 +12,10 @@ import {
   FormControl,
   Grid,
   Hidden,
-  InputLabel,
-  NativeSelect,
   Paper,
   TextField,
 } from "@material-ui/core";
-import { generalFileForm, selectErrorHelper } from "../../utility/general";
+import { generalFileForm } from "../../utility/general";
 import { PlayArrow, DeleteOutlineSharp } from "@material-ui/icons";
 type Props = {};
 
@@ -32,42 +30,14 @@ type UserFormData = {
   beta: string | undefined;
   or: string | undefined;
   se: string | undefined;
-  population: string | undefined;
-  r_squared: string | undefined;
-  d_prime: string | undefined;
-  window_size: string | undefined;
+  ncbi_build: string | undefined;
 };
 
-const LdStructureForm: React.FC<Props> = (props) => {
+const LiftoverForm: React.FC<Props> = (props) => {
   // const [loading, setLoading] = useState(false);
   const [uploadFile, setUploadFile] = useState<any>(null);
   const fileInput = useRef<any>(null);
-  const genomesPopulation = [
-    "CHB",
-    "JPT",
-    "CHS",
-    "CDX",
-    "KHV",
-    "CEU",
-    "TSI",
-    "FIN",
-    "GBR",
-    "IBS",
-    "YRI",
-    "LWK",
-    "MAG",
-    "MSL",
-    "ESN",
-    "ASW",
-    "ACB",
-    "MXL",
-    "PUR",
-    "CLM",
-    "PEL",
-    "BEB",
-    "STU",
-    "ITU",
-  ];
+
   const formik = useFormik<UserFormData>({
     initialValues: {
       filename: "",
@@ -80,27 +50,13 @@ const LdStructureForm: React.FC<Props> = (props) => {
       beta: "",
       or: "",
       se: "",
-      population: "",
-      r_squared: "",
-      d_prime: "",
-      window_size: "",
+      ncbi_build: "",
     },
+
     validationSchema: Yup.object({
       filename: Yup.string().required("Please upload a file"),
       ...generalFormValidationObject,
-      population: Yup.string().required("This input is required"),
-      r_squared: Yup.number()
-        .required("R squared is required")
-        .min(0, "The minimum is zero")
-        .max(1, "the max is 10"),
-      d_prime: Yup.number()
-        .required("D prime is required")
-        .min(0, "The minimum is zero")
-        .max(1, "the max is 1"),
-      window_size: Yup.number()
-        .required("Window size is required")
-        .min(10, "The minimum is zero")
-        .max(1000, "the max is 1"),
+      ncbi_build: Yup.string().required("This input is required"),
     }),
     onSubmit: (values: FormikValues) => {
       alert(JSON.stringify(values));
@@ -111,23 +67,6 @@ const LdStructureForm: React.FC<Props> = (props) => {
           data.append(element, values[element]);
         }
       }
-      const it = data.values();
-
-      console.log(it.next().value);
-      console.log(it.next().value);
-      console.log(it.next().value);
-      console.log(it.next().value);
-      console.log(it.next().value);
-      console.log(it.next().value);
-      console.log(it.next().value);
-      console.log(it.next().value);
-      console.log(it.next().value);
-      console.log(it.next().value);
-      console.log(it.next().value);
-      console.log(it.next().value);
-      console.log(it.next().value);
-      console.log(it.next().value);
-      console.log(it.next().value);
     },
   });
 
@@ -164,7 +103,7 @@ const LdStructureForm: React.FC<Props> = (props) => {
   };
 
   return (
-    <div className={classes.LDForm}>
+    <div className={classes.liftover_form}>
       <form onSubmit={formik.handleSubmit}>
         <Grid container spacing={3}>
           <div className={classes.header_div}>
@@ -208,73 +147,18 @@ const LdStructureForm: React.FC<Props> = (props) => {
           {generalFileForm(classes, formik)}
 
           <div className={classes.header_div}>
-            <h2>LD structure parameters</h2>
+            <h2>Liftover parameters</h2>
           </div>
-          <Grid className={classes.grid} item xs={12} sm={6}>
-            <Paper variant="outlined" className={classes.paper}>
-              <FormControl
-                className={classes.formControl}
-                error={selectIsError(formik, "population")}
-              >
-                <InputLabel htmlFor="population">
-                  Reference Population
-                </InputLabel>
-                {/*  Reference Population*/}
-                <NativeSelect
-                  id="population"
-                  {...formik.getFieldProps("population")}
-                >
-                  <option aria-label="None" value="" />
-                  {/*  Select a reference population*/}
-                  {/*</option>*/}
-                  {genomesPopulation.map((pop, i) => (
-                    <option key={i} value={pop}>
-                      {pop}
-                    </option>
-                  ))}
-                </NativeSelect>
-                {selectErrorHelper(formik, "population")}
-              </FormControl>
-            </Paper>
-          </Grid>
-          <Grid className={classes.grid} item xs={12} sm={6}>
+          <Grid className={classes.grid} item xs={12} sm={4}>
             <Paper variant="outlined" className={classes.paper}>
               <FormControl className={classes.formControl}>
                 <TextField
-                  id={"r_squared"}
+                  id={"ncbi_build"}
                   variant="outlined"
-                  label={"R Squared"}
+                  label={"NCBI Build"}
                   size={"medium"}
-                  {...formik.getFieldProps("r_squared")}
-                  {...textErrorHelper(formik, "r_squared")}
-                />
-              </FormControl>
-            </Paper>
-          </Grid>
-          <Grid className={classes.grid} item xs={12} sm={6}>
-            <Paper variant="outlined" className={classes.paper}>
-              <FormControl className={classes.formControl}>
-                <TextField
-                  id={"d_prime"}
-                  variant="outlined"
-                  size={"medium"}
-                  label={"D Prime"}
-                  {...formik.getFieldProps("d_prime")}
-                  {...textErrorHelper(formik, "d_prime")}
-                />
-              </FormControl>
-            </Paper>
-          </Grid>
-          <Grid className={classes.grid} item xs={12} sm={6}>
-            <Paper variant="outlined" className={classes.paper}>
-              <FormControl className={classes.formControl}>
-                <TextField
-                  id={"window_size"}
-                  variant="outlined"
-                  size={"medium"}
-                  label={"Window Size"}
-                  {...formik.getFieldProps("window_size")}
-                  {...textErrorHelper(formik, "window_size")}
+                  {...formik.getFieldProps("ncbi_build")}
+                  {...textErrorHelper(formik, "ncbi_build")}
                 />
               </FormControl>
             </Paper>
@@ -297,4 +181,4 @@ const LdStructureForm: React.FC<Props> = (props) => {
   );
 };
 
-export default LdStructureForm;
+export default LiftoverForm;

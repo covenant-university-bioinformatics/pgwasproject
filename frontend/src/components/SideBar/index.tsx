@@ -6,19 +6,33 @@ import {
   LabelSharp,
   ArrowRightSharp,
   ArrowDropDownSharp,
+  ChevronLeft,
 } from "@material-ui/icons";
 import ListItem from "@material-ui/core/ListItem";
 import classes from "./index.module.scss";
-import { Collapse, List, ListItemIcon, ListItemText } from "@material-ui/core";
+import {
+  Collapse,
+  Divider,
+  Hidden,
+  IconButton,
+  List,
+  ListItemIcon,
+  ListItemText,
+} from "@material-ui/core";
+import { useActions } from "../../hooks/useActions";
+import { useTypedSelector } from "../../hooks/useTypedSelector";
 
 type Props = {};
 
 const SideBar: React.FC<Props> = (props) => {
+  const { setMini } = useActions();
+  const { miniSidebar } = useTypedSelector((state) => state.ui);
   const [open, setOpen] = React.useState(false);
 
   const handleClick = () => {
     setOpen(!open);
   };
+
   const links = [
     { title: "Home", linkTo: "/", icon: <HomeSharp /> },
     { title: "Liftover", linkTo: "/liftover", icon: <LabelSharp /> },
@@ -64,27 +78,34 @@ const SideBar: React.FC<Props> = (props) => {
       return (
         <Fragment key={link.title}>
           {link.steps ? (
-            <ListItem button onClick={handleClick}>
-              {/*<NavLink key={i} className={classes.link} to={link.linkTo}>*/}
-              <ListItemIcon>{link.icon}</ListItemIcon>
-              {/*</NavLink>*/}
+            <ListItem
+              onClick={() => {
+                handleClick();
+              }}
+              button
+              className={classes.list}
+            >
+              <Hidden mdDown>
+                <ListItemIcon>{link.icon}</ListItemIcon>
+              </Hidden>
               <ListItemText className={classes.text} secondary={"(bayesian)"}>
-                {/*<NavLink*/}
-                {/*  activeClassName={classes.selected}*/}
-                {/*  exact*/}
-                {/*  className={classes.link}*/}
-                {/*  to={link.linkTo}*/}
-                {/*>*/}
                 {link.title}
-                {/*</NavLink>*/}
               </ListItemText>
               {open ? <ArrowDropDownSharp /> : <ArrowRightSharp />}
             </ListItem>
           ) : (
-            <ListItem button>
-              {/*<NavLink key={i} className={classes.link} to={link.linkTo}>*/}
-              <ListItemIcon className={classes.icon}>{link.icon}</ListItemIcon>
-              {/*</NavLink>*/}
+            <ListItem
+              onClick={() => {
+                setMini(false);
+              }}
+              button
+              className={classes.list}
+            >
+              <Hidden mdDown>
+                <ListItemIcon className={classes.icon}>
+                  {link.icon}
+                </ListItemIcon>
+              </Hidden>
               <ListItemText
                 className={classes.text}
                 secondary={link.title === "Imputation" ? "(statistics)" : ""}
@@ -109,8 +130,16 @@ const SideBar: React.FC<Props> = (props) => {
                     className={classes.link}
                     to={step.linkTo}
                   >
-                    <ListItem button className={classes.nested}>
-                      <ListItemIcon>{step.icon}</ListItemIcon>
+                    <ListItem
+                      onClick={() => {
+                        setMini(false);
+                      }}
+                      button
+                      className={classes.nested}
+                    >
+                      <Hidden mdDown>
+                        <ListItemIcon>{step.icon}</ListItemIcon>
+                      </Hidden>
                       <ListItemText primary={step.title} />
                     </ListItem>
                   </NavLink>
@@ -123,7 +152,22 @@ const SideBar: React.FC<Props> = (props) => {
     });
   };
 
-  return <div className={classes.sidebar_link}>{renderItems()}</div>;
+  return (
+    <div className={classes.sidebar_link}>
+      <div className={classes.drawerHeader}>
+        <IconButton
+          onClick={() => {
+            setMini(!miniSidebar);
+          }}
+        >
+          {/*{miniSidebar ? <ChevronRight /> : <ChevronLeft />}*/}
+          {miniSidebar ? <ChevronLeft /> : null}
+        </IconButton>
+      </div>
+      <Divider />
+      {renderItems()}
+    </div>
+  );
 };
 
 export default withRouter(SideBar);

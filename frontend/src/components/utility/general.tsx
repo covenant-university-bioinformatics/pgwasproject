@@ -53,7 +53,7 @@ export const generalFileForm = (classes: any, formik: any) => {
   //variant="outlined" elevation={1}
   return formList.map((element, i) => {
     return (
-      <Grid key={i} className={classes.grid} item xs={4}>
+      <Grid key={i} className={classes.grid} item xs={12} sm={6} md={4}>
         <Paper elevation={0} className={classes.paper}>
           <FormControl className={classes.formControl}>
             <TextField
