@@ -1,4 +1,5 @@
 import * as Yup from "yup";
+import { toast } from "react-toastify";
 
 export const textErrorHelper = (formik: any, values: string) => ({
   error: formik.errors[values] && formik.touched[values],
@@ -10,6 +11,18 @@ export const textErrorHelper = (formik: any, values: string) => ({
 
 export const selectIsError = (formik: any, value: string) => {
   return formik.errors[value] && formik.touched[value];
+};
+
+export const showToastError = (message: string) => {
+  toast.error(message);
+};
+
+export const showToastSuccess = (message: string) => {
+  toast.success(message);
+};
+
+export const showToastMessage = (message: string) => {
+  toast.info(message);
 };
 
 export const generalFormValidationObject = {

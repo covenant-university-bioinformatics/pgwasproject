@@ -4,6 +4,7 @@ import { LabelImportant, LabelSharp } from "@material-ui/icons";
 import { Link } from "react-router-dom";
 import { Grid } from "@material-ui/core";
 import classes from "./index.module.scss";
+
 type Props = {};
 
 const ToolsHome: React.FC<Props> = (props) => {
@@ -55,6 +56,8 @@ const ToolsHome: React.FC<Props> = (props) => {
       );
     });
   };
+
+  console.log("render tools_home");
 
   return (
     <MainLayout title={"Welcome"}>

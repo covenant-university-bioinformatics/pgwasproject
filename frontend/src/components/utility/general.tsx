@@ -38,18 +38,22 @@ export const Logo: React.FC<LogoProps> = (props) => {
   }
 };
 
-export const generalFileForm = (classes: any, formik: any) => {
-  const formList = [
-    "marker_name",
-    "chromosome",
-    "position",
-    "pvalue",
-    "effect_allele",
-    "alternate_allele",
-    "se",
-    "or",
-    "beta",
-  ];
+export const generalFileForm = (
+  classes: any,
+  formik: any,
+  formList: string[]
+) => {
+  // const formList = [
+  //   "marker_name",
+  //   "chromosome",
+  //   "position",
+  //   "pvalue",
+  //   "effect_allele",
+  //   "alternate_allele",
+  //   "se",
+  //   "or",
+  //   "beta",
+  // ];
   //variant="outlined" elevation={1}
   return formList.map((element, i) => {
     return (

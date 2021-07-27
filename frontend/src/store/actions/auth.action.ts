@@ -1,4 +1,5 @@
 import { ActionType } from "../action-types";
+import { User } from "../reducers/auth.reducer";
 
 export type AuthAction =
   | AuthStartAction
@@ -7,7 +8,12 @@ export type AuthAction =
   | SignupStartAction
   | SignupSuccessAction
   | SignupErrorAction
-  | SignOutAction;
+  | SignOutStartAction
+  | SignOutSuccessAction
+  | SignOutErrorAction
+  | CurrentUserStartAction
+  | CurrentUserSuccessAction
+  | CurrentUserErrorAction;
 
 interface AuthStartAction {
   type: ActionType.AUTH_START;
@@ -33,9 +39,32 @@ interface SignupSuccessAction {
 
 interface SignupErrorAction {
   type: ActionType.SIGNUP_ERROR;
-  payload: string[];
+  payload: string;
 }
 
-interface SignOutAction {
-  type: ActionType.SIGNOUT;
+interface SignOutStartAction {
+  type: ActionType.SIGNOUT_START;
+}
+
+interface SignOutSuccessAction {
+  type: ActionType.SIGNOUT_SUCCESS;
+}
+
+interface SignOutErrorAction {
+  type: ActionType.SIGNOUT_ERROR;
+  payload: string;
+}
+
+interface CurrentUserStartAction {
+  type: ActionType.CURRENT_USER_START;
+}
+
+interface CurrentUserSuccessAction {
+  type: ActionType.CURRENT_USER_SUCCESS;
+  payload: User;
+}
+
+interface CurrentUserErrorAction {
+  type: ActionType.CURRENT_USER_ERROR;
+  payload: string;
 }

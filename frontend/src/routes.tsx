@@ -6,6 +6,8 @@ import {
   Link,
   Route,
 } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Header from "./components/Header";
 import HomeComingSoon from "./components/utility/HomeComingSoon";
 import LDStructure from "./components/LDStructure";
@@ -20,7 +22,9 @@ import Test from "./components/Test";
 import Finemap from "./components/Finemap";
 import Susie from "./components/Susie";
 import Paintor from "./components/Paintor";
-
+import SignUp from "./components/SignUp";
+import SignIn from "./components/SignIn";
+import AuthGuard from "./hoc/AuthGuard";
 type Props = {};
 
 const Routes: React.FC<Props> = (props) => {
@@ -31,17 +35,21 @@ const Routes: React.FC<Props> = (props) => {
         <Route path="/dashboard" exact component={HomeComingSoon} />
         <Route path="/test" exact component={Test} />
         <Route path="/tutorials" exact component={HomeComingSoon} />
-        <Route path="/sign_in" exact component={HomeComingSoon} />
-        <Route path="/sign_up" exact component={HomeComingSoon} />
-        <Route path="/imputation" exact component={Imputation} />
-        <Route path="/annotation" component={Annotation} />
-        <Route path="/bayes_finemap" component={Finemap} />
-        <Route path="/bayes_susie" component={Susie} />
-        <Route path="/bayes_paintor" component={Paintor} />
-        <Route path="/deleteriousness" exact component={Deleteriousness} />
-        <Route path="/Regulation" exact component={Regulation} />
-        <Route path="/liftover" component={Liftover} />
-        <Route path="/ld_structure" component={LDStructure} />
+        <Route path="/sign_in" exact component={SignIn} />
+        <Route path="/sign_up" exact component={SignUp} />
+        <Route path="/imputation" exact component={AuthGuard(Imputation)} />
+        <Route path="/annotation" component={AuthGuard(Annotation)} />
+        <Route path="/bayes_finemap" component={AuthGuard(Finemap)} />
+        <Route path="/bayes_susie" component={AuthGuard(Susie)} />
+        <Route path="/bayes_paintor" component={AuthGuard(Paintor)} />
+        <Route
+          path="/deleteriousness"
+          exact
+          component={AuthGuard(Deleteriousness)}
+        />
+        <Route path="/Regulation" exact component={AuthGuard(Regulation)} />
+        <Route path="/liftover" component={AuthGuard(Liftover)} />
+        <Route path="/ld_structure" component={AuthGuard(LDStructure)} />
         <Route path="/" exact component={ToolsHome} />
         <Route
           render={(
@@ -64,6 +72,17 @@ const Routes: React.FC<Props> = (props) => {
           )}
         />
       </Switch>
+      <ToastContainer
+        position="top-left"
+        autoClose={10000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <Footer />
     </BrowserRouter>
   );

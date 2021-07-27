@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { AppBar, Toolbar, Button, Hidden } from "@material-ui/core";
 import { Link, NavLink } from "react-router-dom";
 import classes from "./index.module.scss";
@@ -8,11 +8,22 @@ import {
   InputRounded,
   MenuBookRounded,
   DashboardRounded,
+  CloseRounded,
 } from "@material-ui/icons";
+import { useTypedSelector } from "../../hooks/useTypedSelector";
+import { useActions } from "../../hooks/useActions";
+import { showToastMessage } from "../utility/general_utils";
 
 type Props = {};
 
 const Header: React.FC<Props> = (props) => {
+  const { user, success } = useTypedSelector((state) => state.auth);
+  const { signOut } = useActions();
+
+  const signOutUser = useCallback(() => {
+    signOut();
+  }, [signOut]);
+
   return (
     <AppBar position="fixed" className={classes.appbar}>
       <Toolbar className={classes.toolbar}>
@@ -49,20 +60,43 @@ const Header: React.FC<Props> = (props) => {
               <Hidden smDown> Workflow </Hidden>
             </Button>
           </NavLink>
-          <NavLink to="/sign_up">
+          {!user.username && (
+            <NavLink to="/sign_up">
+              <Button
+                startIcon={<PersonAddRounded />}
+                size="medium"
+                color="inherit"
+              >
+                <Hidden smDown> Sign Up </Hidden>
+              </Button>
+            </NavLink>
+          )}
+          {!user.username && (
+            <NavLink to="/sign_in">
+              <Button
+                startIcon={<InputRounded />}
+                size="medium"
+                color="inherit"
+              >
+                <Hidden smDown> Sign In </Hidden>
+              </Button>
+            </NavLink>
+          )}
+          {user.username && (
             <Button
-              startIcon={<PersonAddRounded />}
+              onClick={() => {
+                signOutUser();
+                if (success) {
+                  showToastMessage(`Sign out successful`);
+                }
+              }}
+              startIcon={<CloseRounded />}
               size="medium"
               color="inherit"
             >
-              <Hidden smDown> Sign Up </Hidden>
+              <Hidden smDown> Sign Out </Hidden>
             </Button>
-          </NavLink>
-          <NavLink to="/sign_in">
-            <Button startIcon={<InputRounded />} size="medium" color="inherit">
-              <Hidden smDown> Sign In </Hidden>
-            </Button>
-          </NavLink>
+          )}
         </nav>
       </Toolbar>
     </AppBar>

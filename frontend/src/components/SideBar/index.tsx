@@ -96,12 +96,14 @@ const SideBar: React.FC<Props> = (props) => {
           ) : (
             <ListItem
               onClick={() => {
-                setMini(false);
+                if (miniSidebar) {
+                  setMini(false);
+                }
               }}
               button
               className={classes.list}
             >
-              <Hidden mdDown>
+              <Hidden mdDown implementation={"css"}>
                 <ListItemIcon className={classes.icon}>
                   {link.icon}
                 </ListItemIcon>
@@ -132,7 +134,9 @@ const SideBar: React.FC<Props> = (props) => {
                   >
                     <ListItem
                       onClick={() => {
-                        setMini(false);
+                        if (miniSidebar) {
+                          setMini(false);
+                        }
                       }}
                       button
                       className={classes.nested}
