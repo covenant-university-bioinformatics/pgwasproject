@@ -5,6 +5,11 @@ export enum ActionType {
   SIGNUP_START = "signup_start",
   SIGNUP_SUCCESS = "signup_success",
   SIGNUP_ERROR = "signup_error",
-  SIGNOUT = "signout",
+  CURRENT_USER_START = "current_user_start",
+  CURRENT_USER_SUCCESS = "current_user_success",
+  CURRENT_USER_ERROR = "current_user_error",
+  SIGNOUT_START = "signout_start",
+  SIGNOUT_SUCCESS = "signout_success",
+  SIGNOUT_ERROR = "signout_error",
   MINIFIED_LAYOUT = "MINIFIED_LAYOUT",
 }

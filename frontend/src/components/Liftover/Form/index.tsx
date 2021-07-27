@@ -144,7 +144,17 @@ const LiftoverForm: React.FC<Props> = (props) => {
           <div className={classes.header_div}>
             <h2>Summary statistics column positions</h2>
           </div>
-          {generalFileForm(classes, formik)}
+          {generalFileForm(classes, formik, [
+            "marker_name",
+            "chromosome",
+            "position",
+            "pvalue",
+            "effect_allele",
+            "alternate_allele",
+            "se",
+            "or",
+            "beta",
+          ])}
 
           <div className={classes.header_div}>
             <h2>Liftover parameters</h2>

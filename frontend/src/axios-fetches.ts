@@ -4,7 +4,7 @@ import axios from "axios";
 // export let cancel;
 
 const instance = axios.create({
-  baseURL: "https://cubrehpc.covenantuniversity.edu.ng/api/v1",
+  baseURL: "https://pgwas.dev/api",
   // baseURL: "http://localhost:5000/api/v1",
 });
 
@@ -30,9 +30,11 @@ instance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 instance.interceptors.request.use(
   (request) => {
     // Edit request config
+    console.log("Sending request...");
     return request;
   },
   (error) => {
+    console.log(error.response.data);
     return Promise.reject(error);
   }
 );

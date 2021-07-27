@@ -1,0 +1,29 @@
+apiVersion: skaffold/v2beta6
+kind: Config
+deploy:
+  helm:
+    releases:
+      - name: pgwasfrontendapp
+        chartPath: .\deployment\helm-micro\
+        valuesFiles:
+          - .\deployment\helm-micro\client-values.yaml
+        artifactOverrides:
+          image: cubrenig/pgwasfrontendapp
+
+build:
+  local:
+    push: false
+    concurrency: 1
+  artifacts:
+    - image: cubrenig/pgwasfrontendapp
+      context: frontend
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "**/*.ts"
+            dest: .
+          - src: "**/*.tsx"
+            dest: .
+          - src: "**/*.scss"
+            dest: .

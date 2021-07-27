@@ -1,15 +1,15 @@
 import React, { useRef, useState } from "react";
 import { FormikValues, useFormik } from "formik";
+import pgwasAxios from "../../../axios-fetches";
 import * as Yup from "yup";
 import classes from "./index.module.scss";
-import {
-  generalFormValidationObject,
-  selectIsError,
-  textErrorHelper,
-} from "../../utility/general_utils";
+import { selectIsError, textErrorHelper } from "../../utility/general_utils";
 import {
   Button,
+  Checkbox,
   FormControl,
+  FormControlLabel,
+  FormGroup,
   Grid,
   Hidden,
   Paper,
@@ -21,16 +21,24 @@ type Props = {};
 
 type UserFormData = {
   filename: string;
+  jobName: string;
   marker_name: string | undefined;
   chromosome: string | undefined;
   position: string | undefined;
-  pvalue: string | undefined;
   effect_allele: string | undefined;
   alternate_allele: string | undefined;
-  beta: string | undefined;
-  or: string | undefined;
-  se: string | undefined;
-  ncbi_build: string | undefined;
+  cytoband: false;
+  kgp_all: false;
+  kgp_afr: false;
+  kgp_amr: false;
+  kgp_eas: false;
+  kgp_eur: false;
+  kgp_sas: false;
+  exac: false;
+  dbnsfp: false;
+  clinvar: false;
+  intervar: false;
+  [key: string]: any;
 };
 
 const AnnotationForm: React.FC<Props> = (props) => {
@@ -41,25 +49,51 @@ const AnnotationForm: React.FC<Props> = (props) => {
   const formik = useFormik<UserFormData>({
     initialValues: {
       filename: "",
+      jobName: "",
       marker_name: "",
       chromosome: "",
       position: "",
-      pvalue: "",
       effect_allele: "",
       alternate_allele: "",
-      beta: "",
-      or: "",
-      se: "",
-      ncbi_build: "",
+      cytoband: false,
+      kgp_all: false,
+      kgp_afr: false,
+      kgp_amr: false,
+      kgp_eas: false,
+      kgp_eur: false,
+      kgp_sas: false,
+      exac: false,
+      dbnsfp: false,
+      clinvar: false,
+      intervar: false,
     },
 
     validationSchema: Yup.object({
       filename: Yup.string().required("Please upload a file"),
-      ...generalFormValidationObject,
-      ncbi_build: Yup.string().required("This input is required"),
+      marker_name: Yup.number()
+        .required("Marker name column number is required")
+        .min(1, "The minimum is one")
+        .max(15, "the max is fifteen"),
+      chromosome: Yup.number()
+        .required("Chromosome column number is required")
+        .min(1, "The minimum is one")
+        .max(15, "the max is fifteen"),
+      position: Yup.number()
+        .required("Position column number is required")
+        .min(1, "The minimum is one")
+        .max(15, "the max is fifteen"),
+      effect_allele: Yup.number()
+        .required("Effect Allele column number is required")
+        .min(1, "The minimum is one")
+        .max(15, "the max is fifteen"),
+      alternate_allele: Yup.number()
+        .min(1, "The minimum is one")
+        .max(15, "the max is fifteen"),
+      jobName: Yup.string().required("Job name is required"),
     }),
     onSubmit: (values: FormikValues) => {
       alert(JSON.stringify(values));
+      console.log(values);
       const data = new FormData();
       data.append("file", uploadFile);
       for (const element in values) {
@@ -67,6 +101,15 @@ const AnnotationForm: React.FC<Props> = (props) => {
           data.append(element, values[element]);
         }
       }
+      pgwasAxios
+        .post("/jobs", data)
+        .then((res) => {
+          // then print response status
+          console.log(res);
+        })
+        .catch((error) => {
+          console.log(error.response.data);
+        });
     },
   });
 
@@ -75,13 +118,17 @@ const AnnotationForm: React.FC<Props> = (props) => {
     let file = event.target.files[0];
 
     if (file) {
-      reader.onloadend = () => {
-        formik.setFieldValue("filename", event.target.files[0].name);
-        setUploadFile(event.target.files[0]);
+      if (file.type === "text/plain") {
+        reader.onloadend = () => {
+          formik.setFieldValue("filename", event.target.files[0].name);
+          setUploadFile(event.target.files[0]);
 
-        formik.setFieldError("filename", undefined);
-      };
-      reader.readAsDataURL(file);
+          formik.setFieldError("filename", undefined);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        formik.setFieldError("filename", "Please upload a text file");
+      }
     } else {
       formik.setFieldError("filename", "Please upload a file");
     }
@@ -102,6 +149,22 @@ const AnnotationForm: React.FC<Props> = (props) => {
     fileInput.current.querySelector("input").value = "";
   };
 
+  const databases = [
+    { variable: "cytoband", name: "Cytoband" },
+    { variable: "kgp_all", name: "Frequency in 1KGP (ALL)" },
+    { variable: "kgp_afr", name: "Frequency in 1KGP (AFR)" },
+    { variable: "kgp_amr", name: "Frequency in 1KGP (AMR)" },
+    { variable: "kgp_eur", name: "Frequency in 1KGP (EUR)" },
+    { variable: "kgp_eas", name: "Frequency in 1KGP (EAS)" },
+    { variable: "kgp_sas", name: "Frequency in 1KGP (SAS)" },
+    { variable: "exac", name: "EXAC" },
+    { variable: "dbnsfp", name: "DBNSFP" },
+    { variable: "clinvar", name: "CLINVAR" },
+    { variable: "intervar", name: "INTERVAR" },
+  ];
+
+  console.log("render");
+  // console.log(formik.values);
   return (
     <div className={classes.annot_form}>
       <form onSubmit={formik.handleSubmit}>
@@ -109,7 +172,7 @@ const AnnotationForm: React.FC<Props> = (props) => {
           <div className={classes.header_div}>
             <h2>Upload a file</h2>
           </div>
-          <Grid item xs={12}>
+          <Grid className={classes.grid} item xs={6}>
             <Paper elevation={0} className={classes.paper}>
               <FormControl
                 error={selectIsError(formik, "filename")}
@@ -141,26 +204,50 @@ const AnnotationForm: React.FC<Props> = (props) => {
               )}
             </Paper>
           </Grid>
+          <Grid className={classes.grid} item xs={6}>
+            <Paper elevation={0} className={classes.paper}>
+              <FormControl className={classes.formControl}>
+                <TextField
+                  id={"jobName"}
+                  variant={"outlined"}
+                  label={"Job Name"}
+                  size={"medium"}
+                  {...formik.getFieldProps("jobName")}
+                  {...textErrorHelper(formik, "jobName")}
+                />
+              </FormControl>
+            </Paper>
+          </Grid>
           <div className={classes.header_div}>
             <h2>Summary statistics column positions</h2>
           </div>
-          {generalFileForm(classes, formik)}
+          {generalFileForm(classes, formik, [
+            "marker_name",
+            "chromosome",
+            "position",
+            "effect_allele",
+            "alternate_allele",
+          ])}
 
           <div className={classes.header_div}>
-            <h2>Liftover parameters</h2>
+            <h2>Annotation Databases</h2>
           </div>
-          <Grid className={classes.grid} item xs={12} sm={4}>
+          <Grid className={classes.grid} item xs={12}>
             <Paper variant="outlined" className={classes.paper}>
-              <FormControl className={classes.formControl}>
-                <TextField
-                  id={"ncbi_build"}
-                  variant="outlined"
-                  label={"NCBI Build"}
-                  size={"medium"}
-                  {...formik.getFieldProps("ncbi_build")}
-                  {...textErrorHelper(formik, "ncbi_build")}
-                />
-              </FormControl>
+              <FormGroup row>
+                {databases.map((data, index) => (
+                  <FormControlLabel
+                    key={`check_${index}`}
+                    control={
+                      <Checkbox
+                        checked={formik.values[data.variable]}
+                        {...formik.getFieldProps(data.variable)}
+                      />
+                    }
+                    label={data.name}
+                  />
+                ))}
+              </FormGroup>
             </Paper>
           </Grid>
         </Grid>
