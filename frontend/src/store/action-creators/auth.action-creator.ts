@@ -40,23 +40,70 @@ export const signinUser = (user: { username: string; password: string }) => {
     });
     try {
       const { data } = await axios.post("/auth/signin", user);
-      localStorage.setItem("token", data.accessToken);
       console.log(data);
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          username: data.user.username,
+          email: data.user.email,
+          expiresIn: data.expiresIn,
+          role: data.user.role,
+          emailConfirmed: data.user.emailConfirmed,
+        })
+      );
       dispacth({
         type: ActionType.AUTH_SUCCESS,
-        payload: { username: user.username, accessToken: data.accessToken },
+        payload: data.user,
       });
     } catch (error) {
       let message = "";
-      if (Array.isArray(error.response.data.message)) {
+      console.dir(error);
+      if (Array.isArray(error?.response?.data.message)) {
         message = error.response.data.message.join("\n");
       } else {
-        message = error.response.data.message;
+        message = error?.response?.data?.message || error.message;
       }
       dispacth({
         type: ActionType.AUTH_ERROR,
         payload: message,
       });
+    }
+  };
+};
+
+//Auto sign in on reload
+export const authCheckState = () => {
+  return async (dispacth: Dispatch<AuthAction>) => {
+    // Get token userId, and exp date from local storage
+    //to update to indexed db later
+    let authuser = localStorage.getItem("user");
+
+    if (!authuser) {
+      console.log("No user");
+      signOut();
+    } else {
+      const { expiresIn, emailConfirmed, username, role, email } =
+        JSON.parse(authuser);
+
+      const expirationDate = new Date(expiresIn);
+      if (expirationDate < new Date()) {
+        console.log("Date Expired");
+        signOut();
+      } else {
+        console.log("Signing in...");
+        dispacth({
+          type: ActionType.AUTH_SUCCESS,
+          payload: {
+            emailConfirmed,
+            username,
+            role,
+            email,
+          },
+        });
+        setTimeout(() => {
+          signOut();
+        }, expirationDate.getMilliseconds());
+      }
     }
   };
 };
@@ -96,10 +143,12 @@ export const signOut = () => {
     });
 
     try {
+      console.log("Signing out ...");
       await axios.get("/auth/logout");
       dispatch({
         type: ActionType.SIGNOUT_SUCCESS,
       });
+      localStorage.removeItem("user");
     } catch (error) {
       let message = "";
       if (Array.isArray(error.response.data.message)) {
@@ -123,21 +172,3 @@ export const signOut = () => {
 //     });
 //   };
 // };
-
-//Helper functions
-function delete_cookie(name: string, path: string, domain: string) {
-  if (get_cookie(name)) {
-    document.cookie =
-      name +
-      "=" +
-      (path ? ";path=" + path : "") +
-      (domain ? ";domain=" + domain : "") +
-      ";expires=Thu, 01 Jan 1970 00:00:01 GMT";
-  }
-}
-
-function get_cookie(name: string) {
-  return document.cookie.split(";").some((c) => {
-    return c.trim().startsWith(name + "=");
-  });
-}

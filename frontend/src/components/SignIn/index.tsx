@@ -11,7 +11,7 @@ import {
 } from "@material-ui/core";
 import { showToastSuccess, textErrorHelper } from "../utility/general_utils";
 import { ExitToAppSharp } from "@material-ui/icons";
-import { RouteComponentProps, Link } from "react-router-dom";
+import { RouteComponentProps, Link, Redirect } from "react-router-dom";
 import { useActions } from "../../hooks/useActions";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 
@@ -25,6 +25,7 @@ type SignInFormData = {
 
 const SignIn: React.FC<Props & RouteComponentProps> = (props) => {
   const { signinUser } = useActions();
+  console.log(props);
 
   const signIn = useCallback(
     (user: { username: string; password: string }) => {
@@ -37,9 +38,11 @@ const SignIn: React.FC<Props & RouteComponentProps> = (props) => {
     (state) => state.auth
   );
   console.log("render signin");
+
+  let redirect: JSX.Element | null = null;
   if (success && user.username) {
     showToastSuccess(`Welcome ${user.username}`);
-    props.history.push("/");
+    redirect = <Redirect to={"/"} />;
   }
 
   let message: JSX.Element | null = null;
@@ -73,56 +76,59 @@ const SignIn: React.FC<Props & RouteComponentProps> = (props) => {
     },
   });
   return (
-    <HomeLayout>
-      <div className={classes.container}>
-        <h2>Please Sign In</h2>
-        {message}
-        <form onSubmit={formik.handleSubmit}>
-          <FormControl className={classes.formControl}>
-            <TextField
-              id={"username"}
-              variant={"outlined"}
-              label={"Username"}
-              size={"medium"}
-              {...formik.getFieldProps("username")}
-              {...textErrorHelper(formik, "username")}
-            />
-          </FormControl>
-          <FormControl className={classes.formControl}>
-            <TextField
-              id={"password"}
-              variant={"outlined"}
-              label={"Password"}
-              type={"password"}
-              size={"medium"}
-              {...formik.getFieldProps("password")}
-              {...textErrorHelper(formik, "password")}
-            />
-          </FormControl>
-          <div className={classes.button_container}>
-            {loading ? (
-              <CircularProgress color="secondary" className="progress" />
-            ) : (
-              <Button
-                className={classes.form_button}
-                startIcon={<ExitToAppSharp />}
-                size="large"
-                type={"submit"}
-                variant="contained"
-                color="primary"
-              >
-                Sign In
-              </Button>
-            )}
+    <>
+      {redirect}
+      <HomeLayout>
+        <div className={classes.container}>
+          <h2>Please Sign In</h2>
+          {message}
+          <form onSubmit={formik.handleSubmit}>
+            <FormControl className={classes.formControl}>
+              <TextField
+                id={"username"}
+                variant={"outlined"}
+                label={"Username"}
+                size={"medium"}
+                {...formik.getFieldProps("username")}
+                {...textErrorHelper(formik, "username")}
+              />
+            </FormControl>
+            <FormControl className={classes.formControl}>
+              <TextField
+                id={"password"}
+                variant={"outlined"}
+                label={"Password"}
+                type={"password"}
+                size={"medium"}
+                {...formik.getFieldProps("password")}
+                {...textErrorHelper(formik, "password")}
+              />
+            </FormControl>
+            <div className={classes.button_container}>
+              {loading ? (
+                <CircularProgress color="secondary" className="progress" />
+              ) : (
+                <Button
+                  className={classes.form_button}
+                  startIcon={<ExitToAppSharp />}
+                  size="large"
+                  type={"submit"}
+                  variant="contained"
+                  color="primary"
+                >
+                  Sign In
+                </Button>
+              )}
+            </div>
+          </form>
+          <div className={classes.info}>
+            <p>
+              Not registered? Please sign up <Link to={"/sign_up"}>here</Link>
+            </p>
           </div>
-        </form>
-        <div className={classes.info}>
-          <p>
-            Not registered? Please sign up <Link to={"/sign_up"}>here</Link>
-          </p>
         </div>
-      </div>
-    </HomeLayout>
+      </HomeLayout>
+    </>
   );
 };
 
