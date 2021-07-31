@@ -11,7 +11,6 @@ export type User = {
 interface AuthState {
   loading: boolean;
   error: string | null;
-  accessToken: string | null;
   success: boolean;
   user: User;
 }
@@ -19,7 +18,6 @@ interface AuthState {
 const initialState = {
   loading: false,
   error: null,
-  accessToken: null,
   success: false,
   user: {
     username: null,
@@ -39,7 +37,6 @@ const authReducer = (
         ...state,
         loading: true,
         error: null,
-        accessToken: null,
         success: false,
         user: {
           username: null,
@@ -55,11 +52,10 @@ const authReducer = (
         error: null,
         user: {
           username: action.payload.username,
-          email: null,
-          emailConfirmed: false,
-          role: null,
+          email: action.payload.email,
+          emailConfirmed: action.payload.emailConfirmed,
+          role: action.payload.role,
         },
-        accessToken: action.payload.accessToken,
         success: true,
       };
     case ActionType.AUTH_ERROR:
@@ -73,7 +69,6 @@ const authReducer = (
           emailConfirmed: false,
           role: null,
         },
-        accessToken: null,
         success: false,
       };
     case ActionType.SIGNUP_START:
@@ -115,7 +110,6 @@ const authReducer = (
           emailConfirmed: false,
           role: null,
         },
-        accessToken: null,
         success: false,
       };
     case ActionType.SIGNOUT_SUCCESS:
@@ -129,12 +123,14 @@ const authReducer = (
           emailConfirmed: false,
           role: null,
         },
-        accessToken: null,
         success: true,
       };
     case ActionType.CURRENT_USER_START:
       return {
         ...state,
+        loading: true,
+        error: null,
+        success: false,
         user: {
           username: null,
           email: null,
@@ -145,6 +141,9 @@ const authReducer = (
     case ActionType.CURRENT_USER_SUCCESS:
       return {
         ...state,
+        loading: false,
+        error: null,
+        success: true,
         user: {
           username: action.payload.username,
           email: action.payload.email,
@@ -155,6 +154,9 @@ const authReducer = (
     case ActionType.CURRENT_USER_ERROR:
       return {
         ...state,
+        loading: false,
+        error: null,
+        success: false,
         user: {
           username: null,
           email: null,

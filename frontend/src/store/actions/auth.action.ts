@@ -21,7 +21,7 @@ interface AuthStartAction {
 
 interface AuthSuccessAction {
   type: ActionType.AUTH_SUCCESS;
-  payload: { username: string; accessToken: string };
+  payload: User;
 }
 
 interface AuthErrorAction {

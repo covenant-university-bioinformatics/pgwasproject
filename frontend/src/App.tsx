@@ -1,17 +1,22 @@
 import React, { useCallback, useEffect } from "react";
 import Routes from "./routes";
 import { useActions } from "./hooks/useActions";
+import { useTypedSelector } from "./hooks/useTypedSelector";
 
 function App() {
-  const { getCurrentUser } = useActions();
+  const { authCheckState } = useActions();
 
-  const getUser = useCallback(() => {
-    getCurrentUser();
-  }, [getCurrentUser]);
+  const test = () => {
+    console.log("executing...");
+  };
 
-  useEffect(() => {
-    getUser();
-  }, [getUser]);
+  test();
+
+  const checkAuth = useCallback(() => {
+    authCheckState();
+  }, [authCheckState]);
+
+  checkAuth();
 
   return <Routes />;
 }
