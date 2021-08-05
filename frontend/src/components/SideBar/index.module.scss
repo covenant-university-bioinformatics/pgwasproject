@@ -11,7 +11,7 @@
   height: calc(100vh - 5.2rem);
   overflow-y: auto;
 
-  .drawerHeader{
+  .drawerHeader {
     position: relative;
     button {
       span {
@@ -25,7 +25,7 @@
   .icon {
   }
   .list {
-    span{
+    span {
       font-size: 1.1rem;
       @include respondMax(tab-land) {
         font-size: 0.8rem;
@@ -39,24 +39,24 @@
         margin-right: -20px;
       }
     }
-  }
 
-  .text {
-    margin-left: -1rem;
-    color: #000;
-  }
+    .text {
+      margin-left: -1rem;
+      color: #000;
 
-  .selected {
-    color: #fff !important;
-    font-weight: bold;
-    font-size: 1.3rem !important;
-    @include respondMax(tab-land) {
-      font-size: 1.2rem !important;
+      .selected {
+        color: #fff !important;
+        font-weight: bold;
+        font-size: 1.3rem !important;
+        @include respondMax(tab-land) {
+          font-size: 1.2rem !important;
+        }
+
+        //background-color: rgba(0,0,0,0.5);
+        //padding: 0.625rem;
+        //border-radius: 5px;
+      }
     }
-
-    //background-color: rgba(0,0,0,0.5);
-    //padding: 0.625rem;
-    //border-radius: 5px;
   }
 
   .link {

@@ -1,19 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import useTable from "../../../hooks/useTable";
 import { Link, RouteComponentProps } from "react-router-dom";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import {
-  Button,
   CircularProgress,
   IconButton,
   TableBody,
   TableCell,
   TableRow,
 } from "@material-ui/core";
+import pgwasAxios from "../../../axios-fetches";
 import Paper from "@material-ui/core/Paper";
 import classes from "./index.module.scss";
-import pgwasAxios from "../../../axios-fetches";
 import { DeleteOutlineSharp } from "@material-ui/icons";
+import { useActions } from "../../../hooks/useActions";
+import { useTypedSelector } from "../../../hooks/useTypedSelector";
+import { showToastError } from "../../utility/general_utils";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -28,10 +30,18 @@ type Props = {};
 
 const AnnotationResultList: React.FC<Props & RouteComponentProps> = (props) => {
   const mclasses = useStyles();
-  const [records, setRecords] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [total, setTotal] = useState(0);
+  const { getAnnotationResults } = useActions();
+
+  const getResults = useCallback(
+    (page: number, limit: number) => {
+      getAnnotationResults(page, limit);
+    },
+    [getAnnotationResults]
+  );
+
+  const { loading, error, success, data, total } = useTypedSelector(
+    (state) => state.annot
+  );
 
   const headCells = [
     { id: "name", label: "Job Name", disableSorting: false },
@@ -48,32 +58,32 @@ const AnnotationResultList: React.FC<Props & RouteComponentProps> = (props) => {
     recordsAfterSorting,
     page,
     rowsPerPage,
-  } = useTable(records, headCells, [3, 6, 9], total);
+  } = useTable(data, headCells, [3, 6, 9], total);
 
-  console.log(records);
+  console.log(data);
   console.log(page);
   console.log(rowsPerPage);
-  console.log(props.match.url.split("/"));
 
-  useEffect(() => {
-    setLoading(true);
+  const deleteJob = (id: string) => {
     pgwasAxios
-      .get(`/annot/jobs?page=${page + 1}&limit=${rowsPerPage}`)
-      .then((res) => {
-        setLoading(false);
-        setTotal(res.data.total);
-        setRecords(res.data.data);
+      .delete(`/annot/jobs/${id}`)
+      .then(() => {
+        getResults(page, rowsPerPage);
       })
       .catch((error) => {
+        console.log(error.response.data);
         let message = "";
         if (Array.isArray(error.response.data.message)) {
           message = error.response.data.message.join("\n");
         } else {
           message = error.response.data.message;
         }
-        setLoading(false);
-        setError(message);
+        showToastError(message);
       });
+  };
+
+  useEffect(() => {
+    getResults(page, rowsPerPage);
   }, [page, rowsPerPage]);
 
   return (
@@ -96,7 +106,7 @@ const AnnotationResultList: React.FC<Props & RouteComponentProps> = (props) => {
                 </TableCell>
                 <TableCell>
                   <Link
-                    to={`${props.match.url.split("/")[1]}/result_view?id=${
+                    to={`/${props.match.url.split("/")[1]}/result_view/${
                       item._id
                     }`}
                   >
@@ -104,7 +114,12 @@ const AnnotationResultList: React.FC<Props & RouteComponentProps> = (props) => {
                   </Link>
                 </TableCell>
                 <TableCell>
-                  <IconButton aria-label="delete">
+                  <IconButton
+                    onClick={() => {
+                      deleteJob(item._id);
+                    }}
+                    aria-label="delete"
+                  >
                     <DeleteOutlineSharp />
                   </IconButton>
                 </TableCell>

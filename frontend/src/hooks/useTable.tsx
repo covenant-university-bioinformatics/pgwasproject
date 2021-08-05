@@ -38,7 +38,7 @@ type Order = "asc" | "desc";
 
 const useTable = (
   records: any[],
-  headCells: any[],
+  headCells: { id: string; label: string; disableSorting: boolean }[],
   limit?: number[],
   count?: number
 ) => {
@@ -153,6 +153,10 @@ const useTable = (
     );
   };
 
+  const recordsAfterPaging = () => {
+    return records.slice(page * rowsPerPage, (page + 1) * rowsPerPage);
+  };
+
   const recordsAfterSorting = () => {
     return stableSort(records, getComparator(order, orderBy));
   };
@@ -163,6 +167,7 @@ const useTable = (
     TblPagination,
     recordsAfterPagingAndSorting,
     recordsAfterSorting,
+    recordsAfterPaging,
     page,
     rowsPerPage,
   };
