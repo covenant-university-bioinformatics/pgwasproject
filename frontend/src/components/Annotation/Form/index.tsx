@@ -3,7 +3,12 @@ import { FormikValues, useFormik } from "formik";
 import pgwasAxios from "../../../axios-fetches";
 import * as Yup from "yup";
 import classes from "./index.module.scss";
-import { selectIsError, textErrorHelper } from "../../utility/general_utils";
+import {
+  selectIsError,
+  showToastError,
+  showToastMessage,
+  textErrorHelper,
+} from "../../utility/general_utils";
 import {
   Button,
   Checkbox,
@@ -17,11 +22,13 @@ import {
 } from "@material-ui/core";
 import { generalFileForm } from "../../utility/general";
 import { PlayArrow, DeleteOutlineSharp } from "@material-ui/icons";
+import { RouteComponentProps } from "react-router-dom";
+import { ActionType } from "../../../store/action-types";
 type Props = {};
 
 type UserFormData = {
   filename: string;
-  jobName: string;
+  job_name: string;
   marker_name: string | undefined;
   chromosome: string | undefined;
   position: string | undefined;
@@ -35,13 +42,13 @@ type UserFormData = {
   kgp_eur: false;
   kgp_sas: false;
   exac: false;
-  dbnsfp: false;
+  disgenet: false;
   clinvar: false;
   intervar: false;
   [key: string]: any;
 };
 
-const AnnotationForm: React.FC<Props> = (props) => {
+const AnnotationForm: React.FC<Props & RouteComponentProps> = (props) => {
   // const [loading, setLoading] = useState(false);
   const [uploadFile, setUploadFile] = useState<any>(null);
   const fileInput = useRef<any>(null);
@@ -49,7 +56,7 @@ const AnnotationForm: React.FC<Props> = (props) => {
   const formik = useFormik<UserFormData>({
     initialValues: {
       filename: "",
-      jobName: "",
+      job_name: "",
       marker_name: "",
       chromosome: "",
       position: "",
@@ -63,7 +70,7 @@ const AnnotationForm: React.FC<Props> = (props) => {
       kgp_eur: false,
       kgp_sas: false,
       exac: false,
-      dbnsfp: false,
+      disgenet: false,
       clinvar: false,
       intervar: false,
     },
@@ -89,10 +96,9 @@ const AnnotationForm: React.FC<Props> = (props) => {
       alternate_allele: Yup.number()
         .min(1, "The minimum is one")
         .max(15, "the max is fifteen"),
-      jobName: Yup.string().required("Job name is required"),
+      job_name: Yup.string().required("Job name is required"),
     }),
     onSubmit: (values: FormikValues) => {
-      alert(JSON.stringify(values));
       console.log(values);
       const data = new FormData();
       data.append("file", uploadFile);
@@ -101,14 +107,26 @@ const AnnotationForm: React.FC<Props> = (props) => {
           data.append(element, values[element]);
         }
       }
+
       pgwasAxios
-        .post("/jobs", data)
+        .post("/annot/jobs", data)
         .then((res) => {
           // then print response status
           console.log(res);
+          showToastMessage("Job submitted successfully");
+          props.history.push(
+            `/${props.match.url.split("/")[1]}` + "/all_results"
+          );
         })
         .catch((error) => {
           console.log(error.response.data);
+          let message = "";
+          if (Array.isArray(error.response.data.message)) {
+            message = error.response.data.message.join("\n");
+          } else {
+            message = error.response.data.message;
+          }
+          showToastError(message);
         });
     },
   });
@@ -158,7 +176,7 @@ const AnnotationForm: React.FC<Props> = (props) => {
     { variable: "kgp_eas", name: "Frequency in 1KGP (EAS)" },
     { variable: "kgp_sas", name: "Frequency in 1KGP (SAS)" },
     { variable: "exac", name: "EXAC" },
-    { variable: "dbnsfp", name: "DBNSFP" },
+    { variable: "disgenet", name: "DISGENET" },
     { variable: "clinvar", name: "CLINVAR" },
     { variable: "intervar", name: "INTERVAR" },
   ];
@@ -208,12 +226,12 @@ const AnnotationForm: React.FC<Props> = (props) => {
             <Paper elevation={0} className={classes.paper}>
               <FormControl className={classes.formControl}>
                 <TextField
-                  id={"jobName"}
+                  id={"job_name"}
                   variant={"outlined"}
                   label={"Job Name"}
                   size={"medium"}
-                  {...formik.getFieldProps("jobName")}
-                  {...textErrorHelper(formik, "jobName")}
+                  {...formik.getFieldProps("job_name")}
+                  {...textErrorHelper(formik, "job_name")}
                 />
               </FormControl>
             </Paper>

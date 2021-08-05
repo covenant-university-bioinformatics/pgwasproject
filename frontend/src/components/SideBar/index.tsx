@@ -128,6 +128,7 @@ const SideBar: React.FC<Props> = (props) => {
               <List component="div" disablePadding>
                 {link.steps.map((step, i) => (
                   <NavLink
+                    activeClassName={classes.selected}
                     key={`${step.title.replace(/\s/g, "")}${i}`}
                     className={classes.link}
                     to={step.linkTo}

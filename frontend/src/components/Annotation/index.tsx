@@ -5,6 +5,7 @@ import ToolsLayout from "../../layouts/ToolsLayout";
 import AnnotationHome from "./Home";
 import AnnotationForm from "./Form";
 import AnnotationResultList from "./ResultList";
+import AnnotationResultView from "./ResultView";
 
 type Props = {};
 
@@ -20,7 +21,11 @@ const Annotation: React.FC<Props & RouteComponentProps> = (props) => {
             path={props.match.url + "/all_results"}
             component={AnnotationResultList}
           />
-          <Route exact path={props.match.url + "/result_view"} />
+          <Route
+            exact
+            path={props.match.url + "/result_view/:jobId"}
+            component={AnnotationResultView}
+          />
         </Switch>
       </div>
     </ToolsLayout>

@@ -12,4 +12,7 @@ export enum ActionType {
   SIGNOUT_SUCCESS = "signout_success",
   SIGNOUT_ERROR = "signout_error",
   MINIFIED_LAYOUT = "MINIFIED_LAYOUT",
+  ANNOTATION_RESULT_START = "annotation_result_start",
+  ANNOTATION_RESULT_SUCCESS = "annotation_result_success",
+  ANNOTATION_RESULT_ERROR = "annotation_result_error",
 }
