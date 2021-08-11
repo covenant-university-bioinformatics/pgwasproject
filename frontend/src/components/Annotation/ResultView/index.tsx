@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { RouteComponentProps } from "react-router-dom";
-import { useTypedSelector } from "../../../hooks/useTypedSelector";
 import pgwasAxios from "../../../axios-fetches";
 import classes from "./index.module.scss";
 import useTable from "../../../hooks/useTable";
@@ -78,24 +77,15 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
   );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [errorInfo, setErrorInfo] = useState("");
   const [jobRunning, setJobRunning] = useState(false);
-  const { data } = useTypedSelector((state) => state.annot);
-  let errorMessage: JSX.Element | null = null;
-  let genMessage: JSX.Element | null = null;
-  let runningMessage: JSX.Element | null = (
-    <div
-      style={{
-        fontSize: "2rem",
-        fontWeight: "bold",
-        marginBottom: "2rem",
-        color: "red",
-      }}
-    >
-      Job is currently running. Please wait for it to complete
-    </div>
-  );
-  const mclasses = useStyles();
+  const [reload, setReload] = useState(0);
 
+  let errorMessage: any | null = null;
+  let genMessage: any | null = null;
+
+  const mclasses = useStyles();
+  const initialCols = 12;
   const [snpAnnotResult, setSnpAnnotResult] = useState<string[][]>([]);
   const [snpAnnotHeader, setSnpAnnotHeader] = useState<
     { id: string; label: string; disableSorting: boolean }[]
@@ -107,6 +97,21 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
     { id: string; label: string; disableSorting: boolean }[]
   >([]);
   const [loadingDisgenet, setLoadingDisgenet] = useState(false);
+
+  const [snpPopFreqResult, setSnpPopFreqResult] = useState<string[][]>([]);
+  const [snpPopFreqHeader, setSnpPopFreqHeader] = useState<
+    { id: string; label: string; disableSorting: boolean }[]
+  >([]);
+
+  const [snpExacFreqResult, setSnpExacFreqResult] = useState<string[][]>([]);
+  const [snpExacFreqHeader, setSnpExacFreqHeader] = useState<
+    { id: string; label: string; disableSorting: boolean }[]
+  >([]);
+
+  const [snpClinvarResult, setSnpClinvarResult] = useState<string[][]>([]);
+  const [snpClinvarHeader, setSnpClinvarHeader] = useState<
+    { id: string; label: string; disableSorting: boolean }[]
+  >([]);
 
   const { TblContainer, TblHead, TblPagination, recordsAfterPaging } = useTable(
     snpAnnotResult,
@@ -127,6 +132,42 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
     snpDisgenetResult.length
   );
 
+  const {
+    TblContainer: TblContainerPopFreq,
+    TblHead: TblHeadPopFreq,
+    TblPagination: TblPaginationPopFreq,
+    recordsAfterPaging: recordsAfterPagingPopFreq,
+  } = useTable(
+    snpPopFreqResult,
+    snpPopFreqHeader,
+    [10, 15, 20],
+    snpPopFreqResult.length
+  );
+
+  const {
+    TblContainer: TblContainerExacFreq,
+    TblHead: TblHeadExacFreq,
+    TblPagination: TblPaginationExacFreq,
+    recordsAfterPaging: recordsAfterPagingExacFreq,
+  } = useTable(
+    snpExacFreqResult,
+    snpExacFreqHeader,
+    [10, 15, 20],
+    snpExacFreqResult.length
+  );
+
+  const {
+    TblContainer: TblContainerClinvar,
+    TblHead: TblHeadClinvar,
+    TblPagination: TblPaginationClinvar,
+    recordsAfterPaging: recordsAfterPagingClinvar,
+  } = useTable(
+    snpClinvarResult,
+    snpClinvarHeader,
+    [10, 15, 20],
+    snpClinvarResult.length
+  );
+
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
@@ -145,6 +186,104 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
       };
     });
     setSnpAnnotHeader(dcd);
+  };
+
+  const getCols = () => {
+    let columns = 0;
+    if (annotRes && annotRes.status === "completed") {
+      const { annot } = annotRes;
+
+      if (annot.kgp_all) {
+        columns += 1;
+      }
+      if (annot.kgp_afr) {
+        columns += 1;
+      }
+      if (annot.kgp_sas) {
+        columns += 1;
+      }
+      if (annot.kgp_eur) {
+        columns += 1;
+      }
+      if (annot.kgp_eas) {
+        columns += 1;
+      }
+      if (annot.kgp_amr) {
+        columns += 1;
+      }
+    }
+    return columns;
+  };
+
+  const getExacCols = () => {
+    let columns = 0;
+    if (annotRes && annotRes.status === "completed") {
+      const { annot } = annotRes;
+      if (annot.exac) {
+        columns += 8;
+      }
+    }
+    return columns;
+  };
+
+  const createHeadersPopFreq = (headers: string[]) => {
+    const columns = getCols();
+
+    if (columns !== 0) {
+      const annotHead = headers.slice(initialCols, columns + initialCols);
+      annotHead.push(headers[headers.length - 1]);
+      const dcd = annotHead.map((ele, i) => {
+        return {
+          id: ele.toLowerCase(),
+          label: ele,
+          disableSorting: true,
+        };
+      });
+      setSnpPopFreqHeader(dcd);
+    }
+  };
+
+  const createHeadersExacFreq = (headers: string[]) => {
+    const columns = getExacCols();
+    const popCols = getCols() + initialCols;
+
+    if (columns !== 0) {
+      const annotHead = headers.slice(popCols, columns + popCols);
+      annotHead.push(headers[headers.length - 1]);
+      const dcd = annotHead.map((ele, i) => {
+        return {
+          id: ele.toLowerCase(),
+          label: ele,
+          disableSorting: true,
+        };
+      });
+      setSnpExacFreqHeader(dcd);
+    }
+  };
+
+  const createHeadersClinvars = (headers: string[]) => {
+    const columns = getCols() + getExacCols() + initialCols;
+    let clinvars = 0;
+
+    if (annotRes && annotRes.status === "completed") {
+      if (annotRes.annot.clinvar) {
+        clinvars = clinvars + 5;
+      }
+    }
+    console.log("columns clinvar ", columns, clinvars + columns);
+    if (clinvars !== 0) {
+      const annotHead = headers.slice(columns, clinvars + columns);
+      annotHead.push(headers[headers.length - 1]);
+      const dcd = annotHead.map((ele, i) => {
+        return {
+          id: ele.toLowerCase(),
+          label: ele,
+          disableSorting: true,
+        };
+      });
+      setSnpClinvarHeader(dcd);
+      console.log("clinvar: ", dcd);
+    }
   };
 
   const createHeadersDisgenet = (headers: string[]) => {
@@ -169,6 +308,69 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
     setSnpAnnotResult(ddd);
   };
 
+  const createTableBodyPopFreq = (allines: string[]) => {
+    const columns = getCols();
+    if (columns !== 0) {
+      const popfreqs: string[][] = [];
+      allines.slice(1).forEach((list_string: string) => {
+        const list = list_string.split("\t");
+        const temp = list.slice(12, columns + 12);
+        if (temp.some((str) => str !== ".")) {
+          temp.push(list[list.length - 1]);
+          popfreqs.push(temp);
+        }
+      });
+      console.log(popfreqs);
+      setSnpPopFreqResult(popfreqs);
+    }
+  };
+
+  const createTableBodyExacFreq = (allines: string[]) => {
+    const columns = getExacCols();
+    const popCols = getCols() + initialCols;
+
+    if (columns !== 0) {
+      const exacfreqs: string[][] = [];
+      allines.slice(1).forEach((list_string: string) => {
+        const list = list_string.split("\t");
+        const temp = list.slice(popCols, columns + popCols);
+        if (temp.some((str) => str !== ".")) {
+          temp.push(list[list.length - 1]);
+          exacfreqs.push(temp);
+        }
+      });
+      setSnpExacFreqResult(exacfreqs);
+    }
+  };
+
+  const createTableBodyClinvars = (allines: string[]) => {
+    const clinvars: string[][] = [];
+    const columns = getCols() + getExacCols() + initialCols;
+    let clinvar_cols = 0;
+
+    if (annotRes && annotRes.status === "completed") {
+      if (annotRes.annot.clinvar) {
+        clinvar_cols = clinvar_cols + 5;
+      }
+    }
+
+    if (clinvar_cols !== 0) {
+      allines.slice(1).forEach((list_string: string) => {
+        const list = list_string.split("\t");
+        const temp = list.slice(columns, clinvar_cols + columns);
+        if (temp.some((str) => str !== ".")) {
+          temp.push(list[list.length - 1]);
+          const res = temp.map((str) =>
+            str.length > 20 ? str.substr(0, 20) : str
+          );
+          clinvars.push(res);
+        }
+      });
+
+      setSnpClinvarResult(clinvars);
+    }
+  };
+
   const createTableBodyDisgenet = (allines: string[]) => {
     const ddd = allines.slice(1).map((list_string: string) => {
       const list = list_string.split("\t");
@@ -177,7 +379,12 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
     setSnpDisgenetResult(ddd);
   };
 
-  const createTableSection = () => {
+  const createTableSection = (
+    TblContainer: React.FC,
+    TblHead: React.FC,
+    TblPagination: any,
+    recordsAfterPaging: () => any[]
+  ) => {
     if (snpAnnotResult.length > 0) {
       return (
         <div className={classes.table_section}>
@@ -249,21 +456,27 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
             >
               Download Annotation Results
             </Button>
-            <Button
-              variant="contained"
-              color="default"
-              className={classes.button}
-              endIcon={<GetAppRounded />}
-              href={`https://pgwas.dev/api/annot${annotRes.disgenet}`}
-            >
-              Download DISGENET Results
-            </Button>
+            {snpDisgenetResult.length > 0 && (
+              <Button
+                variant="contained"
+                color="default"
+                className={classes.button}
+                endIcon={<GetAppRounded />}
+                href={`https://pgwas.dev/api/annot${annotRes.disgenet}`}
+              >
+                Download DISGENET Results
+              </Button>
+            )}
           </div>
         </div>
       );
     }
     return null;
   };
+
+  console.log("pop freq: ", snpPopFreqResult.length);
+  console.log("clinvar: ", snpClinvarResult.length);
+  console.log("disgenet: ", snpDisgenetResult.length);
 
   const createTableTabs = () => {
     if (snpAnnotResult.length > 0) {
@@ -278,20 +491,75 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
               aria-label="simple tabs example"
             >
               <Tab label="Annotation" {...a11yProps(0)} />
-              <Tab label="Allele Frequencies" {...a11yProps(1)} />
-              <Tab label="Disgenet" {...a11yProps(2)} />
+              {snpPopFreqHeader.length > 0 && (
+                <Tab label="1KGP Allele Frequencies" {...a11yProps(1)} />
+              )}
+              {snpExacFreqHeader.length > 0 && (
+                <Tab label="Exome Frequencies" {...a11yProps(2)} />
+              )}
+              {snpClinvarHeader.length > 0 && (
+                <Tab label="Clinvar" {...a11yProps(3)} />
+              )}
+              {snpDisgenetHeader.length > 0 && (
+                <Tab label="Disgenet" {...a11yProps(4)} />
+              )}
             </Tabs>
           </AppBar>
           <TabPanel value={value} index={0}>
             {loadingAnnot ? <CircularProgress /> : null}
-            {createTableSection()}
+            {createTableSection(
+              TblContainer,
+              TblHead,
+              TblPagination,
+              recordsAfterPaging
+            )}
           </TabPanel>
           <TabPanel value={value} index={1}>
-            Item Two
+            {loadingAnnot ? <CircularProgress /> : null}
+            {snpPopFreqResult.length > 0 ? (
+              createTableSection(
+                TblContainerPopFreq,
+                TblHeadPopFreq,
+                TblPaginationPopFreq,
+                recordsAfterPagingPopFreq
+              )
+            ) : (
+              <p>No Data</p>
+            )}
           </TabPanel>
           <TabPanel value={value} index={2}>
+            {loadingAnnot ? <CircularProgress /> : null}
+            {snpExacFreqResult.length > 0 ? (
+              createTableSection(
+                TblContainerExacFreq,
+                TblHeadExacFreq,
+                TblPaginationExacFreq,
+                recordsAfterPagingExacFreq
+              )
+            ) : (
+              <p>No Data</p>
+            )}
+          </TabPanel>
+          <TabPanel value={value} index={3}>
+            {loadingAnnot ? <CircularProgress /> : null}
+            {snpClinvarResult.length > 0 ? (
+              createTableSection(
+                TblContainerClinvar,
+                TblHeadClinvar,
+                TblPaginationClinvar,
+                recordsAfterPagingClinvar
+              )
+            ) : (
+              <p>No Data</p>
+            )}
+          </TabPanel>
+          <TabPanel value={value} index={4}>
             {loadingDisgenet ? <CircularProgress /> : null}
-            {createTableDisgenetSection()}
+            {snpDisgenetResult.length > 0 ? (
+              createTableDisgenetSection()
+            ) : (
+              <p>No Data</p>
+            )}
           </TabPanel>
         </div>
       );
@@ -348,10 +616,41 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
         </div>
       );
 
+      const jobList = (
+        <div className={classes.job_list}>
+          <h3>Job Details</h3>
+          <ul>
+            <li>
+              <span>Job Name</span>
+              <span>{String(annotRes.job_name)}</span>
+            </li>
+            <li>
+              <span>Job UID</span>
+              <span>{String(annotRes.jobUID)}</span>
+            </li>
+            <li>
+              <span>Job Status</span>
+              <span>{String(annotRes.status)}</span>
+            </li>
+            <li>
+              <span>Input File</span>
+              <span>{String(annotRes.inputFile).split("/")[5]}</span>
+            </li>
+            <li>
+              <span>Created Date</span>
+              <span>{new Date(annotRes.createdAt).toLocaleString()}</span>
+            </li>
+          </ul>
+        </div>
+      );
+
       return (
         <div className={classes.info_section}>
           <h3 className={classes.sub_heading}>Job Information</h3>
-          <div className={classes.info}>{dbList}</div>
+          <div className={classes.info}>
+            {jobList}
+            {dbList}
+          </div>
         </div>
       );
     }
@@ -382,6 +681,11 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
     return false;
   };
 
+  if (error) {
+    genMessage = <p>Issue with fetching job with id: {id}</p>;
+    errorMessage = <p>Message from server: {errorInfo}</p>;
+  }
+
   useEffect(() => {
     setLoading(true);
     console.log("fetching jobs");
@@ -398,8 +702,7 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
         setAnnotRes(undefined);
         setLoading(false);
         setError(true);
-        genMessage = <div>Issue with fetching job with id: {id}</div>;
-        errorMessage = <div>{e.message}</div>;
+        setErrorInfo(e.response.data.message);
       });
   }, []);
 
@@ -414,6 +717,16 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
             const header: string[] = alllines[0].split("\t");
             createHeaders(header);
             createTableBody(alllines);
+
+            createHeadersPopFreq(header);
+            createTableBodyPopFreq(alllines);
+
+            createHeadersExacFreq(header);
+            createTableBodyExacFreq(alllines);
+
+            createHeadersClinvars(header);
+            createTableBodyClinvars(alllines);
+
             setLoadingAnnot(false);
           })
           .catch((error) => {
@@ -425,14 +738,18 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
   }, [annotRes]);
 
   useEffect(() => {
-    if (annotRes && annotRes.status === "completed") {
+    if (
+      annotRes &&
+      annotRes.status === "completed" &&
+      annotRes.annot.disgenet
+    ) {
       if (snpDisgenetResult.length === 0) {
         setLoadingDisgenet(true);
         pgwasAxios
           .get(`/annot/jobs/output/${id}/disgenet`)
           .then((response) => {
             const alllines = response.data.split("\n");
-            console.log(alllines);
+            // console.log(alllines);
             const header: string[] = alllines[0].split("\t");
             createHeadersDisgenet(header);
             createTableBodyDisgenet(alllines);
@@ -446,21 +763,24 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
     }
   }, [annotRes]);
 
+  console.log("len: ", snpAnnotResult.length);
   return (
     <div className={classes.result_view}>
       {loading ? <CircularProgress /> : null}
-      {error ? (
-        <>
+      {error && (
+        <div className={classes.error_message}>
           {genMessage}
           {errorMessage}
-        </>
-      ) : null}
-      {jobRunning && runningMessage}
-      {annotRes ? (
-        <h2 style={{ marginBottom: "2rem" }}>
-          Results for Job: {annotRes.job_name.toUpperCase()}
-        </h2>
-      ) : null}
+        </div>
+      )}
+      {jobRunning && (
+        <div className={classes.job_running}>
+          <p>Job is currently running. Please wait for it to complete</p>
+        </div>
+      )}
+      <h2 style={{ marginBottom: "2rem" }}>
+        Results for Job: {annotRes ? annotRes.job_name : id}
+      </h2>
       {createInfoSection()}
       {createChartSection()}
       {createTableTabs()}

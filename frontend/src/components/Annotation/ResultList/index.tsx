@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect } from "react";
 import useTable from "../../../hooks/useTable";
 import { Link, RouteComponentProps } from "react-router-dom";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
@@ -39,7 +39,7 @@ const AnnotationResultList: React.FC<Props & RouteComponentProps> = (props) => {
     [getAnnotationResults]
   );
 
-  const { loading, error, success, data, total } = useTypedSelector(
+  const { loading, error, data, total } = useTypedSelector(
     (state) => state.annot
   );
 
@@ -84,7 +84,7 @@ const AnnotationResultList: React.FC<Props & RouteComponentProps> = (props) => {
 
   useEffect(() => {
     getResults(page, rowsPerPage);
-  }, [page, rowsPerPage]);
+  }, [page, rowsPerPage, getResults]);
 
   return (
     <div className={classes.result_list}>
