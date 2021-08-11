@@ -23,7 +23,7 @@ import {
 import { generalFileForm } from "../../utility/general";
 import { PlayArrow, DeleteOutlineSharp } from "@material-ui/icons";
 import { RouteComponentProps } from "react-router-dom";
-import { ActionType } from "../../../store/action-types";
+
 type Props = {};
 
 type UserFormData = {
@@ -114,9 +114,7 @@ const AnnotationForm: React.FC<Props & RouteComponentProps> = (props) => {
           // then print response status
           console.log(res);
           showToastMessage("Job submitted successfully");
-          props.history.push(
-            `/${props.match.url.split("/")[1]}` + "/all_results"
-          );
+          props.history.push(`/${props.match.url.split("/")[1]}/all_results`);
         })
         .catch((error) => {
           console.log(error.response.data);
@@ -134,7 +132,6 @@ const AnnotationForm: React.FC<Props & RouteComponentProps> = (props) => {
   const handleFileUploadChange = (event: any) => {
     let reader = new FileReader();
     let file = event.target.files[0];
-
     if (file) {
       if (file.type === "text/plain") {
         reader.onloadend = () => {
@@ -148,7 +145,7 @@ const AnnotationForm: React.FC<Props & RouteComponentProps> = (props) => {
         formik.setFieldError("filename", "Please upload a text file");
       }
     } else {
-      formik.setFieldError("filename", "Please upload a file");
+      formik.setFieldError("filename", "Please upload a readable text file");
     }
   };
 
