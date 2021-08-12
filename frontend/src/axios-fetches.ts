@@ -4,7 +4,7 @@ import axios from "axios";
 // export let cancel;
 
 const instance = axios.create({
-  baseURL: "http://spgwas.waslitbre.org/api",
+  baseURL: "https://spgwas.waslitbre.org/api",
   // baseURL: "https:/pgwas.dev/api",
 });
 
