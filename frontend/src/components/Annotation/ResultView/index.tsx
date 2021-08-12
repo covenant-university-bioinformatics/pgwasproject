@@ -474,10 +474,6 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
     return null;
   };
 
-  console.log("pop freq: ", snpPopFreqResult.length);
-  console.log("clinvar: ", snpClinvarResult.length);
-  console.log("disgenet: ", snpDisgenetResult.length);
-
   const createTableTabs = () => {
     if (snpAnnotResult.length > 0) {
       return (
@@ -763,7 +759,6 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
     }
   }, [annotRes]);
 
-  console.log("len: ", snpAnnotResult.length);
   return (
     <div className={classes.result_view}>
       {loading ? <CircularProgress /> : null}
