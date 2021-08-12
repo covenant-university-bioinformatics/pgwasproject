@@ -178,7 +178,6 @@ const AnnotationForm: React.FC<Props & RouteComponentProps> = (props) => {
     { variable: "intervar", name: "INTERVAR" },
   ];
 
-  console.log("render");
   // console.log(formik.values);
   return (
     <div className={classes.annot_form}>

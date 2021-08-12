@@ -60,10 +60,6 @@ const AnnotationResultList: React.FC<Props & RouteComponentProps> = (props) => {
     rowsPerPage,
   } = useTable(data, headCells, [3, 6, 9], total);
 
-  console.log(data);
-  console.log(page);
-  console.log(rowsPerPage);
-
   const deleteJob = (id: string) => {
     pgwasAxios
       .delete(`/annot/jobs/${id}`)
