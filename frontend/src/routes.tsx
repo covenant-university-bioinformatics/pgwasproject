@@ -18,7 +18,6 @@ import Deleteriousness from "./components/Deleteriousness";
 import Regulation from "./components/Regulation";
 import Liftover from "./components/Liftover";
 import Footer from "./components/Footer";
-import Test from "./components/Test";
 import Finemap from "./components/Finemap";
 import Susie from "./components/Susie";
 import Paintor from "./components/Paintor";
@@ -33,7 +32,6 @@ const Routes: React.FC<Props> = (props) => {
       <Header />
       <Switch>
         <Route path="/dashboard" exact component={HomeComingSoon} />
-        <Route path="/test" exact component={Test} />
         <Route path="/tutorials" exact component={HomeComingSoon} />
         <Route path="/sign_in" exact component={SignIn} />
         <Route path="/sign_up" exact component={SignUp} />
