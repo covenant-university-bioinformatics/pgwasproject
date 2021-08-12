@@ -1,9 +1,13 @@
-FROM node:alpine as builder
-WORKDIR '/app'
+FROM node:14 as builder
+WORKDIR /app
+
 COPY ./package.json ./
-RUN yarn install
+RUN npm config set python /usr/bin/python
+
+RUN npm install
+
 COPY . .
-RUN yarn run build
+RUN npm run build
 
 FROM nginx
 EXPOSE 3000
