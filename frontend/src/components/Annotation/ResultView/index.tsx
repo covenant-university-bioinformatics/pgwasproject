@@ -660,7 +660,9 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
           <h3>SNP Locations</h3>
           <div className={classes.image_box}>
             <img
-              src={`https://pgwas.dev/api/annot${annotRes!.snp_plot}`}
+              src={`https://spgwas.waslitbre.org/api/annot${
+                annotRes!.snp_plot
+              }`}
               alt="snp_plot"
             />
           </div>
