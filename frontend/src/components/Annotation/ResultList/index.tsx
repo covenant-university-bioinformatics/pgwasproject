@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import useTable from "../../../hooks/useTable";
 import { Link, RouteComponentProps } from "react-router-dom";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
@@ -15,7 +15,7 @@ import classes from "./index.module.scss";
 import { DeleteOutlineSharp } from "@material-ui/icons";
 import { useActions } from "../../../hooks/useActions";
 import { useTypedSelector } from "../../../hooks/useTypedSelector";
-import { showToastError } from "../../utility/general_utils";
+import { showToastError, showToastSuccess } from "../../utility/general_utils";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -43,6 +43,8 @@ const AnnotationResultList: React.FC<Props & RouteComponentProps> = (props) => {
     (state) => state.annot
   );
 
+  const [deleteLoading, setDeleteLoading] = useState(false);
+
   const headCells = [
     { id: "name", label: "Job Name", disableSorting: false },
     { id: "status", label: "Job Status", disableSorting: false },
@@ -61,19 +63,24 @@ const AnnotationResultList: React.FC<Props & RouteComponentProps> = (props) => {
   } = useTable(data, headCells, [3, 6, 9], total);
 
   const deleteJob = (id: string) => {
+    setDeleteLoading(true);
     pgwasAxios
       .delete(`/annot/jobs/${id}`)
       .then(() => {
+        setDeleteLoading(false);
+        showToastSuccess("Job deleted");
         getResults(page, rowsPerPage);
       })
       .catch((error) => {
-        console.log(error.response.data);
-        let message = "";
-        if (Array.isArray(error.response.data.message)) {
-          message = error.response.data.message.join("\n");
-        } else {
-          message = error.response.data.message;
+        let message = "Unable to delete job";
+        if (error?.response) {
+          if (Array.isArray(error.response.data?.message)) {
+            message = error.response.data.message.join("\n");
+          } else {
+            message = error?.response.data?.message;
+          }
         }
+        setDeleteLoading(false);
         showToastError(message);
       });
   };
@@ -89,6 +96,7 @@ const AnnotationResultList: React.FC<Props & RouteComponentProps> = (props) => {
           <CircularProgress />
         </div>
       ) : null}
+      {error ? <div className={classes.error}>{error}</div> : null}
       <Paper className={[mclasses.pageContent, classes.paper].join(" ")}>
         <TblContainer>
           <TblHead />
@@ -110,14 +118,21 @@ const AnnotationResultList: React.FC<Props & RouteComponentProps> = (props) => {
                   </Link>
                 </TableCell>
                 <TableCell>
-                  <IconButton
-                    onClick={() => {
-                      deleteJob(item._id);
-                    }}
-                    aria-label="delete"
-                  >
-                    <DeleteOutlineSharp />
-                  </IconButton>
+                  {deleteLoading ? (
+                    <CircularProgress
+                      color="secondary"
+                      className={[classes.spinner, "progress"].join(" ")}
+                    />
+                  ) : (
+                    <IconButton
+                      onClick={() => {
+                        deleteJob(item._id);
+                      }}
+                      aria-label="delete"
+                    >
+                      <DeleteOutlineSharp />
+                    </IconButton>
+                  )}
                 </TableCell>
               </TableRow>
             ))}
@@ -125,7 +140,6 @@ const AnnotationResultList: React.FC<Props & RouteComponentProps> = (props) => {
         </TblContainer>
         <TblPagination />
       </Paper>
-      {error ? <div className={classes.error}>{error}</div> : null}
     </div>
   );
 };

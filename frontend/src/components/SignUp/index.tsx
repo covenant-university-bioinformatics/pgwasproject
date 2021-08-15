@@ -44,13 +44,11 @@ const SignUp: React.FC<Props & RouteComponentProps> = (props) => {
         .required("Password is required"),
     }),
     onSubmit: (values: SignUpFormData) => {
-      console.log(values);
       setLoading(true);
       pgwasAxios
         .post("/auth/register", values)
         .then((res) => {
           // then print response status
-          console.log(res);
           showToastSuccess(
             "Sign Up successful\nPlease kindly check your email to verify the registered email"
           );
@@ -58,12 +56,14 @@ const SignUp: React.FC<Props & RouteComponentProps> = (props) => {
           setRegisterSuccess(true);
         })
         .catch((error) => {
-          console.log(error.response.data);
-          let message = "";
-          if (Array.isArray(error.response.data.message)) {
-            message = error.response.data.message.join("\n");
-          } else {
-            message = error.response.data.message;
+          console.log(error?.response?.data);
+          let message = "Registration failed";
+          if (error?.response) {
+            if (Array.isArray(error.response.data?.message)) {
+              message = error.response.data.message.join("\n");
+            } else {
+              message = error?.response.data?.message;
+            }
           }
           setLoading(false);
           showToastError(message);

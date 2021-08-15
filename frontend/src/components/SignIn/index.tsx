@@ -25,7 +25,6 @@ type SignInFormData = {
 
 const SignIn: React.FC<Props & RouteComponentProps> = (props) => {
   const { signinUser } = useActions();
-  console.log(props);
 
   const signIn = useCallback(
     (user: { username: string; password: string }) => {
@@ -37,7 +36,6 @@ const SignIn: React.FC<Props & RouteComponentProps> = (props) => {
   const { loading, error, success, user } = useTypedSelector(
     (state) => state.auth
   );
-  console.log("render signin");
 
   let redirect: JSX.Element | null = null;
   if (success && user.username) {
@@ -71,7 +69,6 @@ const SignIn: React.FC<Props & RouteComponentProps> = (props) => {
         .required("Password is required"),
     }),
     onSubmit: (values: FormikValues) => {
-      console.log(values);
       signIn({ username: values.username, password: values.password });
     },
   });
@@ -106,7 +103,10 @@ const SignIn: React.FC<Props & RouteComponentProps> = (props) => {
             </FormControl>
             <div className={classes.button_container}>
               {loading ? (
-                <CircularProgress color="secondary" className="progress" />
+                <CircularProgress
+                  color="secondary"
+                  className={[classes.spinner, "progress"].join(" ")}
+                />
               ) : (
                 <Button
                   className={classes.form_button}

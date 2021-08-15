@@ -9,5 +9,9 @@
   }
   .error{
     position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    color: red;
+    font-weight: bold;
   }
 }

@@ -8,12 +8,12 @@ const instance = axios.create({
   // baseURL: "https:/pgwas.dev/api",
 });
 
-const authUser = localStorage.getItem("authuser");
+const authUser = localStorage.getItem("user");
 
 let token = "";
 
 if (authUser) {
-  token = JSON.parse(authUser).token;
+  token = JSON.parse(authUser).accessToken;
 }
 
 instance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
@@ -30,11 +30,10 @@ instance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 instance.interceptors.request.use(
   (request) => {
     // Edit request config
-    console.log("Sending request...");
     return request;
   },
   (error) => {
-    console.log(error.response.data);
+    console.log(error?.response?.data);
     return Promise.reject(error);
   }
 );
@@ -49,17 +48,5 @@ instance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
-export const setHeaders = () => {
-  const authUser = localStorage.getItem("authuser");
-
-  let token = "";
-
-  if (authUser) {
-    token = JSON.parse(authUser).token;
-  }
-
-  instance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-};
 
 export default instance;

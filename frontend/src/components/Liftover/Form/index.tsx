@@ -98,7 +98,6 @@ const LiftoverForm: React.FC<Props> = (props) => {
     setUploadFile(null);
     formik.setFieldValue("filename", "");
     formik.setFieldError("filename", "Please upload a file");
-    // console.log(fileInput.current.querySelector("input"));
     fileInput.current.querySelector("input").value = "";
   };
 

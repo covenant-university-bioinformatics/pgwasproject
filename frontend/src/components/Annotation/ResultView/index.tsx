@@ -79,7 +79,6 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
   const [error, setError] = useState(false);
   const [errorInfo, setErrorInfo] = useState("");
   const [jobRunning, setJobRunning] = useState(false);
-  const [reload, setReload] = useState(0);
 
   let errorMessage: any | null = null;
   let genMessage: any | null = null;
@@ -270,7 +269,7 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
         clinvars = clinvars + 5;
       }
     }
-    console.log("columns clinvar ", columns, clinvars + columns);
+
     if (clinvars !== 0) {
       const annotHead = headers.slice(columns, clinvars + columns);
       annotHead.push(headers[headers.length - 1]);
@@ -282,7 +281,6 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
         };
       });
       setSnpClinvarHeader(dcd);
-      console.log("clinvar: ", dcd);
     }
   };
 
@@ -320,7 +318,6 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
           popfreqs.push(temp);
         }
       });
-      console.log(popfreqs);
       setSnpPopFreqResult(popfreqs);
     }
   };
@@ -686,11 +683,9 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
 
   useEffect(() => {
     setLoading(true);
-    console.log("fetching jobs");
     pgwasAxios
       .get<AnnotationResult>(`/annot/jobs/${id}`)
       .then((result) => {
-        console.log(result);
         setAnnotRes(result.data);
         setJobRunning(result.data.status === "running");
         setLoading(false);
@@ -702,7 +697,7 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
         setError(true);
         setErrorInfo(e.response.data.message);
       });
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     if (annotRes && annotRes.status === "completed") {
@@ -733,7 +728,7 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
           });
       }
     }
-  }, [annotRes]);
+  }, [annotRes, id]);
 
   useEffect(() => {
     if (
@@ -747,7 +742,6 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
           .get(`/annot/jobs/output/${id}/disgenet`)
           .then((response) => {
             const alllines = response.data.split("\n");
-            // console.log(alllines);
             const header: string[] = alllines[0].split("\t");
             createHeadersDisgenet(header);
             createTableBodyDisgenet(alllines);
@@ -759,7 +753,9 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
           });
       }
     }
-  }, [annotRes]);
+  }, [annotRes, id]);
+
+  console.log("render");
 
   return (
     <div className={classes.result_view}>

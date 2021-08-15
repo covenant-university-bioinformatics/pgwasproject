@@ -39,6 +39,10 @@
 
     .button_container {
       width: 100%;
+
+      display: flex;
+      justify-content: center;
+
       .form_button {
         width: 100%;
       }
