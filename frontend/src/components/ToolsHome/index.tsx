@@ -57,8 +57,6 @@ const ToolsHome: React.FC<Props> = (props) => {
     });
   };
 
-  console.log("render tools_home");
-
   return (
     <MainLayout title={"Welcome"}>
       <div className={classes.main_container}>

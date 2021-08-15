@@ -12,6 +12,7 @@ import {
 import {
   Button,
   Checkbox,
+  CircularProgress,
   FormControl,
   FormControlLabel,
   FormGroup,
@@ -49,9 +50,9 @@ type UserFormData = {
 };
 
 const AnnotationForm: React.FC<Props & RouteComponentProps> = (props) => {
-  // const [loading, setLoading] = useState(false);
   const [uploadFile, setUploadFile] = useState<any>(null);
   const fileInput = useRef<any>(null);
+  const [loading, setLoading] = useState(false);
 
   const formik = useFormik<UserFormData>({
     initialValues: {
@@ -99,7 +100,6 @@ const AnnotationForm: React.FC<Props & RouteComponentProps> = (props) => {
       job_name: Yup.string().required("Job name is required"),
     }),
     onSubmit: (values: FormikValues) => {
-      console.log(values);
       const data = new FormData();
       data.append("file", uploadFile);
       for (const element in values) {
@@ -107,23 +107,25 @@ const AnnotationForm: React.FC<Props & RouteComponentProps> = (props) => {
           data.append(element, values[element]);
         }
       }
-
+      setLoading(true);
       pgwasAxios
         .post("/annot/jobs", data)
         .then((res) => {
           // then print response status
-          console.log(res);
           showToastMessage("Job submitted successfully");
+          setLoading(false);
           props.history.push(`/${props.match.url.split("/")[1]}/all_results`);
         })
         .catch((error) => {
-          console.log(error.response.data);
-          let message = "";
-          if (Array.isArray(error.response.data.message)) {
-            message = error.response.data.message.join("\n");
-          } else {
-            message = error.response.data.message;
+          let message = "Unable to submit job";
+          if (error?.response) {
+            if (Array.isArray(error.response.data?.message)) {
+              message = error.response.data.message.join("\n");
+            } else {
+              message = error?.response.data?.message;
+            }
           }
+          setLoading(false);
           showToastError(message);
         });
     },
@@ -160,7 +162,6 @@ const AnnotationForm: React.FC<Props & RouteComponentProps> = (props) => {
     setUploadFile(null);
     formik.setFieldValue("filename", "");
     formik.setFieldError("filename", "Please upload a file");
-    // console.log(fileInput.current.querySelector("input"));
     fileInput.current.querySelector("input").value = "";
   };
 
@@ -178,7 +179,6 @@ const AnnotationForm: React.FC<Props & RouteComponentProps> = (props) => {
     { variable: "intervar", name: "INTERVAR" },
   ];
 
-  // console.log(formik.values);
   return (
     <div className={classes.annot_form}>
       <form onSubmit={formik.handleSubmit}>
@@ -266,16 +266,20 @@ const AnnotationForm: React.FC<Props & RouteComponentProps> = (props) => {
           </Grid>
         </Grid>
         <div className={classes.button_container}>
-          <Button
-            className={classes.form_button}
-            startIcon={<PlayArrow />}
-            size="large"
-            type={"submit"}
-            variant="contained"
-            color="primary"
-          >
-            Execute <Hidden xsDown> Analysis</Hidden>
-          </Button>
+          {loading ? (
+            <CircularProgress color="secondary" className="progress" />
+          ) : (
+            <Button
+              className={classes.form_button}
+              startIcon={<PlayArrow />}
+              size="large"
+              type={"submit"}
+              variant="contained"
+              color="primary"
+            >
+              Execute <Hidden xsDown> Analysis</Hidden>
+            </Button>
+          )}
         </div>
       </form>
     </div>

@@ -19,12 +19,15 @@ export const signupUser = (user: {
         type: ActionType.SIGNUP_SUCCESS,
       });
     } catch (error) {
-      let message = "";
-      if (Array.isArray(error.response.data.message)) {
-        message = error.response.data.message.join("\n");
-      } else {
-        message = error.response.data.message;
+      let message = "Registration Failed";
+      if (error?.response) {
+        if (Array.isArray(error.response.data?.message)) {
+          message = error.response.data.message.join("\n");
+        } else {
+          message = error?.response.data?.message;
+        }
       }
+
       dispatch({
         type: ActionType.SIGNUP_ERROR,
         payload: message,
@@ -40,7 +43,6 @@ export const signinUser = (user: { username: string; password: string }) => {
     });
     try {
       const { data } = await axios.post("/auth/signin", user);
-      console.log(data);
       localStorage.setItem(
         "user",
         JSON.stringify({
@@ -49,6 +51,7 @@ export const signinUser = (user: { username: string; password: string }) => {
           expiresIn: data.expiresIn,
           role: data.user.role,
           emailConfirmed: data.user.emailConfirmed,
+          accessToken: data.accessToken,
         })
       );
       dispacth({
@@ -56,12 +59,14 @@ export const signinUser = (user: { username: string; password: string }) => {
         payload: data.user,
       });
     } catch (error) {
-      let message = "";
       console.dir(error);
-      if (Array.isArray(error?.response?.data.message)) {
-        message = error.response.data.message.join("\n");
-      } else {
-        message = error?.response?.data?.message || error.message;
+      let message = "User Sign In Failed";
+      if (error?.response) {
+        if (Array.isArray(error.response.data?.message)) {
+          message = error.response.data.message.join("\n");
+        } else {
+          message = error?.response.data?.message;
+        }
       }
       dispacth({
         type: ActionType.AUTH_ERROR,
@@ -79,7 +84,6 @@ export const authCheckState = () => {
     let authuser = localStorage.getItem("user");
 
     if (!authuser) {
-      console.log("No user");
       signOut();
     } else {
       const { expiresIn, emailConfirmed, username, role, email } =
@@ -87,10 +91,8 @@ export const authCheckState = () => {
 
       const expirationDate = new Date(expiresIn);
       if (expirationDate < new Date()) {
-        console.log("Date Expired");
         signOut();
       } else {
-        console.log("Signing in...");
         dispacth({
           type: ActionType.AUTH_SUCCESS,
           payload: {
@@ -121,12 +123,14 @@ export const getCurrentUser = () => {
         payload: response.data,
       });
     } catch (error) {
-      console.log(error.response.data);
-      let message = "";
-      if (Array.isArray(error.response.data.message)) {
-        message = error.response.data.message.join("\n");
-      } else {
-        message = error.response.data.message;
+      console.log(error?.response?.data);
+      let message = "Unable to connect";
+      if (error?.response) {
+        if (Array.isArray(error.response.data?.message)) {
+          message = error.response.data.message.join("\n");
+        } else {
+          message = error?.response.data?.message;
+        }
       }
       dispatch({
         type: ActionType.CURRENT_USER_ERROR,
@@ -143,18 +147,19 @@ export const signOut = () => {
     });
 
     try {
-      console.log("Signing out ...");
       await axios.get("/auth/logout");
       dispatch({
         type: ActionType.SIGNOUT_SUCCESS,
       });
       localStorage.removeItem("user");
     } catch (error) {
-      let message = "";
-      if (Array.isArray(error.response.data.message)) {
-        message = error.response.data.message.join("\n");
-      } else {
-        message = error.response.data.message;
+      let message = "Sign out Failed";
+      if (error?.response) {
+        if (Array.isArray(error.response.data?.message)) {
+          message = error.response.data.message.join("\n");
+        } else {
+          message = error?.response.data?.message;
+        }
       }
       dispatch({
         type: ActionType.SIGNOUT_ERROR,
@@ -163,12 +168,3 @@ export const signOut = () => {
     }
   };
 };
-
-// export const signOut = () => {
-//   return async (dispatch: Dispatch<AuthAction>) => {
-//     localStorage.removeItem("accessToken");
-//     dispatch({
-//       type: ActionType.SIGNOUT,
-//     });
-//   };
-// };

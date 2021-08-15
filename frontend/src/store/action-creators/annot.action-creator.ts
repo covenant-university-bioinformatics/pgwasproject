@@ -21,11 +21,13 @@ export const getAnnotationResults = (page: number, limit: number) => {
         },
       });
     } catch (error) {
-      let message = "";
-      if (Array.isArray(error.response.data.message)) {
-        message = error.response.data.message.join("\n");
-      } else {
-        message = error.response.data.message;
+      let message = "Unable to fetch jobs";
+      if (error?.response) {
+        if (Array.isArray(error.response.data?.message)) {
+          message = error.response.data.message.join("\n");
+        } else {
+          message = error?.response.data?.message;
+        }
       }
       dispatch({
         type: ActionType.ANNOTATION_RESULT_ERROR,

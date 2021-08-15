@@ -111,23 +111,6 @@ const LdStructureForm: React.FC<Props> = (props) => {
           data.append(element, values[element]);
         }
       }
-      const it = data.values();
-
-      console.log(it.next().value);
-      console.log(it.next().value);
-      console.log(it.next().value);
-      console.log(it.next().value);
-      console.log(it.next().value);
-      console.log(it.next().value);
-      console.log(it.next().value);
-      console.log(it.next().value);
-      console.log(it.next().value);
-      console.log(it.next().value);
-      console.log(it.next().value);
-      console.log(it.next().value);
-      console.log(it.next().value);
-      console.log(it.next().value);
-      console.log(it.next().value);
     },
   });
 
@@ -159,7 +142,6 @@ const LdStructureForm: React.FC<Props> = (props) => {
     setUploadFile(null);
     formik.setFieldValue("filename", "");
     formik.setFieldError("filename", "Please upload a file");
-    // console.log(fileInput.current.querySelector("input"));
     fileInput.current.querySelector("input").value = "";
   };
 
