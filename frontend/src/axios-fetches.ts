@@ -7,7 +7,7 @@ const instance = axios.create({
   baseURL: "https://spgwas.waslitbre.org/api",
   // baseURL: "https:/pgwas.dev/api",
 });
-
+console.log("runned");
 const authUser = localStorage.getItem("user");
 
 let token = "";
@@ -29,7 +29,13 @@ instance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
 instance.interceptors.request.use(
   (request) => {
-    // Edit request config
+    // Edit request config before it is sent
+    const authUser = localStorage.getItem("user");
+    let token = "";
+    if (authUser) {
+      token = JSON.parse(authUser).accessToken;
+    }
+    request.headers.common["Authorization"] = `Bearer ${token}`;
     return request;
   },
   (error) => {

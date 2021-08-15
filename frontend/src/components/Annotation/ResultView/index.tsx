@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import pgwasAxios from "../../../axios-fetches";
 import classes from "./index.module.scss";
@@ -79,7 +79,10 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
   const [error, setError] = useState(false);
   const [errorInfo, setErrorInfo] = useState("");
   const [jobRunning, setJobRunning] = useState(false);
-
+  const [reload, setReload] = useState(0);
+  const [seconds, setSeconds] = React.useState(30);
+  const interval = useRef<any>(null);
+  const timeout = useRef<any>(null);
   let errorMessage: any | null = null;
   let genMessage: any | null = null;
 
@@ -472,7 +475,7 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
   };
 
   const createTableTabs = () => {
-    if (snpAnnotResult.length > 0) {
+    if (annotRes && annotRes.status === "completed") {
       return (
         <div className={classes.table_tabs}>
           <h3 className={classes.sub_heading}>Annotation Result Tables</h3>
@@ -484,18 +487,10 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
               aria-label="simple tabs example"
             >
               <Tab label="Annotation" {...a11yProps(0)} />
-              {snpPopFreqHeader.length > 0 && (
-                <Tab label="1KGP Allele Frequencies" {...a11yProps(1)} />
-              )}
-              {snpExacFreqHeader.length > 0 && (
-                <Tab label="Exome Frequencies" {...a11yProps(2)} />
-              )}
-              {snpClinvarHeader.length > 0 && (
-                <Tab label="Clinvar" {...a11yProps(3)} />
-              )}
-              {snpDisgenetHeader.length > 0 && (
-                <Tab label="Disgenet" {...a11yProps(4)} />
-              )}
+              <Tab label="1KGP Allele Frequencies" {...a11yProps(1)} />
+              <Tab label="Exome Frequencies" {...a11yProps(2)} />
+              <Tab label="Clinvar" {...a11yProps(3)} />
+              <Tab label="Disgenet" {...a11yProps(4)} />
             </Tabs>
           </AppBar>
           <TabPanel value={value} index={0}>
@@ -517,7 +512,7 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
                 recordsAfterPagingPopFreq
               )
             ) : (
-              <p>No Data</p>
+              <p>No results found for your SNPs</p>
             )}
           </TabPanel>
           <TabPanel value={value} index={2}>
@@ -530,7 +525,7 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
                 recordsAfterPagingExacFreq
               )
             ) : (
-              <p>No Data</p>
+              <p>No results found for your SNPs</p>
             )}
           </TabPanel>
           <TabPanel value={value} index={3}>
@@ -543,12 +538,13 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
                 recordsAfterPagingClinvar
               )
             ) : (
-              <p>No Data</p>
+              <p>No results found for your SNPs</p>
             )}
           </TabPanel>
           <TabPanel value={value} index={4}>
-            {loadingDisgenet ? <CircularProgress /> : null}
-            {snpDisgenetResult.length > 0 ? (
+            {loadingDisgenet ? (
+              <CircularProgress />
+            ) : snpDisgenetResult.length > 0 ? (
               createTableDisgenetSection()
             ) : (
               <p>No Data</p>
@@ -556,8 +552,9 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
           </TabPanel>
         </div>
       );
+    } else {
+      return null;
     }
-    return null;
   };
 
   const createInfoSection = () => {
@@ -604,6 +601,10 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
             <li>
               <span>1KGP AFR</span>
               <span>{String(annotRes.annot.kgp_afr)}</span>
+            </li>
+            <li>
+              <span>Intervar</span>
+              <span>{String(annotRes.annot.intervar)}</span>
             </li>
           </ul>
         </div>
@@ -690,14 +691,46 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
         setJobRunning(result.data.status === "running");
         setLoading(false);
         setError(false);
+        if (result.data.status === "completed") {
+          clearInterval(interval.current);
+          clearTimeout(timeout.current);
+        }
       })
       .catch((e) => {
         setAnnotRes(undefined);
         setLoading(false);
         setError(true);
         setErrorInfo(e.response.data.message);
+        clearInterval(interval.current);
       });
-  }, [id]);
+  }, [id, reload]);
+
+  useEffect(() => {
+    if (annotRes && annotRes.status !== "completed") {
+      if (interval.current === null) {
+        interval.current = setInterval(() => {
+          setReload((prev) => prev + 1);
+        }, 30000);
+      }
+    }
+  }, [annotRes]);
+
+  useEffect(() => {
+    if (annotRes && annotRes.status === "running") {
+      if (seconds > 0) {
+        timeout.current = setTimeout(() => setSeconds(seconds - 1), 1000);
+      } else {
+        setSeconds(30);
+      }
+    }
+  });
+
+  useEffect(() => {
+    return () => {
+      clearInterval(interval.current);
+      clearTimeout(timeout.current);
+    };
+  }, []);
 
   useEffect(() => {
     if (annotRes && annotRes.status === "completed") {
@@ -769,6 +802,8 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
       {jobRunning && (
         <div className={classes.job_running}>
           <p>Job is currently running. Please wait for it to complete</p>
+          <p>Number of reload times: {reload}</p>
+          <p>Time to next reload: {seconds}</p>
         </div>
       )}
       <h2 style={{ marginBottom: "2rem" }}>
