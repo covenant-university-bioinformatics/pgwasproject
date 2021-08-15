@@ -9,6 +9,7 @@ import {
   MenuBookRounded,
   DashboardRounded,
   CloseRounded,
+  PersonRounded,
 } from "@material-ui/icons";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useActions } from "../../hooks/useActions";
@@ -95,6 +96,11 @@ const Header: React.FC<Props> = (props) => {
               color="inherit"
             >
               <Hidden smDown> Sign Out </Hidden>
+            </Button>
+          )}
+          {user.username && (
+            <Button startIcon={<PersonRounded />} size="medium" color="inherit">
+              <Hidden smDown> {user.username} </Hidden>
             </Button>
           )}
         </nav>
