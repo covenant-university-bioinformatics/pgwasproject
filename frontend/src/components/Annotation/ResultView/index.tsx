@@ -452,7 +452,7 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
               color="primary"
               className={classes.button}
               endIcon={<GetAppRounded />}
-              href={`https://pgwas.dev/api/annot${annotRes.outputFile}`}
+              href={`/results${annotRes.outputFile}`}
             >
               Download Annotation Results
             </Button>
@@ -462,7 +462,7 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
                 color="default"
                 className={classes.button}
                 endIcon={<GetAppRounded />}
-                href={`https://pgwas.dev/api/annot${annotRes.disgenet}`}
+                href={`/results${annotRes.disgenet}`}
               >
                 Download DISGENET Results
               </Button>
@@ -657,12 +657,7 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
         <div className={classes.image_tab}>
           <h3>SNP Locations</h3>
           <div className={classes.image_box}>
-            <img
-              src={`https://spgwas.waslitbre.org/api/annot${
-                annotRes!.snp_plot
-              }`}
-              alt="snp_plot"
-            />
+            <img src={`/results${annotRes!.snp_plot}`} alt="snp_plot" />
           </div>
         </div>
       );
