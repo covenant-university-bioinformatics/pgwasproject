@@ -1,5 +1,5 @@
 import React from "react";
-import classes from "../LDStructure/index.module.scss";
+import classes from "./index.module.scss";
 import { Route, RouteComponentProps, Switch } from "react-router-dom";
 import ToolsLayout from "../../layouts/ToolsLayout";
 import AnnotationHome from "./Home";

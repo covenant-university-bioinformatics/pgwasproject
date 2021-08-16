@@ -1,7 +1,9 @@
 .result_list{
    position: relative;
   .paper{
-
+    overflow-x: auto;
+    margin-right: auto;
+    margin-left: auto;
   }
   .loading{
     position: absolute;
