@@ -452,7 +452,7 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
               color="primary"
               className={classes.button}
               endIcon={<GetAppRounded />}
-              href={`/results${annotRes.outputFile}`}
+              href={`https://www.spgwas.waslitbre.org/api/annot${annotRes.outputFile}`}
             >
               Download Annotation Results
             </Button>
@@ -462,7 +462,7 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
                 color="default"
                 className={classes.button}
                 endIcon={<GetAppRounded />}
-                href={`/results${annotRes.disgenet}`}
+                href={`https://www.spgwas.waslitbre.org/api/annot${annotRes.disgenet}`}
               >
                 Download DISGENET Results
               </Button>
@@ -480,7 +480,11 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
         <div className={classes.table_tabs}>
           <h3 className={classes.sub_heading}>Annotation Result Tables</h3>
           {showDownloadButton()}
-          <AppBar color="default" position="static">
+          <AppBar
+            className={classes.tabs_header}
+            color="default"
+            position="static"
+          >
             <Tabs
               value={value}
               onChange={handleChange}
@@ -657,7 +661,12 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
         <div className={classes.image_tab}>
           <h3>SNP Locations</h3>
           <div className={classes.image_box}>
-            <img src={`/results${annotRes!.snp_plot}`} alt="snp_plot" />
+            <img
+              src={`https://spgwas.waslitbre.org/api/annot${
+                annotRes!.snp_plot
+              }`}
+              alt="snp_plot"
+            />
           </div>
         </div>
       );
@@ -702,6 +711,7 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
 
   useEffect(() => {
     if (annotRes && annotRes.status !== "completed") {
+      //handle failed case
       if (interval.current === null) {
         interval.current = setInterval(() => {
           setReload((prev) => prev + 1);
@@ -782,8 +792,6 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
       }
     }
   }, [annotRes, id]);
-
-  console.log("render");
 
   return (
     <div className={classes.result_view}>
