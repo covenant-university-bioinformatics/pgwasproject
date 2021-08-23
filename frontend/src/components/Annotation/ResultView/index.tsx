@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import pgwasAxios from "../../../axios-fetches";
 import classes from "./index.module.scss";
@@ -33,6 +33,9 @@ export type AnnotationResult = {
   outputFile: string;
   disgenet: string;
   snp_plot: string;
+  failed_reason: string | undefined;
+  longJob: string;
+  completionTime: string;
   annot: {
     intervar: boolean;
     clinvar: boolean;
@@ -71,6 +74,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
   props
 ) => {
+  const reloadLimit = 60;
   const { jobId: id } = props.match.params;
   const [annotRes, setAnnotRes] = useState<AnnotationResult | undefined>(
     undefined
@@ -78,10 +82,9 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [errorInfo, setErrorInfo] = useState("");
-  const [jobRunning, setJobRunning] = useState(false);
   const [reload, setReload] = useState(0);
-  const [seconds, setSeconds] = React.useState(30);
-  const interval = useRef<any>(null);
+  const [seconds, setSeconds] = useState(reloadLimit);
+  // const interval = useRef<any>(null);
   const timeout = useRef<any>(null);
   let errorMessage: any | null = null;
   let genMessage: any | null = null;
@@ -443,7 +446,7 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
       return (
         <div className={classes.download}>
           <p>
-            The tables below have been chuked and pruned to allow for proper
+            The tables below have been chunked and pruned to allow for proper
             display. Use the buttons below to download the full files.
           </p>
           <div className={classes.buttons}>
@@ -452,7 +455,7 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
               color="primary"
               className={classes.button}
               endIcon={<GetAppRounded />}
-              href={`https://www.spgwas.waslitbre.org/api/annot${annotRes.outputFile}`}
+              href={`/results${annotRes.outputFile}`}
             >
               Download Annotation Results
             </Button>
@@ -462,7 +465,7 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
                 color="default"
                 className={classes.button}
                 endIcon={<GetAppRounded />}
-                href={`https://www.spgwas.waslitbre.org/api/annot${annotRes.disgenet}`}
+                href={`/results${annotRes.disgenet}`}
               >
                 Download DISGENET Results
               </Button>
@@ -472,6 +475,29 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
       );
     }
     return null;
+  };
+
+  const createJobStatus = () => {
+    if (
+      annotRes &&
+      (annotRes.status === "running" || annotRes.status === "queued")
+    ) {
+      return (
+        <div className={classes.job_running}>
+          <p>Job is currently {annotRes.status}</p>
+          {annotRes.longJob ? (
+            <p>
+              This job may take a while to complete. Don't worry, an email will
+              be sent to you when it is done.
+            </p>
+          ) : (
+            <p>Time to next reload: {seconds}</p>
+          )}
+        </div>
+      );
+    } else {
+      return null;
+    }
   };
 
   const createTableTabs = () => {
@@ -488,6 +514,7 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
             <Tabs
               value={value}
               onChange={handleChange}
+              variant="scrollable"
               aria-label="simple tabs example"
             >
               <Tab label="Annotation" {...a11yProps(0)} />
@@ -497,69 +524,85 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
               <Tab label="Disgenet" {...a11yProps(4)} />
             </Tabs>
           </AppBar>
-          <TabPanel value={value} index={0}>
-            {loadingAnnot ? <CircularProgress /> : null}
-            {createTableSection(
-              TblContainer,
-              TblHead,
-              TblPagination,
-              recordsAfterPaging
-            )}
-          </TabPanel>
-          <TabPanel value={value} index={1}>
-            {loadingAnnot ? <CircularProgress /> : null}
-            {snpPopFreqResult.length > 0 ? (
-              createTableSection(
-                TblContainerPopFreq,
-                TblHeadPopFreq,
-                TblPaginationPopFreq,
-                recordsAfterPagingPopFreq
-              )
-            ) : (
-              <p>No results found for your SNPs</p>
-            )}
-          </TabPanel>
-          <TabPanel value={value} index={2}>
-            {loadingAnnot ? <CircularProgress /> : null}
-            {snpExacFreqResult.length > 0 ? (
-              createTableSection(
-                TblContainerExacFreq,
-                TblHeadExacFreq,
-                TblPaginationExacFreq,
-                recordsAfterPagingExacFreq
-              )
-            ) : (
-              <p>No results found for your SNPs</p>
-            )}
-          </TabPanel>
-          <TabPanel value={value} index={3}>
-            {loadingAnnot ? <CircularProgress /> : null}
-            {snpClinvarResult.length > 0 ? (
-              createTableSection(
-                TblContainerClinvar,
-                TblHeadClinvar,
-                TblPaginationClinvar,
-                recordsAfterPagingClinvar
-              )
-            ) : (
-              <p>No results found for your SNPs</p>
-            )}
-          </TabPanel>
-          <TabPanel value={value} index={4}>
-            {loadingDisgenet ? (
-              <CircularProgress />
-            ) : snpDisgenetResult.length > 0 ? (
-              createTableDisgenetSection()
-            ) : (
-              <p>No Data</p>
-            )}
-          </TabPanel>
+          <div className={classes.panels}>
+            <TabPanel value={value} index={0}>
+              {loadingAnnot ? <CircularProgress /> : null}
+              {createTableSection(
+                TblContainer,
+                TblHead,
+                TblPagination,
+                recordsAfterPaging
+              )}
+            </TabPanel>
+            <TabPanel value={value} index={1}>
+              {loadingAnnot ? <CircularProgress /> : null}
+              {snpPopFreqResult.length > 0 ? (
+                createTableSection(
+                  TblContainerPopFreq,
+                  TblHeadPopFreq,
+                  TblPaginationPopFreq,
+                  recordsAfterPagingPopFreq
+                )
+              ) : (
+                <p>No results found for your SNPs</p>
+              )}
+            </TabPanel>
+            <TabPanel value={value} index={2}>
+              {loadingAnnot ? <CircularProgress /> : null}
+              {snpExacFreqResult.length > 0 ? (
+                createTableSection(
+                  TblContainerExacFreq,
+                  TblHeadExacFreq,
+                  TblPaginationExacFreq,
+                  recordsAfterPagingExacFreq
+                )
+              ) : (
+                <p>No results found for your SNPs</p>
+              )}
+            </TabPanel>
+            <TabPanel value={value} index={3}>
+              {loadingAnnot ? <CircularProgress /> : null}
+              {snpClinvarResult.length > 0 ? (
+                createTableSection(
+                  TblContainerClinvar,
+                  TblHeadClinvar,
+                  TblPaginationClinvar,
+                  recordsAfterPagingClinvar
+                )
+              ) : (
+                <p>No results found for your SNPs</p>
+              )}
+            </TabPanel>
+            <TabPanel value={value} index={4}>
+              {loadingDisgenet ? (
+                <CircularProgress />
+              ) : snpDisgenetResult.length > 0 ? (
+                createTableDisgenetSection()
+              ) : (
+                <p>No Data</p>
+              )}
+            </TabPanel>
+          </div>
         </div>
       );
     } else {
       return null;
     }
   };
+
+  const getTotalTime = useCallback(() => {
+    if (annotRes && annotRes.completionTime && annotRes.createdAt) {
+      const timeOne = new Date(annotRes.completionTime);
+      const timeTwo = new Date(annotRes.createdAt);
+      let time = -1;
+      if (timeOne && timeTwo) {
+        // @ts-ignore
+        time = (Math.abs(timeOne - timeTwo) / (1000 * 60)).toFixed(2);
+      }
+      return time;
+    }
+    return -1;
+  }, [annotRes]);
 
   const createInfoSection = () => {
     if (annotRes) {
@@ -638,6 +681,18 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
               <span>Created Date</span>
               <span>{new Date(annotRes.createdAt).toLocaleString()}</span>
             </li>
+            <li>
+              <span>Completion Date</span>
+              <span>
+                {annotRes.completionTime
+                  ? new Date(annotRes.completionTime).toLocaleString()
+                  : "Pending"}
+              </span>
+            </li>
+            <li>
+              <span>Total time</span>
+              <span>{getTotalTime()} minutes</span>
+            </li>
           </ul>
         </div>
       );
@@ -655,18 +710,26 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
     return false;
   };
 
+  const createJobFailedReason = () => {
+    if (annotRes && annotRes.failed_reason) {
+      return (
+        <div className={classes.error_message}>
+          <p>Reason for failure: </p>
+          <p>{annotRes.failed_reason}</p>
+        </div>
+      );
+    } else {
+      return null;
+    }
+  };
+
   const createChartSection = () => {
     if (annotRes && annotRes.status === "completed") {
       const chart = (
         <div className={classes.image_tab}>
           <h3>SNP Locations</h3>
           <div className={classes.image_box}>
-            <img
-              src={`https://spgwas.waslitbre.org/api/annot${
-                annotRes!.snp_plot
-              }`}
-              alt="snp_plot"
-            />
+            <img src={`/results${annotRes!.snp_plot}`} alt="snp_plot" />
           </div>
         </div>
       );
@@ -692,11 +755,14 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
       .get<AnnotationResult>(`/annot/jobs/${id}`)
       .then((result) => {
         setAnnotRes(result.data);
-        setJobRunning(result.data.status === "running");
+        console.log(result.data);
         setLoading(false);
         setError(false);
-        if (result.data.status === "completed") {
-          clearInterval(interval.current);
+        if (
+          result.data.status === "completed" ||
+          result.data.status === "failed"
+        ) {
+          // clearInterval(interval.current);
           clearTimeout(timeout.current);
         }
       })
@@ -705,34 +771,29 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
         setLoading(false);
         setError(true);
         setErrorInfo(e.response.data.message);
-        clearInterval(interval.current);
+        // clearInterval(interval.current);
+        clearTimeout(timeout.current);
       });
   }, [id, reload]);
 
   useEffect(() => {
-    if (annotRes && annotRes.status !== "completed") {
-      //handle failed case
-      if (interval.current === null) {
-        interval.current = setInterval(() => {
-          setReload((prev) => prev + 1);
-        }, 30000);
-      }
-    }
-  }, [annotRes]);
-
-  useEffect(() => {
-    if (annotRes && annotRes.status === "running") {
+    if (
+      annotRes &&
+      !annotRes.longJob &&
+      (annotRes.status === "running" || annotRes.status === "queued")
+    ) {
       if (seconds > 0) {
         timeout.current = setTimeout(() => setSeconds(seconds - 1), 1000);
       } else {
-        setSeconds(30);
+        setSeconds(reloadLimit);
+        setReload((prev) => prev + 1);
       }
     }
-  });
+  }, [annotRes, seconds]);
 
   useEffect(() => {
     return () => {
-      clearInterval(interval.current);
+      // clearInterval(interval.current);
       clearTimeout(timeout.current);
     };
   }, []);
@@ -766,6 +827,7 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
           });
       }
     }
+    // eslint-disable-next-line
   }, [annotRes, id]);
 
   useEffect(() => {
@@ -791,6 +853,7 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
           });
       }
     }
+    // eslint-disable-next-line
   }, [annotRes, id]);
 
   return (
@@ -802,17 +865,12 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
           {errorMessage}
         </div>
       )}
-      {jobRunning && (
-        <div className={classes.job_running}>
-          <p>Job is currently running. Please wait for it to complete</p>
-          <p>Number of reload times: {reload}</p>
-          <p>Time to next reload: {seconds}</p>
-        </div>
-      )}
+      {createJobStatus()}
       <h2 style={{ marginBottom: "2rem" }}>
         Results for Job: {annotRes ? annotRes.job_name : id}
       </h2>
       {createInfoSection()}
+      {createJobFailedReason()}
       {createChartSection()}
       {createTableTabs()}
     </div>

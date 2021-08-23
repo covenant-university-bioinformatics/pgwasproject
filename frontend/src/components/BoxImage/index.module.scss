@@ -1,0 +1,105 @@
+@import "../../partials/mixins";
+
+.BoxImages {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  top: 0;
+  left: 0;
+  perspective: 1000px;
+  transform: scale(0.9);
+  @include respondMax(tab-land) {
+    transform: scale(0.7);
+  }
+
+  .Image {
+    width: 100%;
+    height: 15.625rem;
+    margin: 0 auto;
+    transform-style: preserve-3d;
+    transform: scale(0);
+
+    //width: 100%;
+    //height: 100%;
+    //&:after {
+    //  content: "";
+    //  position: absolute;
+    //  top: 0;
+    //  left: 0;
+    //  background-color: rgba(0,0,0,0.2);
+    //  width: 100%;
+    //  height: 100%;
+    //  border-radius: 5px;
+    //}
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      border-radius: 5px;
+    }
+    &One {
+      position: absolute;
+      top: 5rem;
+      left: 0;
+      width: 12.5rem;
+      height: 12.5rem;
+      box-shadow: 3px 5px 5px 0 rgba(0, 0, 0, 0.4);
+      animation: reveal;
+      animation-duration: 0.8s;
+      animation-delay: 1.5s;
+      animation-iteration-count: 1;
+      animation-fill-mode: forwards;
+      animation-play-state: running;
+      animation-timing-function: cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    }
+    &Two {
+      position: absolute;
+      top: 19rem;
+      left: 0;
+      width: 12.5rem;
+      height: 12.5rem;
+      box-shadow: 3px 5px 5px 0 rgba(0, 0, 0, 0.4);
+      animation: reveal;
+      animation-duration: 0.8s;
+      animation-delay: 1.8s;
+      animation-iteration-count: 1;
+      animation-fill-mode: forwards;
+      animation-play-state: running;
+      animation-timing-function: cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    }
+    &Three {
+      position: absolute;
+      top: 83px;
+      left: 30%;
+      @include respondMax(tab-land) {
+        left: 40%;
+      }
+      width: 31.25rem;
+      height: 26.25rem;
+      box-shadow: 3px 5px 5px 0 rgba(0, 0, 0, 0.4);
+      animation: reveal;
+      animation-duration: 0.8s;
+      animation-delay: 2s;
+      animation-iteration-count: 1;
+      animation-fill-mode: forwards;
+      animation-play-state: running;
+      animation-timing-function: cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    }
+  }
+}
+
+@keyframes reveal {
+  0% {
+    transform: translateX(-18.75rem) translateY(18.75rem) scale(1.7) rotateY(-25deg);
+  }
+  //50%{
+  //  transform: scale(0.6);
+  //}
+  //75%{
+  //  transform: scale(1.2);
+  //}
+  100% {
+    transform: translateY(0) scale(1) rotateY(0);
+  }
+}

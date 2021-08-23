@@ -14,7 +14,7 @@
   }
 
   .job_running {
-    width: 100%;
+    width: 350px;
     background-color: #3d8af3;
     border-radius: 5px;
     padding: 1rem;
@@ -180,10 +180,8 @@
   }
 
   .table_tabs {
-    overflow-x: auto;
     .tabs_header {
       @include respondMax(ipad-land) {
-        width: 850px;
         .MuiTabs-root {
           overflow: scroll !important;
         }
@@ -205,6 +203,14 @@
         }
       }
     }
+
+    .panels{
+      margin: 1rem;
+      padding: 1rem;
+      overflow-x: auto;
+      box-shadow: 0 0 5px rgba(0,0,0,0.4);
+    }
+
     .table_section {
       width: 100%;
     }

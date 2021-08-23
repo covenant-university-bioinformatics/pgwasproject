@@ -1,38 +1,71 @@
-.main_container {
-  display: flex;
-  justify-content: center;
-  height: inherit;
-  .grid_container {
-    padding: 3rem 0;
-    min-height: 35rem;
-    align-items: stretch;
-    .grid_element {
-      margin-bottom: 1rem;
-      //background-color: #ca0dac;
-      a {
-        text-decoration: none;
-        font-weight: bold;
-        color: #000000;
-        font-size: 1.4rem;
-        display: block;
-        height: 100%;
-        :hover {
-          //background-color: #fff;
-          color: #fe0000;
-        }
-        .paper {
+@import "../../partials/mixins";
+.home_container{
+  width: 80%;
+  margin: 0 auto;
+  height: 100%;
+  padding: 2rem;
+  @include respondMax(ipad-port) {
+    padding: 1rem;
+  }
+  .main_header{
+    //margin: 2rem 0 2rem 0;
+    margin-bottom: 2rem;
+    @include respondMax(ipad-port) {
+      //font-size: 1rem;
+    }
+    color: #ffffff;
+    text-align: center;
+  }
+  .line_bar{
+    display: block;
+    @include respondMax(ipad-port) {
+      width: 12rem;
+    }
+    width: 17rem;
+    height: 0.5rem;
+    margin: 0 auto 3.5rem auto;
+    border-radius: 10px;
+    background-color: #f7bd35;
+    //margin-bottom: 5rem;
+  }
+  .main_container {
+    display: flex;
+    justify-content: center;
+    height: inherit;
+    .grid_container {
+      padding: 3rem 0;
+      min-height: 35rem;
+      align-items: stretch;
+      .grid_element {
+        margin-bottom: 1rem;
+        //background-color: #ca0dac;
+        a {
+          text-decoration: none;
+          font-weight: bold;
+          color: #000000;
+          font-size: 1.4rem;
+          display: block;
           height: 100%;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          background: rgb(255,255,255);
-          background: linear-gradient(152deg, rgba(255,255,255,1) 18%, rgba(255,243,182,1) 49%, rgba(255,255,255,1) 84%);
-          box-shadow: 2px 2px 5px 2px rgba(0,0,0, 0.4);
-          border-radius: 4px;
-          padding: 1.25rem;
-          text-align: center;
+          :hover {
+            //background-color: #fff;
+            color: #fe0000;
+          }
+          .paper {
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgb(255,255,255);
+            //background: linear-gradient(152deg, rgba(255,255,255,1) 18%, rgba(255,243,182,1) 49%, rgba(255,255,255,1) 84%);
+            background: linear-gradient(152deg, rgba(255,255,255,1) 18%, rgba(255,209,209,1) 49%, rgba(255,255,255,1) 84%);
+            box-shadow: 2px 2px 5px 2px rgba(0,0,0, 0.4);
+            border-radius: 4px;
+            padding: 1.25rem;
+            text-align: center;
+          }
         }
       }
     }
   }
+
 }

@@ -1,21 +1,13 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect } from "react";
 import useTable from "../../../hooks/useTable";
-import { Link, RouteComponentProps } from "react-router-dom";
+import { RouteComponentProps } from "react-router-dom";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import {
-  CircularProgress,
-  IconButton,
-  TableBody,
-  TableCell,
-  TableRow,
-} from "@material-ui/core";
-import pgwasAxios from "../../../axios-fetches";
+import { CircularProgress, TableBody } from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 import classes from "./index.module.scss";
-import { DeleteOutlineSharp } from "@material-ui/icons";
 import { useActions } from "../../../hooks/useActions";
 import { useTypedSelector } from "../../../hooks/useTypedSelector";
-import { showToastError, showToastSuccess } from "../../utility/general_utils";
+import AnnotRow from "../Row";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -43,8 +35,6 @@ const AnnotationResultList: React.FC<Props & RouteComponentProps> = (props) => {
     (state) => state.annot
   );
 
-  const [deleteLoading, setDeleteLoading] = useState(false);
-
   const headCells = [
     { id: "name", label: "Job Name", disableSorting: false },
     { id: "status", label: "Job Status", disableSorting: false },
@@ -61,29 +51,6 @@ const AnnotationResultList: React.FC<Props & RouteComponentProps> = (props) => {
     page,
     rowsPerPage,
   } = useTable(data, headCells, [3, 6, 9], total);
-
-  const deleteJob = (id: string) => {
-    setDeleteLoading(true);
-    pgwasAxios
-      .delete(`/annot/jobs/${id}`)
-      .then(() => {
-        setDeleteLoading(false);
-        showToastSuccess("Job deleted");
-        getResults(page, rowsPerPage);
-      })
-      .catch((error) => {
-        let message = "Unable to delete job";
-        if (error?.response) {
-          if (Array.isArray(error.response.data?.message)) {
-            message = error.response.data.message.join("\n");
-          } else {
-            message = error?.response.data?.message;
-          }
-        }
-        setDeleteLoading(false);
-        showToastError(message);
-      });
-  };
 
   useEffect(() => {
     getResults(page, rowsPerPage);
@@ -102,39 +69,16 @@ const AnnotationResultList: React.FC<Props & RouteComponentProps> = (props) => {
           <TblHead />
           <TableBody>
             {recordsAfterSorting().map((item: any, index) => (
-              <TableRow key={item._id}>
-                <TableCell>{item.job_name}</TableCell>
-                <TableCell>{item.status}</TableCell>
-                <TableCell>
-                  {new Date(item.createdAt).toLocaleString()}
-                </TableCell>
-                <TableCell>
-                  <Link
-                    to={`/${props.match.url.split("/")[1]}/result_view/${
-                      item._id
-                    }`}
-                  >
-                    view
-                  </Link>
-                </TableCell>
-                <TableCell>
-                  {deleteLoading ? (
-                    <CircularProgress
-                      color="secondary"
-                      className={[classes.spinner, "progress"].join(" ")}
-                    />
-                  ) : (
-                    <IconButton
-                      onClick={() => {
-                        deleteJob(item._id);
-                      }}
-                      aria-label="delete"
-                    >
-                      <DeleteOutlineSharp />
-                    </IconButton>
-                  )}
-                </TableCell>
-              </TableRow>
+              <AnnotRow
+                key={item._id}
+                item={item}
+                link={`/${props.match.url.split("/")[1]}/result_view/${
+                  item._id
+                }`}
+                page={page}
+                rowsPerPage={rowsPerPage}
+                getResults={getResults}
+              />
             ))}
           </TableBody>
         </TblContainer>

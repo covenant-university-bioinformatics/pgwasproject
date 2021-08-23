@@ -34,43 +34,43 @@ const SideBar: React.FC<Props> = (props) => {
   };
 
   const links = [
-    { title: "Home", linkTo: "/", icon: <HomeSharp /> },
-    { title: "Liftover", linkTo: "/liftover", icon: <LabelSharp /> },
+    // { title: "Home", linkTo: "/tools", icon: <HomeSharp /> },
+    { title: "Liftover", linkTo: "/tools/liftover", icon: <LabelSharp /> },
     {
       title: "LD Structure",
-      linkTo: "/ld_structure",
+      linkTo: "/tools/ld_structure",
       icon: <LabelSharp />,
     },
-    { title: "Imputation", linkTo: "/imputation", icon: <LabelSharp /> },
+    { title: "Imputation", linkTo: "/tools/imputation", icon: <LabelSharp /> },
     {
       title: "Finemapping",
-      linkTo: "/bayes_finemap",
+      linkTo: "/tools/bayes_finemap",
       icon: <LabelSharp />,
       steps: [
         {
           title: "SuSie",
-          linkTo: "/bayes_finemap/susie",
+          linkTo: "/tools/bayes_susie",
           icon: <LabelImportant />,
         },
         {
           title: "FineMap",
-          linkTo: "/bayes_finemap/finemap",
+          linkTo: "/tools/bayes_finemap",
           icon: <LabelImportant />,
         },
         {
           title: "Paintor",
-          linkTo: "/bayes_finemap/paintor",
+          linkTo: "/tools/bayes_paintor",
           icon: <LabelImportant />,
         },
       ],
     },
-    { title: "Annotation", linkTo: "/annotation", icon: <LabelSharp /> },
+    { title: "Annotation", linkTo: "/tools/annotation", icon: <LabelSharp /> },
     {
       title: "Deleteriousness",
-      linkTo: "/deleteriousness",
+      linkTo: "/tools/deleteriousness",
       icon: <LabelSharp />,
     },
-    { title: "Regulation", linkTo: "/regulation", icon: <LabelSharp /> },
+    { title: "Regulation", linkTo: "/tools/regulation", icon: <LabelSharp /> },
   ];
 
   const renderItems = () => {
@@ -114,7 +114,7 @@ const SideBar: React.FC<Props> = (props) => {
               >
                 <NavLink
                   activeClassName={classes.selected}
-                  exact
+                  // exact
                   className={classes.link}
                   to={link.linkTo}
                 >
@@ -170,6 +170,31 @@ const SideBar: React.FC<Props> = (props) => {
         </IconButton>
       </div>
       <Divider />
+      <ListItem
+        onClick={() => {
+          if (miniSidebar) {
+            setMini(false);
+          }
+        }}
+        button
+        className={classes.list}
+      >
+        <Hidden mdDown implementation={"css"}>
+          <ListItemIcon className={classes.icon}>
+            <HomeSharp />
+          </ListItemIcon>
+        </Hidden>
+        <ListItemText className={classes.text}>
+          <NavLink
+            activeClassName={classes.selected}
+            exact
+            className={classes.link}
+            to={"/tools"}
+          >
+            Home
+          </NavLink>
+        </ListItemText>
+      </ListItem>
       {renderItems()}
     </div>
   );

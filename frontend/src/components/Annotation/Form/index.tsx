@@ -4,6 +4,7 @@ import pgwasAxios from "../../../axios-fetches";
 import * as Yup from "yup";
 import classes from "./index.module.scss";
 import {
+  getErrorMessage,
   selectIsError,
   showToastError,
   showToastMessage,
@@ -117,16 +118,8 @@ const AnnotationForm: React.FC<Props & RouteComponentProps> = (props) => {
           props.history.push(`/${props.match.url.split("/")[1]}/all_results`);
         })
         .catch((error) => {
-          let message = "Unable to submit job";
-          if (error?.response) {
-            if (Array.isArray(error.response.data?.message)) {
-              message = error.response.data.message.join("\n");
-            } else {
-              message = error?.response.data?.message;
-            }
-          }
           setLoading(false);
-          showToastError(message);
+          showToastError(getErrorMessage(error));
         });
     },
   });
@@ -276,6 +269,7 @@ const AnnotationForm: React.FC<Props & RouteComponentProps> = (props) => {
               type={"submit"}
               variant="contained"
               color="primary"
+              disabled={!formik.isValid}
             >
               Execute <Hidden xsDown> Analysis</Hidden>
             </Button>

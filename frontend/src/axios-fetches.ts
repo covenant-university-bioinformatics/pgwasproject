@@ -5,7 +5,7 @@ import axios from "axios";
 
 const instance = axios.create({
   baseURL: "https://spgwas.waslitbre.org/api",
-  // baseURL: "https:/pgwas.dev/api",
+  // baseURL: "https://pgwas.dev/api",
 });
 console.log("runned");
 const authUser = localStorage.getItem("user");

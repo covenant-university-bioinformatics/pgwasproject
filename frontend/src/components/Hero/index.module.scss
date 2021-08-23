@@ -1,0 +1,175 @@
+@import "../../partials/mixins";
+
+.Hero {
+  height: 41rem;
+  width: 100%;
+  margin-bottom: 2rem;
+  display: flex;
+  background-color: #2d3dcb;
+  align-items: flex-start;
+  justify-content: center;
+  //background-color: red;
+  @include respondMax(tab-land) {
+    padding: 2rem;
+  }
+
+  @include respondMax(tab-port) {
+    padding: 0;
+  }
+  //background-color: black;
+
+  .Col1 {
+    flex: 1.5;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    //background-color: black;
+    //transform: scale(0.85);
+    //top: -10rem;
+    @include respondMax(tab-port) {
+      display: none;
+    }
+  }
+  .Col2 {
+    //margin-left: 2rem;
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    //background-color: blue;
+    padding: 2rem;
+    @include respondMax(ipad-port) {
+      padding: 10px;
+    }
+    //display: flex;
+    //align-items: center;
+    @include respondMax(tab-port) {
+      background-color: rgba(0, 0, 0, 0.4);
+      margin-left: 0;
+    }
+    //background-color: rgba(255,255,255,0.3);
+    .main_header {
+      margin-top: -4rem;
+      font-size: 2.7rem;
+      padding: 5px;
+
+      border-radius: 5px;
+      margin-bottom: 1rem;
+      @include respondMax(tab-land) {
+        margin-top: 1rem;
+        font-size: 2rem;
+      }
+      //text-align: justify;
+      color: $color-white;
+      font-weight: bold;
+      //width: 24rem;
+      //transform: translateX(100rem);
+      //animation: slideIn;
+      //animation-duration: 2s;
+      //animation-delay: 1s;
+      //animation-iteration-count: 1;
+      //animation-fill-mode: forwards;
+      //animation-play-state: running;
+      //animation-timing-function: ease-in-out;
+      @include respondMax(tab-port) {
+        font-size: 3rem;
+        width: 100%;
+        text-align: center;
+      }
+      @include respondMax(ipad-land) {
+        padding: 1rem;
+        font-size: 2rem;
+      }
+      //background-color: $color-alpha;
+    }
+
+    .sub_content {
+      font-size: 1.1rem;
+      text-align: justify;
+      line-height: 1.3;
+      padding: 5px;
+      color: $color-white;
+      margin-bottom: 1.5rem;
+      @include respondMax(tab-port) {
+        margin: 2rem 0;
+      }
+      @include respondMax(ipad-port) {
+        margin: 5px 0;
+      }
+      @include respondMax(phone-port) {
+        line-height: 1.3;
+        font-size: 0.9rem;
+      }
+    }
+
+    .buttons {
+      padding: 5px;
+      @include respondMax(tab-port) {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      @include respondMax(ipad-port) {
+        flex-direction: column;
+      }
+      .tool_button {
+        width: 13.7rem;
+        height: 3.2rem;
+        margin: 5px 2rem 5px 0;
+        @include respondMax(tab-port) {
+          margin: 0 1rem 0 0;
+        }
+        @include respondMax(ipad-port) {
+          margin: 0 0 5px 0;
+          padding: 0.5rem 1rem;
+        }
+        @include respondMax(phone-port) {
+          width: 90%;
+          height: 2.5rem;
+        }
+        padding: 0.5rem 2rem;
+        font-size: 1.2rem;
+        background-color: #f7bd35;
+        &:hover {
+          top: -5px;
+          transition: top 1s;
+        }
+      }
+      .workflow_button {
+        width: 13.7rem;
+        height: 3.2rem;
+        padding: 0.5rem 2rem;
+        font-size: 1.2rem;
+        @include respondMax(ipad-port) {
+          padding: 0.5rem 1rem;
+        }
+        @include respondMax(phone-port) {
+          width: 90%;
+          height: 2.5rem;
+        }
+        &:hover {
+          top: -5px;
+          transition: top 1s;
+        }
+        //color: #dd8cbd;
+      }
+    }
+  }
+}
+
+@keyframes slideIn {
+  0% {
+    transform: translateX(100rem);
+    color: transparent;
+  }
+  50% {
+    //right: 1rem;
+    color: rgba($color, 1);
+  }
+  100% {
+    transform: translateX(0);
+    color: white;
+  }
+}
