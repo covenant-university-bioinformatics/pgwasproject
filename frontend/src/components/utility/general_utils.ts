@@ -25,6 +25,20 @@ export const showToastMessage = (message: string) => {
   toast.info(message);
 };
 
+export const getErrorMessage = (error: any) => {
+  let message = "Unable to perform action";
+  if (error?.response) {
+    if (Array.isArray(error.response.data?.message)) {
+      message = error.response.data.message.join("\n");
+    } else if (error?.response.data?.message) {
+      message = error?.response.data?.message;
+    } else {
+      message = error.message;
+    }
+  }
+  return message;
+};
+
 export const generalFormValidationObject = {
   marker_name: Yup.number()
     .required("Marker name column number is required")

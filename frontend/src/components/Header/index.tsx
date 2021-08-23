@@ -47,7 +47,7 @@ const Header: React.FC<Props> = (props) => {
               <Hidden smDown> Tutorials </Hidden>
             </Button>
           </NavLink>
-          <NavLink to="/">
+          <NavLink to="/tools">
             <Button startIcon={<AppsRounded />} size="medium" color="inherit">
               <Hidden smDown> Tools </Hidden>
             </Button>

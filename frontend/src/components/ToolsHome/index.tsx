@@ -1,41 +1,42 @@
 import React from "react";
-import MainLayout from "../../layouts/MainLayout";
+// import MainLayout from "../../layouts/MainLayout";
 import { LabelImportant, LabelSharp } from "@material-ui/icons";
 import { Link } from "react-router-dom";
 import { Grid } from "@material-ui/core";
 import classes from "./index.module.scss";
+import HomeLayout from "../../layouts/HomeLayout";
 
 type Props = {};
 
 const ToolsHome: React.FC<Props> = (props) => {
   const links = [
-    { title: "Liftover", linkTo: "/liftover" },
+    { title: "Liftover", linkTo: "/tools/liftover" },
     {
       title: "LD Structure",
-      linkTo: "/ld_structure",
+      linkTo: "/tools/ld_structure",
       icon: <LabelSharp />,
     },
-    { title: "Imputation", linkTo: "/imputation" },
+    { title: "Imputation", linkTo: "/tools/imputation" },
     {
       title: "SuSie",
-      linkTo: "/bayes_finemap/susie",
+      linkTo: "/tools/bayes_finemap/susie",
     },
     {
       title: "FineMap",
-      linkTo: "/bayes_finemap/finemap",
+      linkTo: "/tools/bayes_finemap/finemap",
     },
     {
       title: "Paintor",
-      linkTo: "/bayes_finemap/paintor",
+      linkTo: "/tools/bayes_finemap/paintor",
       icon: <LabelImportant />,
     },
-    { title: "Annotation", linkTo: "/annotation" },
+    { title: "Annotation", linkTo: "/tools/annotation" },
     {
       title: "Deleteriousness",
-      linkTo: "/deleteriousness",
+      linkTo: "/tools/deleteriousness",
       icon: <LabelSharp />,
     },
-    { title: "Regulation", linkTo: "/regulation" },
+    { title: "Regulation", linkTo: "/tools/regulation" },
   ];
 
   const constructTabs = () => {
@@ -58,14 +59,20 @@ const ToolsHome: React.FC<Props> = (props) => {
   };
 
   return (
-    <MainLayout title={"Welcome"}>
-      <div className={classes.main_container}>
-        {/*<h1>Home Page for the tools</h1>*/}
-        <Grid container spacing={3} className={classes.grid_container}>
-          {constructTabs()}
-        </Grid>
+    <HomeLayout>
+      <div className={classes.home_container}>
+        <h1 className={classes.main_header}>
+          Available Individual postGWAS tools
+        </h1>
+        <span className={classes.line_bar}>&nbsp;</span>
+        {/*<p>We provide the following individual postGWAS tools for analysis</p>*/}
+        <div className={classes.main_container}>
+          <Grid container spacing={3} className={classes.grid_container}>
+            {constructTabs()}
+          </Grid>
+        </div>
       </div>
-    </MainLayout>
+    </HomeLayout>
   );
 };
 

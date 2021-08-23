@@ -1,0 +1,33 @@
+.result_list{
+  position: relative;
+  .paper{
+    overflow-x: auto;
+    margin-right: auto;
+    margin-left: auto;
+  }
+  .loading{
+    position: absolute;
+    left: 50%;
+  }
+  .error{
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    color: red;
+    font-weight: bold;
+  }
+}
+
+.job_running{
+  width: 280px;
+  background-color: #3d8af3;
+  border-radius: 5px;
+  padding: 1rem;
+  margin-top: 1rem;
+  p {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #fff;
+  }
+}

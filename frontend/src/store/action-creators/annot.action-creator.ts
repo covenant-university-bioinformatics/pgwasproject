@@ -2,6 +2,7 @@ import axios from "../../axios-fetches";
 import { ActionType } from "../action-types";
 import { AnnotAction } from "../actions/annot.action";
 import { Dispatch } from "redux";
+import { getErrorMessage } from "../../components/utility/general_utils";
 
 export const getAnnotationResults = (page: number, limit: number) => {
   return async (dispatch: Dispatch<AnnotAction>) => {
@@ -21,17 +22,11 @@ export const getAnnotationResults = (page: number, limit: number) => {
         },
       });
     } catch (error) {
-      let message = "Unable to fetch jobs";
-      if (error?.response) {
-        if (Array.isArray(error.response.data?.message)) {
-          message = error.response.data.message.join("\n");
-        } else {
-          message = error?.response.data?.message;
-        }
-      }
+      console.dir(error);
+      console.log(getErrorMessage(error));
       dispatch({
         type: ActionType.ANNOTATION_RESULT_ERROR,
-        payload: message,
+        payload: getErrorMessage(error),
       });
     }
   };

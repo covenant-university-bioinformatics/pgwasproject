@@ -6,19 +6,19 @@ deploy:
       - name: pgwasfrontendapp
         chartPath: .\deployment\helm-micro\
         valuesFiles:
-          - .\deployment\helm-micro\client-values.yaml
+          - .\deployment\helm-micro\values.yaml
         artifactOverrides:
-          image: cubrenig/pgwasfrontendapp
+          image: pgwasfrontendapp
 
 build:
   local:
     push: false
     concurrency: 1
   artifacts:
-    - image: cubrenig/pgwasfrontendapp
+    - image: pgwasfrontendapp
       context: frontend
       docker:
-        dockerfile: Dockerfile
+        dockerfile: Dockerfile.dev
       sync:
         manual:
           - src: "**/*.ts"

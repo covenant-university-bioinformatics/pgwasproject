@@ -24,6 +24,7 @@ import Paintor from "./components/Paintor";
 import SignUp from "./components/SignUp";
 import SignIn from "./components/SignIn";
 import AuthGuard from "./hoc/AuthGuard";
+import Home from "./Pages/Home/Home";
 type Props = {};
 
 const Routes: React.FC<Props> = (props) => {
@@ -31,24 +32,42 @@ const Routes: React.FC<Props> = (props) => {
     <BrowserRouter>
       <Header />
       <Switch>
-        <Route path="/dashboard" exact component={HomeComingSoon} />
-        <Route path="/tutorials" exact component={HomeComingSoon} />
-        <Route path="/sign_in" exact component={SignIn} />
-        <Route path="/sign_up" exact component={SignUp} />
-        <Route path="/imputation" exact component={AuthGuard(Imputation)} />
-        <Route path="/annotation" component={AuthGuard(Annotation)} />
-        <Route path="/bayes_finemap" component={AuthGuard(Finemap)} />
-        <Route path="/bayes_susie" component={AuthGuard(Susie)} />
-        <Route path="/bayes_paintor" component={AuthGuard(Paintor)} />
         <Route
-          path="/deleteriousness"
+          path="/tools/imputation"
+          exact
+          component={AuthGuard(Imputation)}
+        />
+        <Route path="/tools/annotation" component={AuthGuard(Annotation)} />
+        <Route
+          path="/tools/bayes_finemap"
+          exact
+          component={AuthGuard(Finemap)}
+        />
+        <Route path="/tools/bayes_susie" exact component={AuthGuard(Susie)} />
+        <Route
+          path="/tools/bayes_paintor"
+          exact
+          component={AuthGuard(Paintor)}
+        />
+        <Route
+          path="/tools/deleteriousness"
           exact
           component={AuthGuard(Deleteriousness)}
         />
-        <Route path="/Regulation" exact component={AuthGuard(Regulation)} />
-        <Route path="/liftover" component={AuthGuard(Liftover)} />
-        <Route path="/ld_structure" component={AuthGuard(LDStructure)} />
-        <Route path="/" exact component={ToolsHome} />
+        <Route
+          path="/tools/Regulation"
+          exact
+          component={AuthGuard(Regulation)}
+        />
+        <Route path="/tools/liftover" component={AuthGuard(Liftover)} />
+        <Route path="/tools/ld_structure" component={AuthGuard(LDStructure)} />
+        <Route path="/tools" exact component={ToolsHome} />
+        <Route path="/dashboard" exact component={HomeComingSoon} />
+        <Route path="/tutorials" exact component={HomeComingSoon} />
+        <Route path="/workflows" exact component={HomeComingSoon} />
+        <Route path="/sign_in" exact component={SignIn} />
+        <Route path="/sign_up" exact component={SignUp} />
+        <Route path="/" exact component={Home} />
         <Route
           render={(
             props:
@@ -72,7 +91,7 @@ const Routes: React.FC<Props> = (props) => {
       </Switch>
       <ToastContainer
         position="top-left"
-        autoClose={10000}
+        autoClose={6000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
