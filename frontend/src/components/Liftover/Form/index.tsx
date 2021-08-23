@@ -87,7 +87,9 @@ const LiftoverForm: React.FC<Props & RouteComponentProps> = (props) => {
         .then((res) => {
           showToastMessage("Job submitted successfully");
           setLoading(false);
-          props.history.push(`/${props.match.url.split("/")[1]}/all_results`);
+          props.history.push(
+            `/${props.match.url.split("/")[1]}/liftover/all_results`
+          );
         })
         .catch((error) => {
           setLoading(false);

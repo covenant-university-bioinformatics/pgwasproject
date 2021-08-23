@@ -755,7 +755,6 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
       .get<AnnotationResult>(`/annot/jobs/${id}`)
       .then((result) => {
         setAnnotRes(result.data);
-        console.log(result.data);
         setLoading(false);
         setError(false);
         if (
