@@ -72,9 +72,9 @@ const AnnotationResultList: React.FC<Props & RouteComponentProps> = (props) => {
               <AnnotRow
                 key={item._id}
                 item={item}
-                link={`/${props.match.url.split("/")[1]}/result_view/${
-                  item._id
-                }`}
+                link={`/${
+                  props.match.url.split("/")[1]
+                }/annotation/result_view/${item._id}`}
                 page={page}
                 rowsPerPage={rowsPerPage}
                 getResults={getResults}
