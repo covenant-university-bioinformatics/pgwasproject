@@ -5,7 +5,7 @@
   width: 100%;
   margin-bottom: 2rem;
   display: flex;
-  background-color: #2d3dcb;
+  background: #081a99 url("../../resources/images/index.webp") no-repeat left;
   align-items: flex-start;
   justify-content: center;
   //background-color: red;
@@ -136,6 +136,10 @@
           top: -5px;
           transition: top 1s;
         }
+        .link {
+          text-decoration: none;
+          color: #fff;
+        }
       }
       .workflow_button {
         width: 13.7rem;
@@ -153,7 +157,10 @@
           top: -5px;
           transition: top 1s;
         }
-        //color: #dd8cbd;
+        .link {
+          text-decoration: none;
+          color: #fff;
+        }
       }
     }
   }

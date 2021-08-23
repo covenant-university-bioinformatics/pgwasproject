@@ -2,6 +2,7 @@ import React from "react";
 import classes from "./index.module.scss";
 import BoxImage from "../BoxImage";
 import { Button } from "@material-ui/core";
+import { Link } from "react-router-dom";
 type Props = {};
 
 const Hero: React.FC<Props> = (props: Props) => {
@@ -23,7 +24,9 @@ const Hero: React.FC<Props> = (props: Props) => {
             size="large"
             color="primary"
           >
-            Run Tool
+            <Link className={classes.link} to={"/tools"}>
+              Run Tool
+            </Link>
           </Button>
           <Button
             className={classes.workflow_button}
@@ -31,7 +34,9 @@ const Hero: React.FC<Props> = (props: Props) => {
             size="large"
             color="secondary"
           >
-            Run Workflow
+            <Link className={classes.link} to={"/workflows"}>
+              Run Workflow
+            </Link>
           </Button>
         </div>
       </div>
