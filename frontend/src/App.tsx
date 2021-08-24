@@ -13,7 +13,6 @@ function App() {
   //     window.location.pathname;
   // }
 
-
   const checkAuth = useCallback(() => {
     authCheckState();
   }, [authCheckState]);
