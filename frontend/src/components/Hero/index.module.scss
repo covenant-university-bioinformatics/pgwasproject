@@ -42,6 +42,7 @@
     padding: 2rem;
     @include respondMax(ipad-port) {
       padding: 10px;
+      //justify-content: flex-start;
     }
     //display: flex;
     //align-items: center;
@@ -58,8 +59,13 @@
       border-radius: 5px;
       margin-bottom: 1rem;
       @include respondMax(tab-land) {
-        margin-top: 1rem;
+        //margin-top: 1rem;
         font-size: 2rem;
+      }
+
+      @include respondMax(ipad-land) {
+        margin-top: -10rem;
+        //font-size: 2rem;
       }
       //text-align: justify;
       color: $color-white;
@@ -124,6 +130,8 @@
         @include respondMax(ipad-port) {
           margin: 0 0 5px 0;
           padding: 0.5rem 1rem;
+          width: 90%;
+          height: 2.5rem;
         }
         @include respondMax(phone-port) {
           width: 90%;
@@ -148,6 +156,8 @@
         font-size: 1.2rem;
         @include respondMax(ipad-port) {
           padding: 0.5rem 1rem;
+          width: 90%;
+          height: 2.5rem;
         }
         @include respondMax(phone-port) {
           width: 90%;

@@ -10,7 +10,15 @@ const AuthGuard = (Component: any) => {
       if (user.username) {
         return <Component {...this.props} />;
       } else {
-        return <Redirect to={"/sign_in"} />;
+        return (
+          <Redirect
+            to={{
+              pathname: "/sign_in",
+              // @ts-ignore
+              state: { referrer: this.props.location.pathname },
+            }}
+          />
+        );
       }
     };
 
