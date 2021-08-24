@@ -23,7 +23,9 @@ type SignInFormData = {
   [key: string]: any;
 };
 
-const SignIn: React.FC<Props & RouteComponentProps> = (props) => {
+const SignIn: React.FC<
+  Props & RouteComponentProps<{}, {}, { referrer: string }>
+> = (props) => {
   const { signinUser } = useActions();
 
   const signIn = useCallback(
@@ -40,7 +42,8 @@ const SignIn: React.FC<Props & RouteComponentProps> = (props) => {
   let redirect: JSX.Element | null = null;
   if (success && user.username) {
     showToastSuccess(`Welcome ${user.username}`);
-    redirect = <Redirect to={"/"} />;
+    const path = props?.location?.state?.referrer || "/";
+    redirect = <Redirect to={path} />;
   }
 
   let message: JSX.Element | null = null;

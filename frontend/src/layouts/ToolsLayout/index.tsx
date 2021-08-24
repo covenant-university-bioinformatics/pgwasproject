@@ -8,6 +8,7 @@ import {
   HomeRounded,
   TableChartRounded,
 } from "@material-ui/icons";
+import { useTypedSelector } from "../../hooks/useTypedSelector";
 
 type Props = {
   title: string;
@@ -15,8 +16,15 @@ type Props = {
 };
 
 const ToolsLayout: React.FC<Props> = ({ title, path, children }) => {
+  const { user } = useTypedSelector((state) => state.auth);
   return (
     <MainLayout title={title}>
+      {!user.emailConfirmed ? (
+        <div className={classes.email_confirmed}>
+          Please you have to verify your email first before you can use any
+          service. Please check this "{user.email}" for the verification email
+        </div>
+      ) : null}
       <div className={classes.tool_appbar}>
         <AppBar position="static" className={classes.appBar}>
           <Toolbar variant="dense" className={classes.toolBar}>
