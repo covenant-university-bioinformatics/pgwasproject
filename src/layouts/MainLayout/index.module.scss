@@ -1,0 +1,69 @@
+@import "../../partials/mixins";
+
+.mainLayout {
+  //width: 100%;
+  //height: calc(100vh - 5.2rem);
+  min-height: 100%;
+  margin-top: 5.2rem;
+  //background-color: #0c2d52;
+
+  .sidebar_donut {
+    position: fixed;
+    top: 85px;
+    right: 30px;
+    //background-color: #000000;
+    color: #e71b1b;
+    transform: scale(1.5);
+    display: none;
+    z-index: 10000;
+    @include specialMax(959px) {
+      display: block;
+    }
+  }
+
+  .info {
+    height: 100vh;
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: none;
+    @include specialMax(600px) {
+      display: flex;
+    }
+  }
+
+  .grid_container {
+    height: inherit;
+    position: relative;
+
+    .side_container {
+      height: inherit;
+
+      @include specialMax(959px) {
+        display: none;
+      }
+    }
+    .open {
+      display: block;
+    }
+
+    .main_container {
+      padding: 1rem;
+      min-height: 35rem;
+      overflow: hidden;
+      .main_title {
+        font-size: 2.6rem;
+        margin-bottom: 1rem;
+
+        @include respondMax(ipad-land) {
+          font-size: 1.4rem !important;
+        }
+      }
+    }
+  }
+}

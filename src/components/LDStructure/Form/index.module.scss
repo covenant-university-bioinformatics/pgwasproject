@@ -1,0 +1,53 @@
+@import "../../../partials/mixins";
+.LDForm {
+  width: 100%;
+  .header_div {
+    width: 100%;
+    h2 {
+      padding-left: 1.3rem;
+      font-size: 1.2rem;
+    }
+  }
+  .grid {
+    padding: 0.4rem;
+
+    .paper {
+      padding: 0.6rem;
+
+      .formControl {
+        width: 100%;
+        label {
+          font-size: 1rem;
+        }
+        input {
+          font-size: 1rem;
+          padding: 1.3rem 7px;
+        }
+        select {
+          font-size: 1rem;
+        }
+      }
+    }
+  }
+
+  .button_container {
+    width: 100%;
+    margin: 1.25rem;
+    padding: 1.25rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    @include respondMax(ipad-port) {
+      justify-content: flex-start;
+      margin: 0.5rem;
+      padding: 0.5rem;
+    }
+    .form_button {
+      width: 40%;
+      @include respondMax(ipad-port) {
+        justify-self: left;
+        width: 95%;
+      }
+    }
+  }
+}

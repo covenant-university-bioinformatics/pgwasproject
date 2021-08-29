@@ -1,0 +1,23 @@
+@import "./partials/mixins";
+
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  //font-size: 62.5%;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  overflow-x: hidden;
+}
+
+
+.Toastify__toast-body{
+  white-space: pre-line;
+}

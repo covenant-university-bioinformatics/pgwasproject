@@ -1,0 +1,85 @@
+@import "../../partials/mixins";
+.sidebar_link {
+  color: #ffffff;
+  font-weight: 300;
+  border-bottom: 1px solid #353535;
+  background-color: #dec230;
+  padding: 1rem;
+  width: 100%;
+  position: sticky;
+  top: 5.2rem;
+  height: calc(100vh - 5.2rem);
+  overflow-y: auto;
+
+  .drawerHeader {
+    position: relative;
+    button {
+      span {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+    }
+  }
+
+  .icon {
+  }
+  .list {
+    span {
+      font-size: 1.1rem;
+      @include respondMax(tab-land) {
+        font-size: 0.8rem;
+      }
+      @include respondMax(ipad-land) {
+        font-size: 1.4rem !important;
+      }
+    }
+    svg {
+      @include specialMax(1380px) {
+        margin-right: -20px;
+      }
+    }
+
+    .text {
+      margin-left: -1rem;
+      color: #000;
+
+      .selected {
+        color: #fff !important;
+        font-weight: bold;
+        font-size: 1.3rem !important;
+        @include respondMax(tab-land) {
+          font-size: 1.2rem !important;
+        }
+
+        //background-color: rgba(0,0,0,0.5);
+        //padding: 0.625rem;
+        //border-radius: 5px;
+      }
+    }
+  }
+
+  .link {
+    //margin-bottom: 3.75rem;
+    text-decoration: none;
+    color: #000;
+    font-size: 1.1rem;
+    @include respondMax(tab-land) {
+      font-size: 0.8rem;
+    }
+    @include respondMax(ipad-land) {
+      font-size: 1.4rem !important;
+    }
+    .listItem {
+    }
+    .nested {
+      padding-left: 2.2rem;
+      @include respondMax(tab-land) {
+        padding-left: 1.6rem;
+      }
+    }
+  }
+
+  a {
+  }
+}

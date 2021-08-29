@@ -1,0 +1,178 @@
+import React, { Fragment } from "react";
+import { NavLink, withRouter } from "react-router-dom";
+import {
+  HomeSharp,
+  LabelImportant,
+  LabelSharp,
+  ArrowRightSharp,
+  ArrowDropDownSharp,
+  ChevronLeft,
+} from "@material-ui/icons";
+import ListItem from "@material-ui/core/ListItem";
+import classes from "./index.module.scss";
+import {
+  Collapse,
+  Divider,
+  Hidden,
+  IconButton,
+  List,
+  ListItemIcon,
+  ListItemText,
+} from "@material-ui/core";
+import { useActions } from "../../hooks/useActions";
+import { useTypedSelector } from "../../hooks/useTypedSelector";
+
+type Props = {};
+
+const SideBar: React.FC<Props> = (props) => {
+  const { setMini } = useActions();
+  const { miniSidebar } = useTypedSelector((state) => state.ui);
+  const [open, setOpen] = React.useState(false);
+
+  const handleClick = () => {
+    setOpen(!open);
+  };
+
+  const links = [
+    { title: "Home", linkTo: "/", icon: <HomeSharp /> },
+    { title: "Liftover", linkTo: "/liftover", icon: <LabelSharp /> },
+    {
+      title: "LD Structure",
+      linkTo: "/ld_structure",
+      icon: <LabelSharp />,
+    },
+    { title: "Imputation", linkTo: "/imputation", icon: <LabelSharp /> },
+    {
+      title: "Finemapping",
+      linkTo: "/bayes_finemap",
+      icon: <LabelSharp />,
+      steps: [
+        {
+          title: "SuSie",
+          linkTo: "/bayes_finemap/susie",
+          icon: <LabelImportant />,
+        },
+        {
+          title: "FineMap",
+          linkTo: "/bayes_finemap/finemap",
+          icon: <LabelImportant />,
+        },
+        {
+          title: "Paintor",
+          linkTo: "/bayes_finemap/paintor",
+          icon: <LabelImportant />,
+        },
+      ],
+    },
+    { title: "Annotation", linkTo: "/annotation", icon: <LabelSharp /> },
+    {
+      title: "Deleteriousness",
+      linkTo: "/deleteriousness",
+      icon: <LabelSharp />,
+    },
+    { title: "Regulation", linkTo: "/regulation", icon: <LabelSharp /> },
+  ];
+
+  const renderItems = () => {
+    return links.map((link, i) => {
+      return (
+        <Fragment key={link.title}>
+          {link.steps ? (
+            <ListItem
+              onClick={() => {
+                handleClick();
+              }}
+              button
+              className={classes.list}
+            >
+              <Hidden mdDown>
+                <ListItemIcon>{link.icon}</ListItemIcon>
+              </Hidden>
+              <ListItemText className={classes.text} secondary={"(bayesian)"}>
+                {link.title}
+              </ListItemText>
+              {open ? <ArrowDropDownSharp /> : <ArrowRightSharp />}
+            </ListItem>
+          ) : (
+            <ListItem
+              onClick={() => {
+                if (miniSidebar) {
+                  setMini(false);
+                }
+              }}
+              button
+              className={classes.list}
+            >
+              <Hidden mdDown implementation={"css"}>
+                <ListItemIcon className={classes.icon}>
+                  {link.icon}
+                </ListItemIcon>
+              </Hidden>
+              <ListItemText
+                className={classes.text}
+                secondary={link.title === "Imputation" ? "(statistics)" : ""}
+              >
+                <NavLink
+                  activeClassName={classes.selected}
+                  exact
+                  className={classes.link}
+                  to={link.linkTo}
+                >
+                  {link.title}
+                </NavLink>
+              </ListItemText>
+            </ListItem>
+          )}
+          {link.steps ? (
+            <Collapse in={open} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                {link.steps.map((step, i) => (
+                  <NavLink
+                    activeClassName={classes.selected}
+                    key={`${step.title.replace(/\s/g, "")}${i}`}
+                    className={classes.link}
+                    to={step.linkTo}
+                  >
+                    <ListItem
+                      onClick={() => {
+                        if (miniSidebar) {
+                          setMini(false);
+                        }
+                      }}
+                      button
+                      className={classes.nested}
+                    >
+                      <Hidden mdDown>
+                        <ListItemIcon>{step.icon}</ListItemIcon>
+                      </Hidden>
+                      <ListItemText primary={step.title} />
+                    </ListItem>
+                  </NavLink>
+                ))}
+              </List>
+            </Collapse>
+          ) : null}
+        </Fragment>
+      );
+    });
+  };
+
+  return (
+    <div className={classes.sidebar_link}>
+      <div className={classes.drawerHeader}>
+        <IconButton
+          onClick={() => {
+            setMini(!miniSidebar);
+          }}
+        >
+          {/*{miniSidebar ? <ChevronRight /> : <ChevronLeft />}*/}
+          {miniSidebar ? <ChevronLeft /> : null}
+        </IconButton>
+      </div>
+      <Divider />
+      {renderItems()}
+    </div>
+  );
+};
+
+export default withRouter(SideBar);

@@ -1,0 +1,119 @@
+// Colors
+$primary-color: rgba(#72549a, 0.6);
+$secondary-color: rgba(#f7bd35, 0.6);
+$color: #72549a;
+$color2: #f7bd35;
+$color-white: #fff;
+$color-black: #000;
+$color-alpha: rgba(0,0,0,0.3);
+$logo-color: #ca0dac;
+$reference-color: #2d2d92;
+$form-color: #cf9113;
+$hover-color: #e333ec;
+$footer-color: #070707;
+$dashboard-color1: #252b3b;;
+$timeline-main-color: #4557bb;
+
+
+//Sample
+//@include respondMax(tab-land) {
+//  padding: 2rem;
+//}
+
+@mixin specialMin($special) {
+  @media only screen and (min-width: $special) {
+    @content;
+  }
+}
+
+@mixin heightMax($special) {
+  @media only screen and (max-height: $special) {
+    @content;
+  }
+}
+
+@mixin specialMax($special) {
+  @media only screen and (max-width: $special) {
+    @content;
+  }
+}
+
+@mixin respondMin($breakpoint) {
+  @if $breakpoint == phone-port {
+    @media only screen and (min-width: 375px) {
+      @content;
+    }
+  }
+  @if $breakpoint == phone-land {
+    @media only screen and (min-width: 481px) {
+      @content;
+    }
+  }
+
+  @if $breakpoint == ipad-port {
+    @media only screen and (min-width: 641px) {
+      @content;
+    }
+  }
+
+  @if $breakpoint == ipad-land {
+    @media only screen and (min-width: 961px) {
+      @content;
+    }
+  }
+  @if $breakpoint == tab-port {
+    @media only screen and (min-width: 1023px) {
+      @content;
+    }
+  }
+  @if $breakpoint == tab-land {
+    @media only screen and (min-width: 1200px) {
+      @content;
+    }
+  }
+  @if $breakpoint == big-desktop {
+    @media only screen and (min-width: 1800px) {
+      @content;
+    }
+  }
+}
+
+@mixin respondMax($breakpoint) {
+  @if $breakpoint == phone-port {
+    @media only screen and (max-width: 375px) {
+      @content;
+    }
+  }
+  @if $breakpoint == phone-land {
+    @media only screen and (max-width: 481px) {
+      @content;
+    }
+  }
+
+  @if $breakpoint == ipad-port {
+    @media only screen and (max-width: 641px) {
+      @content;
+    }
+  }
+
+  @if $breakpoint == ipad-land {
+    @media only screen and (max-width: 961px) {
+      @content;
+    }
+  }
+  @if $breakpoint == tab-port {
+    @media only screen and (max-width: 1023px) {
+      @content;
+    }
+  }
+  @if $breakpoint == tab-land {
+    @media only screen and (max-width: 1200px) {
+      @content;
+    }
+  }
+  @if $breakpoint == big-desktop {
+    @media only screen and (max-width: 1800px) {
+      @content;
+    }
+  }
+}
