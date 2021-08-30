@@ -159,7 +159,7 @@ function LDStructureResult() {
                 <IconButton
                   aria-label="view"
                   color="primary"
-                  disabled = {(status === 'COMPLETED') ? false : true}
+                  disabled = {(status === 'RUNNING') ? true : false}
                   onClick={handleClickOpen(jobUniqueID, outputFilepath)}>
                   <PageviewOutlinedIcon />
                 </IconButton>

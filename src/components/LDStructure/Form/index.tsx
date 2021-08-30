@@ -130,16 +130,6 @@ const LdStructureForm: React.FC<Props> = (props) => {
           setDisable(false);
           alert(error);
         });
-
-      // pgwasAxios
-      //   .post("/ldstructure", data)
-      //   .then((res) => {
-      //     // then print response status
-      //     console.log(res);
-      //   })
-      //   .catch((error) => {
-      //     console.log(error);
-      //   });
     },
   });
 
