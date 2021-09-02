@@ -223,20 +223,20 @@ const LdStructureForm: React.FC<Props> = (props) => {
           </div>
           {generalFileForm(classes, formik,  [
             "marker_name",
-            "chromosome",
-            "position",
-            "pvalue",
-            "effect_allele",
-            "alternate_allele",
-            "se",
-            "or",
-            "beta",
+            // "chromosome",
+            // "position",
+            // "pvalue",
+            // "effect_allele",
+            // "alternate_allele",
+            // "se",
+            // "or",
+            // "beta",
           ])}
 
           <div className={classes.header_div}>
             <h2>LD structure parameters</h2>
           </div>
-          <Grid className={classes.grid} item xs={12} sm={6}>
+          {/* <Grid className={classes.grid} item xs={12} sm={6}>
             <Paper variant="outlined" className={classes.paper}>
               <FormControl
                 className={classes.formControl}
@@ -245,14 +245,11 @@ const LdStructureForm: React.FC<Props> = (props) => {
                 <InputLabel htmlFor="population">
                   Reference Population
                 </InputLabel>
-                {/*  Reference Population*/}
                 <NativeSelect
                   id="population"
                   {...formik.getFieldProps("population")}
                 >
                   <option aria-label="None" value="" />
-                  {/*  Select a reference population*/}
-                  {/*</option>*/}
                   {genomesPopulation.map((pop, i) => (
                     <option key={i} value={pop}>
                       {pop}
@@ -262,7 +259,7 @@ const LdStructureForm: React.FC<Props> = (props) => {
                 {selectErrorHelper(formik, "population")}
               </FormControl>
             </Paper>
-          </Grid>
+          </Grid> */}
           <Grid className={classes.grid} item xs={12} sm={6}>
             <Paper variant="outlined" className={classes.paper}>
               <FormControl className={classes.formControl}>
@@ -277,7 +274,7 @@ const LdStructureForm: React.FC<Props> = (props) => {
               </FormControl>
             </Paper>
           </Grid>
-          <Grid className={classes.grid} item xs={12} sm={6}>
+          {/* <Grid className={classes.grid} item xs={12} sm={6}>
             <Paper variant="outlined" className={classes.paper}>
               <FormControl className={classes.formControl}>
                 <TextField
@@ -290,8 +287,8 @@ const LdStructureForm: React.FC<Props> = (props) => {
                 />
               </FormControl>
             </Paper>
-          </Grid>
-          <Grid className={classes.grid} item xs={12} sm={6}>
+          </Grid> */}
+          {/* <Grid className={classes.grid} item xs={12} sm={6}>
             <Paper variant="outlined" className={classes.paper}>
               <FormControl className={classes.formControl}>
                 <TextField
@@ -304,7 +301,7 @@ const LdStructureForm: React.FC<Props> = (props) => {
                 />
               </FormControl>
             </Paper>
-          </Grid>
+          </Grid> */}
         </Grid>
         <div className={classes.button_container}>
           <Button
