@@ -22,4 +22,4 @@ jobs:
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
       - run: doctl kubernetes cluster kubeconfig save k8s-1-21-2-do-2-fra-pgwas
-      - run: helm upgrade pgwasfrontendapp ./deployment/helm-micro/ --install --wait --atomic --set image=cubrenig/pgwasfrontendapp:$GITHUB_SHA --values=./deployment/helm-micro/client-values.yaml
+      - run: helm upgrade pgwasfrontendapp ./deployment/helm-micro/ --install --wait --set image=cubrenig/pgwasfrontendapp:$GITHUB_SHA --values=./deployment/helm-micro/client-values.yaml
