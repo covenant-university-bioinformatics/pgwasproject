@@ -142,3 +142,160 @@ export const selectErrorHelper = (formik: any, values: string) => {
   }
   return false;
 };
+
+export const createJobStatus = (data: any, seconds: number, classes: any) => {
+  if (data && (data.status === "running" || data.status === "queued")) {
+    return (
+      <div className={classes.job_running}>
+        <p>Job is currently {data.status}</p>
+        {data.longJob ? (
+          <p>
+            This job may take a while to complete. Don't worry, an email will be
+            sent to you when it is done.
+          </p>
+        ) : (
+          <p>Time to next reload: {seconds}</p>
+        )}
+      </div>
+    );
+  } else {
+    return null;
+  }
+};
+
+export const getTotalTime = (data: any) => {
+  if (data && data.completionTime && data.createdAt) {
+    const timeOne = new Date(data.completionTime);
+    const timeTwo = new Date(data.createdAt);
+    let time = -1;
+    if (timeOne && timeTwo) {
+      // @ts-ignore
+      time = (Math.abs(timeOne - timeTwo) / (1000 * 60)).toFixed(2);
+    }
+    return time;
+  }
+  return -1;
+};
+
+export const createInfoSection = (data: any, classes: any) => {
+  if (data) {
+    // const dbList = (
+    //   <div className={classes.db_list}>
+    //     <h3>Selected Databases</h3>
+    //     <ul>
+    //       <li>
+    //         <span>Gene DB</span>
+    //         <span>{String(annotRes.annot.gene_db)}</span>
+    //       </li>
+    //       <li>
+    //         <span>Cytoband</span>
+    //         <span>{String(annotRes.annot.cytoband)}</span>
+    //       </li>
+    //       <li>
+    //         <span>Clinvar</span>
+    //         <span>{String(annotRes.annot.clinvar)}</span>
+    //       </li>
+    //       <li>
+    //         <span>Disgenet</span>
+    //         <span>{String(annotRes.annot.disgenet)}</span>
+    //       </li>
+    //       <li>
+    //         <span>EXAC</span> <span>{String(annotRes.annot.exac)}</span>
+    //       </li>
+    //       <li>
+    //         <span>1KGP SAS</span>
+    //         <span>{String(annotRes.annot.kgp_sas)}</span>
+    //       </li>
+    //       <li>
+    //         <span>1KGP EUR</span>
+    //         <span>{String(annotRes.annot.kgp_eur)}</span>
+    //       </li>
+    //       <li>
+    //         <span>1KGP EAS</span>
+    //         <span>{String(annotRes.annot.kgp_eas)}</span>
+    //       </li>
+    //       <li>
+    //         <span>1KGP AMR</span>
+    //         <span>{String(annotRes.annot.kgp_amr)}</span>
+    //       </li>
+    //       <li>
+    //         <span>1KGP ALL</span>
+    //         <span>{String(annotRes.annot.kgp_all)}</span>
+    //       </li>
+    //       <li>
+    //         <span>1KGP AFR</span>
+    //         <span>{String(annotRes.annot.kgp_afr)}</span>
+    //       </li>
+    //       <li>
+    //         <span>Intervar</span>
+    //         <span>{String(annotRes.annot.intervar)}</span>
+    //       </li>
+    //     </ul>
+    //   </div>
+    // );
+
+    const jobList = (
+      <div className={classes.job_list}>
+        <h3>Job Details</h3>
+        <ul>
+          <li>
+            <span>Job Name</span>
+            <span>{String(data.job_name)}</span>
+          </li>
+          <li>
+            <span>Job UID</span>
+            <span>{String(data.jobUID)}</span>
+          </li>
+          <li>
+            <span>Job Status</span>
+            <span>{String(data.status)}</span>
+          </li>
+          <li>
+            <span>Input File</span>
+            <span>{String(data.inputFile).split("/")[5]}</span>
+          </li>
+          <li>
+            <span>Created Date</span>
+            <span>{new Date(data.createdAt).toLocaleString()}</span>
+          </li>
+          <li>
+            <span>Completion Date</span>
+            <span>
+              {data.completionTime
+                ? new Date(data.completionTime).toLocaleString()
+                : "Pending"}
+            </span>
+          </li>
+          <li>
+            <span>Total time</span>
+            <span>{getTotalTime(data)} minutes</span>
+          </li>
+        </ul>
+      </div>
+    );
+
+    return (
+      <div className={classes.info_section}>
+        <h3 className={classes.sub_heading}>Job Information</h3>
+        <div className={classes.info}>
+          {jobList}
+          {/*{dbList}*/}
+        </div>
+      </div>
+    );
+  }
+  return false;
+};
+
+export const createJobFailedReason = (data: any, classes: any) => {
+  if (data && data.failed_reason) {
+    return (
+      <div className={classes.error_message}>
+        <p>Reason for failure: </p>
+        <p>{data.failed_reason}</p>
+      </div>
+    );
+  } else {
+    return null;
+  }
+};

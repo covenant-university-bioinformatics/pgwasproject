@@ -51,7 +51,6 @@ const Routes: React.FC<Props> = (props) => {
         />
         <Route
           path="/tools/deleteriousness"
-          exact
           component={AuthGuard(Deleteriousness)}
         />
         <Route

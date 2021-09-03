@@ -38,7 +38,6 @@ export type AnnotationResult = {
   longJob: string;
   completionTime: string;
   annot: {
-    gene_db: string;
     intervar: boolean;
     clinvar: boolean;
     disgenet: boolean;
@@ -320,7 +319,7 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
       const popfreqs: string[][] = [];
       allines.slice(1).forEach((list_string: string) => {
         const list = list_string.split("\t");
-        const temp = list.slice(initialCols, columns + initialCols);
+        const temp = list.slice(12, columns + 12);
         if (temp.some((str) => str !== ".")) {
           temp.push(list[list.length - 1]);
           popfreqs.push(temp);
@@ -612,10 +611,6 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
         <div className={classes.db_list}>
           <h3>Selected Databases</h3>
           <ul>
-            <li>
-              <span>Gene DB</span>
-              <span>{String(annotRes.annot.gene_db)}</span>
-            </li>
             <li>
               <span>Cytoband</span>
               <span>{String(annotRes.annot.cytoband)}</span>

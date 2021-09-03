@@ -7,7 +7,7 @@ import Paper from "@material-ui/core/Paper";
 import classes from "./index.module.scss";
 import { useActions } from "../../../hooks/useActions";
 import { useTypedSelector } from "../../../hooks/useTypedSelector";
-import AnnotRow from "../../utility/Row";
+import AnnotRow from "../Row";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -22,7 +22,6 @@ type Props = {};
 
 const AnnotationResultList: React.FC<Props & RouteComponentProps> = (props) => {
   const mclasses = useStyles();
-
   const { getAnnotationResults } = useActions();
 
   const getResults = useCallback(
@@ -76,10 +75,9 @@ const AnnotationResultList: React.FC<Props & RouteComponentProps> = (props) => {
                 link={`/${
                   props.match.url.split("/")[1]
                 }/annotation/result_view/${item._id}`}
-                route={"annot"}
-                getResults={getResults}
                 page={page}
                 rowsPerPage={rowsPerPage}
+                getResults={getResults}
               />
             ))}
           </TableBody>

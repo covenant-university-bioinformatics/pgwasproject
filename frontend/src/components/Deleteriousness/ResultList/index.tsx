@@ -1,13 +1,13 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import useTable from "../../../hooks/useTable";
 import { RouteComponentProps } from "react-router-dom";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import { CircularProgress, TableBody } from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 import classes from "./index.module.scss";
-import { useActions } from "../../../hooks/useActions";
-import { useTypedSelector } from "../../../hooks/useTypedSelector";
-import AnnotRow from "../../utility/Row";
+import DeletRow from "../../utility/Row";
+import pgwasAxios from "../../../axios-fetches";
+import { getErrorMessage } from "../../utility/general_utils";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -20,21 +20,10 @@ const useStyles = makeStyles((theme: Theme) =>
 
 type Props = {};
 
-const AnnotationResultList: React.FC<Props & RouteComponentProps> = (props) => {
+const DeleteriousnessResultList: React.FC<Props & RouteComponentProps> = (
+  props
+) => {
   const mclasses = useStyles();
-
-  const { getAnnotationResults } = useActions();
-
-  const getResults = useCallback(
-    (page: number, limit: number) => {
-      getAnnotationResults(page, limit);
-    },
-    [getAnnotationResults]
-  );
-
-  const { loading, error, data, total } = useTypedSelector(
-    (state) => state.annot
-  );
 
   const headCells = [
     { id: "name", label: "Job Name", disableSorting: false },
@@ -44,6 +33,11 @@ const AnnotationResultList: React.FC<Props & RouteComponentProps> = (props) => {
     { id: "actions", label: "Actions", disableSorting: true },
   ];
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [data, setData] = useState<any[]>([]);
+  const [total, setTotal] = useState(0);
+
   const {
     TblContainer,
     TblHead,
@@ -52,6 +46,21 @@ const AnnotationResultList: React.FC<Props & RouteComponentProps> = (props) => {
     page,
     rowsPerPage,
   } = useTable(data, headCells, [3, 6, 9], total);
+
+  const getResults = useCallback((page: number, limit: number) => {
+    setLoading(true);
+    pgwasAxios
+      .get(`/delet/jobs?page=${page + 1}&limit=${limit}`)
+      .then((response) => {
+        setLoading(false);
+        setData(response.data.data);
+        setTotal(response.data.total);
+      })
+      .catch((error) => {
+        setLoading(false);
+        setError(getErrorMessage(error));
+      });
+  }, []);
 
   useEffect(() => {
     getResults(page, rowsPerPage);
@@ -70,16 +79,16 @@ const AnnotationResultList: React.FC<Props & RouteComponentProps> = (props) => {
           <TblHead />
           <TableBody>
             {recordsAfterSorting().map((item: any, index) => (
-              <AnnotRow
+              <DeletRow
                 key={item._id}
                 item={item}
                 link={`/${
                   props.match.url.split("/")[1]
-                }/annotation/result_view/${item._id}`}
-                route={"annot"}
-                getResults={getResults}
+                }/deleteriousness/result_view/${item._id}`}
                 page={page}
+                route={"delet"}
                 rowsPerPage={rowsPerPage}
+                getResults={getResults}
               />
             ))}
           </TableBody>
@@ -90,4 +99,4 @@ const AnnotationResultList: React.FC<Props & RouteComponentProps> = (props) => {
   );
 };
 
-export default AnnotationResultList;
+export default DeleteriousnessResultList;
