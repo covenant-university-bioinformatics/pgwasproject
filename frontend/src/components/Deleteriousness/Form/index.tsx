@@ -12,11 +12,8 @@ import {
 } from "../../utility/general_utils";
 import {
   Button,
-  Checkbox,
   CircularProgress,
   FormControl,
-  FormControlLabel,
-  FormGroup,
   Grid,
   Hidden,
   InputLabel,
@@ -38,21 +35,11 @@ type UserFormData = {
   position: string | undefined;
   effect_allele: string | undefined;
   alternate_allele: string | undefined;
-  cytoband: false;
-  kgp_all: false;
-  kgp_afr: false;
-  kgp_amr: false;
-  kgp_eas: false;
-  kgp_eur: false;
-  kgp_sas: false;
-  exac: false;
-  disgenet: false;
-  clinvar: false;
-  intervar: false;
+  gene_db: string;
   [key: string]: any;
 };
 
-const AnnotationForm: React.FC<Props & RouteComponentProps> = (props) => {
+const DeleteriousnessForm: React.FC<Props & RouteComponentProps> = (props) => {
   const [uploadFile, setUploadFile] = useState<any>(null);
   const fileInput = useRef<any>(null);
   const [loading, setLoading] = useState(false);
@@ -67,17 +54,6 @@ const AnnotationForm: React.FC<Props & RouteComponentProps> = (props) => {
       effect_allele: "",
       alternate_allele: "",
       gene_db: "",
-      cytoband: false,
-      kgp_all: false,
-      kgp_afr: false,
-      kgp_amr: false,
-      kgp_eas: false,
-      kgp_eur: false,
-      kgp_sas: false,
-      exac: false,
-      disgenet: false,
-      clinvar: false,
-      intervar: false,
     },
 
     validationSchema: Yup.object({
@@ -114,13 +90,13 @@ const AnnotationForm: React.FC<Props & RouteComponentProps> = (props) => {
       }
       setLoading(true);
       pgwasAxios
-        .post("/annot/jobs", data)
+        .post("/delet/jobs", data)
         .then((res) => {
           // then print response status
           showToastMessage("Job submitted successfully");
           setLoading(false);
           props.history.push(
-            `/${props.match.url.split("/")[1]}/annotation/all_results`
+            `/${props.match.url.split("/")[1]}/deleteriousness/all_results`
           );
         })
         .catch((error) => {
@@ -164,20 +140,6 @@ const AnnotationForm: React.FC<Props & RouteComponentProps> = (props) => {
     fileInput.current.querySelector("input").value = "";
   };
 
-  const databases = [
-    { variable: "cytoband", name: "Cytoband" },
-    { variable: "kgp_all", name: "Frequency in 1KGP (ALL)" },
-    { variable: "kgp_afr", name: "Frequency in 1KGP (AFR)" },
-    { variable: "kgp_amr", name: "Frequency in 1KGP (AMR)" },
-    { variable: "kgp_eur", name: "Frequency in 1KGP (EUR)" },
-    { variable: "kgp_eas", name: "Frequency in 1KGP (EAS)" },
-    { variable: "kgp_sas", name: "Frequency in 1KGP (SAS)" },
-    { variable: "exac", name: "Exome Frequencies" },
-    { variable: "disgenet", name: "DISGENET" },
-    { variable: "clinvar", name: "CLINVAR" },
-    { variable: "intervar", name: "INTERVAR (Disease Databases)" },
-  ];
-
   const gene_dbs = [
     { variable: "refseq", name: "RefSeq" },
     { variable: "ucsc", name: "UCSC" },
@@ -185,7 +147,7 @@ const AnnotationForm: React.FC<Props & RouteComponentProps> = (props) => {
   ];
 
   return (
-    <div className={classes.annot_form}>
+    <div className={classes.delet_form}>
       <form onSubmit={formik.handleSubmit}>
         <Grid container spacing={3}>
           <div className={classes.header_div}>
@@ -270,24 +232,14 @@ const AnnotationForm: React.FC<Props & RouteComponentProps> = (props) => {
             </Paper>
           </Grid>
           <div className={classes.header_div}>
-            <h2>Other Annotation Databases</h2>
+            <h2>Deleteriousness Databases</h2>
           </div>
-          <Grid className={classes.grid} item xs={12}>
+          <Grid className={classes.grid} item xs={12} sm={12}>
             <Paper variant="outlined" className={classes.paper}>
-              <FormGroup row>
-                {databases.map((data, index) => (
-                  <FormControlLabel
-                    key={`check_${index}`}
-                    control={
-                      <Checkbox
-                        checked={formik.values[data.variable]}
-                        {...formik.getFieldProps(data.variable)}
-                      />
-                    }
-                    label={data.name}
-                  />
-                ))}
-              </FormGroup>
+              whole-exome SIFT, PolyPhen2 HDIV, PolyPhen2 HVAR, LRT,
+              MutationTaster, MutationAssessor, FATHMM, PROVEAN, MetaSVM,
+              MetaLR, VEST, M-CAP, CADD, GERP++, DANN, fathmm-MKL, Eigen,
+              GenoCanyon, fitCons, PhyloP and SiPhy scores
             </Paper>
           </Grid>
         </Grid>
@@ -313,4 +265,4 @@ const AnnotationForm: React.FC<Props & RouteComponentProps> = (props) => {
   );
 };
 
-export default AnnotationForm;
+export default DeleteriousnessForm;

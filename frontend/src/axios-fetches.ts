@@ -7,7 +7,7 @@ const instance = axios.create({
   baseURL: "https://spgwas.waslitbre.org/api",
   // baseURL: "https://pgwas.dev/api",
 });
-console.log("runned");
+
 const authUser = localStorage.getItem("user");
 
 let token = "";

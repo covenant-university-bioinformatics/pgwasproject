@@ -1,0 +1,33 @@
+.infos {
+  display: flex;
+  width: 100%;
+  .side_one {
+    flex: 2;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 5px;
+    .extra_info {
+      font-size: 0.8rem;
+      width: 10rem;
+      //background-color: black;
+      color: black;
+      h3 {
+        background-color: #f7bd35;
+        text-align: center;
+      }
+    }
+  }
+  .image_box {
+    flex: 1;
+    //display: flex;
+    //flex-direction: column;
+    //.image_one {
+    //  flex: 1;
+    //  margin: 5px;
+    //}
+    //.image_two {
+    //  flex: 1;
+    //  margin: 5px;
+    //}
+  }
+}

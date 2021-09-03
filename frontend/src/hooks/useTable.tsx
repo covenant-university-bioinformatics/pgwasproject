@@ -22,7 +22,8 @@ const useStyles = makeStyles((theme: Theme) =>
         fontWeight: "600",
         // color: theme.palette.primary.main,
         color: "#fff",
-        backgroundColor: theme.palette.primary.light,
+        // backgroundColor: theme.palette.primary.light,
+        backgroundColor: "black",
       },
       "& tbody td": {
         fontWeight: "bold",
