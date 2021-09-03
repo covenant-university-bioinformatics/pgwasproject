@@ -50,7 +50,7 @@ const useTable = (
   const [rowsPerPage, setRowsPerPage] = useState(pages[page]); //limit
   const [order, setOrder] = useState<Order>("asc");
   const [orderBy, setOrderBy] = useState("");
-  const totalDocuments = count ? count : records.length;
+  const totalDocuments = count ? count : records?.length;
 
   const TblContainer: React.FC<TableProps> = (props) => (
     <Table className={mclasses.table}>{props.children}</Table>

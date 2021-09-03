@@ -3,10 +3,13 @@
   width: 100%;
   .side_one {
     flex: 2;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-gap: 5px;
+    //display: grid;
+    //grid-template-columns: repeat(4, 1fr);
+    //grid-gap: 5px;
+    display: flex;
+    flex-wrap: wrap;
     .extra_info {
+      margin: 1rem;
       font-size: 0.8rem;
       width: 10rem;
       //background-color: black;
