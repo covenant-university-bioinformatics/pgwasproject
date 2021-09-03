@@ -16,6 +16,18 @@
       padding: 1.4rem;
       line-height: 1.4;
 
+      .db_list{
+        display: flex;
+        flex-wrap: wrap;
+        list-style-type: square;
+        li {
+          //flex: 1;
+          margin: 1rem;
+          font-weight: bold;
+          //display: inline-block;
+        }
+      }
+
       .formControl {
         width: 100%;
         label {

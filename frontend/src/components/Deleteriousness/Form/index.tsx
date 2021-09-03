@@ -146,6 +146,30 @@ const DeleteriousnessForm: React.FC<Props & RouteComponentProps> = (props) => {
     { variable: "ensembl", name: "Ensembl" },
   ];
 
+  const dbs = [
+    "whole-exome SIFT",
+    "PolyPhen2 HDIV",
+    "PolyPhen2 HVAR",
+    "LRT",
+    "MutationTaster",
+    "MutationAssessor",
+    "FATHMM",
+    "PROVEAN",
+    "MetaSVM",
+    "MetaLR",
+    "VEST",
+    "M-CAP",
+    "CADD",
+    "GERP++",
+    "DANN",
+    "fathmm-MKL",
+    "Eigen",
+    "GenoCanyon",
+    "fitCons",
+    "PhyloP",
+    "SiPhy",
+  ];
+
   return (
     <div className={classes.delet_form}>
       <form onSubmit={formik.handleSubmit}>
@@ -236,10 +260,11 @@ const DeleteriousnessForm: React.FC<Props & RouteComponentProps> = (props) => {
           </div>
           <Grid className={classes.grid} item xs={12} sm={12}>
             <Paper variant="outlined" className={classes.paper}>
-              whole-exome SIFT, PolyPhen2 HDIV, PolyPhen2 HVAR, LRT,
-              MutationTaster, MutationAssessor, FATHMM, PROVEAN, MetaSVM,
-              MetaLR, VEST, M-CAP, CADD, GERP++, DANN, fathmm-MKL, Eigen,
-              GenoCanyon, fitCons, PhyloP and SiPhy scores
+              <ul className={classes.db_list}>
+                {dbs.map((db, i) => (
+                  <li key={i}>{db}</li>
+                ))}
+              </ul>
             </Paper>
           </Grid>
         </Grid>
