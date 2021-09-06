@@ -70,6 +70,12 @@ const SideBar: React.FC<Props> = (props) => {
       linkTo: "/tools/deleteriousness",
       icon: <LabelSharp />,
     },
+    { title: "EQTL", linkTo: "/tools/eqtl", icon: <LabelSharp /> },
+    {
+      title: "Gene-Set Analysis",
+      linkTo: "/tools/gene_based",
+      icon: <LabelSharp />,
+    },
     { title: "Regulation", linkTo: "/tools/regulation", icon: <LabelSharp /> },
   ];
 

@@ -92,7 +92,7 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
   let genMessage: any | null = null;
 
   const mclasses = useStyles();
-  const initialCols = 26;
+  const initialCols = 12;
   const [snpAnnotResult, setSnpAnnotResult] = useState<string[][]>([]);
   const [snpAnnotHeader, setSnpAnnotHeader] = useState<
     { id: string; label: string; disableSorting: boolean }[]
@@ -183,7 +183,7 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
 
   const createHeaders = (headers: string[]) => {
     const annotHead = headers.slice(0, 8);
-    annotHead.push(headers[25]);
+    annotHead.push(headers[11]);
     annotHead.push(headers[headers.length - 1]);
     const dcd = annotHead.map((ele, i) => {
       return {
@@ -307,7 +307,7 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
     const ddd = allines.slice(1).map((list_string: string) => {
       const list = list_string.split("\t");
       const temp = list.slice(0, 8);
-      temp.push(list[25]);
+      temp.push(list[11]);
       temp.push(list[list.length - 1]);
       return temp;
     });

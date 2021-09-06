@@ -25,6 +25,8 @@ import SignUp from "./components/SignUp";
 import SignIn from "./components/SignIn";
 import AuthGuard from "./hoc/AuthGuard";
 import Home from "./Pages/Home/Home";
+import EQTL from "./components/EQTL";
+import GeneBased from "./components/GeneBased";
 type Props = {};
 
 const Routes: React.FC<Props> = (props) => {
@@ -60,9 +62,12 @@ const Routes: React.FC<Props> = (props) => {
         />
         <Route path="/tools/liftover" component={AuthGuard(Liftover)} />
         <Route path="/tools/ld_structure" component={AuthGuard(LDStructure)} />
+        <Route path="/tools/eqtl" component={AuthGuard(EQTL)} />
+        <Route path="/tools/gene_based" component={AuthGuard(GeneBased)} />
         <Route path="/tools" exact component={ToolsHome} />
         <Route path="/dashboard" exact component={HomeComingSoon} />
         <Route path="/tutorials" exact component={HomeComingSoon} />
+        <Route path="/Documentation" exact component={HomeComingSoon} />
         <Route path="/workflows" exact component={HomeComingSoon} />
         <Route path="/sign_in" exact component={SignIn} />
         <Route path="/sign_up" exact component={SignUp} />
