@@ -1,6 +1,6 @@
 import React from "react";
 import ToolsLayout from "../../layouts/ToolsLayout";
-import classes from "../Annotation/index.module.scss";
+import classes from "./index.module.scss";
 import { Route, RouteComponentProps, Switch } from "react-router-dom";
 import DeleteriousnessHome from "./Home";
 import DeleteriousnessForm from "./Form";

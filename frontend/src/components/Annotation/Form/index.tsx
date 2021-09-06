@@ -175,7 +175,7 @@ const AnnotationForm: React.FC<Props & RouteComponentProps> = (props) => {
     { variable: "exac", name: "Exome Frequencies" },
     { variable: "disgenet", name: "DISGENET" },
     { variable: "clinvar", name: "CLINVAR" },
-    { variable: "intervar", name: "INTERVAR (Disease Databases)" },
+    { variable: "intervar", name: "INTERVAR" },
   ];
 
   const gene_dbs = [

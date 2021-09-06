@@ -11,6 +11,10 @@ const AnnotationHome: React.FC<Props> = (props) => {
           Genome annotation is the process of identifying functional elements
           along the sequence of a genome, thus giving meaning to it.
         </p>
+        <p>
+          This analysis uses Annovar tool and several gene databases,exome
+          databases, population frequences and SNP diseases databases
+        </p>
       </Paper>
     </div>
   );
