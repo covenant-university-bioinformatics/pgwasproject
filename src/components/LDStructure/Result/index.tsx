@@ -63,6 +63,10 @@ function LDStructureResult() {
 
   useEffect(() => {
     getAllSubmittedJobs()
+    const interval = setInterval(() => {
+      getAllSubmittedJobs()
+    }, 1000);
+    return () => clearInterval(interval);
   }, [])
   
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -159,7 +163,7 @@ function LDStructureResult() {
                 <IconButton
                   aria-label="view"
                   color="primary"
-                  disabled = {(status === 'RUNNING') ? true : false}
+                  disabled = {(status === 'RUNNING' || status === 'NOTSTARTED') ? true : false}
                   onClick={handleClickOpen(jobUniqueID, outputFilepath)}>
                   <PageviewOutlinedIcon />
                 </IconButton>
