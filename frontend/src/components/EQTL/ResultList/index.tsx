@@ -50,7 +50,7 @@ const DeleteriousnessResultList: React.FC<Props & RouteComponentProps> = (
   const getResults = useCallback((page: number, limit: number) => {
     setLoading(true);
     pgwasAxios
-      .get(`/delet/jobs?page=${page + 1}&limit=${limit}`)
+      .get(`/eqtl/jobs?page=${page + 1}&limit=${limit}`)
       .then((response) => {
         setLoading(false);
         setData(response.data.data);
@@ -62,9 +62,9 @@ const DeleteriousnessResultList: React.FC<Props & RouteComponentProps> = (
       });
   }, []);
 
-  useEffect(() => {
-    getResults(page, rowsPerPage);
-  }, [page, rowsPerPage, getResults]);
+  // useEffect(() => {
+  //   getResults(page, rowsPerPage);
+  // }, [page, rowsPerPage, getResults]);
 
   return (
     <div className={classes.result_list}>
