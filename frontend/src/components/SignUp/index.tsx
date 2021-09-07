@@ -130,7 +130,7 @@ const SignUp: React.FC<Props & RouteComponentProps> = (props) => {
                     variant="contained"
                     color="primary"
                   >
-                    Sign Up
+                    Register
                   </Button>
                 )}
               </div>
