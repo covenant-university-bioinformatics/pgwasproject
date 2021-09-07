@@ -207,7 +207,7 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
         columns += 1;
       }
       if (annot.kgp_sas) {
-        columns += 1;
+        columns += 0;
       }
       if (annot.kgp_eur) {
         columns += 1;
