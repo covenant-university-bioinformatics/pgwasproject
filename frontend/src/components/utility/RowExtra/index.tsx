@@ -194,7 +194,7 @@ const RowExtra: React.FC<Props> = ({ item, scores }: Props) => {
                   </div>
                 </div>
               ) : (
-                <p>This is not a nonsynonymous SNV</p>
+                <p>This is not a nonsynonymous SNV or Results not available!</p>
               )}
             </Box>
           </Collapse>
