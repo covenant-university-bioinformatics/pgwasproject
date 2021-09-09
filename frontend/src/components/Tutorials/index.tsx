@@ -71,7 +71,11 @@ const Tutorials: React.FC<Props> = (props: Props) => {
               On the selected tool dashboard, click on new analysis button on
               the tab panel.
             </li>
-            <li>Upload the files you want to use for the analysis.</li>
+            <li>
+              Upload the files you want to use for the analysis (important! -
+              please ensure your filename doesn't have illegal characters like
+              spaces, braces etc!).
+            </li>
             <li>Fill in the job name.</li>
             <li>
               In the next section, fill in the correct column number for the
