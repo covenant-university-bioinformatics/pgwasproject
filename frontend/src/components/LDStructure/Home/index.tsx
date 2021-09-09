@@ -14,23 +14,6 @@ const LDStructureHome: React.FC<Props> = (props) => {
           association of their different alleles is higher or lower than what
           would be expected if the loci were independent and associated randomly
         </p>
-        <p>
-          Linkage disequilibrium is influenced by many factors, including
-          selection, the rate of genetic recombination, mutation rate, genetic
-          drift, the system of mating, population structure, and genetic
-          linkage. As a result, the pattern of linkage disequilibrium in a
-          genome is a powerful signal of the population genetic processes that
-          are structuring it.
-        </p>
-        <p>
-          In spite of its name, linkage disequilibrium may exist between alleles
-          at different loci without any genetic linkage between them and
-          independently of whether or not allele frequencies are in equilibrium
-          (not changing with time).[1] Furthermore, linkage disequilibrium is
-          sometimes referred to as gametic phase disequilibrium;[2] however, the
-          concept also applies to asexual organisms and therefore does not
-          depend on the presence of gametes.
-        </p>
       </Paper>
     </div>
   );

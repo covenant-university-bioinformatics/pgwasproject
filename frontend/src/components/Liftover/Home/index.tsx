@@ -8,6 +8,10 @@ const LiftoverHome: React.FC<Props> = (props) => {
     <div>
       <Paper variant={"outlined"} elevation={3} className={classes.paper}>
         <p>
+          LiftOver is a necessary step to bring all genetical analysis to the
+          same reference build.
+        </p>
+        <p>
           All the tools provided in this application are based on Genome build
           HG19/GRCH37 This pipeline helps to convert genome coordinates and
           genome annotation files from GRCH38 and GRCH36 to GRCH37.

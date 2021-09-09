@@ -28,16 +28,23 @@ const Tutorials: React.FC<Props> = (props: Props) => {
             >
               Celiac disease
             </a>{" "}
-            - This data includes SNPs significantly associated to Celiac disease
-            downloaded from GWAS Catalog. The SNPs in this file are in genomic
-            assembly hg38. Convert it to Genomic assembly hg19 with Liftover
-            tool and use the resulting output in the other tools.
+            - This data includes SNPs significantly associated with Celiac
+            disease downloaded from GWAS Catalog. The SNPs in this file are in
+            genomic assembly hg38. Convert it to Genomic assembly hg19 with
+            Liftover tool and use the resulting output in the other tools.
           </p>
         </div>
         <div className={classes.register}>
           <h2>Instructions on how to register on the application</h2>
           <ul>
-            <li>Visit the home page site: https://www.spgwas.waslitbre.org/</li>
+            <li>
+              Visit the home page site: https://www.spgwas.waslitbre.org/ (Side
+              note: In case you have viewed this site before, you might be
+              viewing an old version of the site because of the way browsers
+              cache sites. Please you might need to press SHIFT + ENTER while in
+              focus of the browser address bar to fetch a fresh version from the
+              server)
+            </li>
             <li>Click on the Sign UP button on the top right corner.</li>
             <li>Enter your details and submit</li>
             <li>
@@ -123,7 +130,7 @@ const Tutorials: React.FC<Props> = (props: Props) => {
                 </li>
                 <li>
                   When the job is completed, scroll down to view the results.
-                  Use the download buttons to obtains results of your analysis.
+                  Use the download buttons to obtain results of your analysis.
                 </li>
                 <li>
                   Please note: The annotation service can only run 2 concurrent
@@ -149,7 +156,7 @@ const Tutorials: React.FC<Props> = (props: Props) => {
                 </li>
                 <li>
                   When the job is completed, scroll down to view the results.
-                  Use the download buttons to obtains results of your analysis.
+                  Use the download buttons to obtain results of your analysis.
                 </li>
                 <li>
                   Please note: the deleteriousnes service can only run 1
