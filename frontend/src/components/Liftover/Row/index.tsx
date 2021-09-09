@@ -79,6 +79,7 @@ const Row: React.FC<Props> = ({
               className={classes.button}
               endIcon={<GetAppRounded />}
               href={`/results${item.outputFile}`}
+              target="_blank"
             >
               Download
             </Button>

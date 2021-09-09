@@ -27,6 +27,7 @@ import AuthGuard from "./hoc/AuthGuard";
 import Home from "./Pages/Home/Home";
 import EQTL from "./components/EQTL";
 import GeneBased from "./components/GeneBased";
+import Tutorials from "./components/Tutorials";
 type Props = {};
 
 const Routes: React.FC<Props> = (props) => {
@@ -66,7 +67,7 @@ const Routes: React.FC<Props> = (props) => {
         <Route path="/tools/gene_based" component={AuthGuard(GeneBased)} />
         <Route path="/tools" exact component={ToolsHome} />
         <Route path="/dashboard" exact component={HomeComingSoon} />
-        <Route path="/tutorials" exact component={HomeComingSoon} />
+        <Route path="/tutorials" exact component={Tutorials} />
         <Route path="/Documentation" exact component={HomeComingSoon} />
         <Route path="/workflows" exact component={HomeComingSoon} />
         <Route path="/sign_in" exact component={SignIn} />
