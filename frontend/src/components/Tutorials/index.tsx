@@ -35,7 +35,7 @@ const Tutorials: React.FC<Props> = (props: Props) => {
           </p>
         </div>
         <div className={classes.register}>
-          <h2>Instructions to on how to register on the application</h2>
+          <h2>Instructions on how to register on the application</h2>
           <ul>
             <li>Visit the home page site: https://www.spgwas.waslitbre.org/</li>
             <li>Click on the Sign UP button on the top right corner.</li>
