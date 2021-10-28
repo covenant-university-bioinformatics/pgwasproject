@@ -37,7 +37,7 @@ const ToolsHome: React.FC<Props> = (props) => {
       icon: <LabelSharp />,
     },
     { title: "EQTL", linkTo: "/tools/eqtl" },
-    { title: "Gene-Set Analysis", linkTo: "/tools/gene_based" },
+    { title: "Gene-Based Analysis", linkTo: "/tools/genebased" },
     { title: "Regulation", linkTo: "/tools/regulation" },
   ];
 

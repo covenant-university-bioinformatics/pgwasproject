@@ -287,6 +287,53 @@ export const createInfoSection = (data: any, classes: any) => {
   return false;
 };
 
+export const getInfoSection = (data: any, classes: any) => {
+  if (data) {
+    const jobList = (
+      <div className={classes.job_list}>
+        <h3>Job Details</h3>
+        <ul>
+          <li>
+            <span>Job Name</span>
+            <span>{String(data.job_name)}</span>
+          </li>
+          <li>
+            <span>Job UID</span>
+            <span>{String(data.jobUID)}</span>
+          </li>
+          <li>
+            <span>Job Status</span>
+            <span>{String(data.status)}</span>
+          </li>
+          <li>
+            <span>Input File</span>
+            <span>{String(data.inputFile).split("/")[5]}</span>
+          </li>
+          <li>
+            <span>Created Date</span>
+            <span>{new Date(data.createdAt).toLocaleString()}</span>
+          </li>
+          <li>
+            <span>Completion Date</span>
+            <span>
+              {data.completionTime
+                ? new Date(data.completionTime).toLocaleString()
+                : "Pending"}
+            </span>
+          </li>
+          <li>
+            <span>Total time</span>
+            <span>{getTotalTime(data)} minutes</span>
+          </li>
+        </ul>
+      </div>
+    );
+
+    return jobList;
+  }
+  return false;
+};
+
 export const createJobFailedReason = (data: any, classes: any) => {
   if (data && data.failed_reason) {
     return (
