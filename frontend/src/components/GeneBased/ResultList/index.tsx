@@ -76,19 +76,21 @@ const GeneBasedResultList: React.FC<Props & RouteComponentProps> = (props) => {
         <TblContainer>
           <TblHead />
           <TableBody>
-            {recordsAfterSorting().map((item: any, index) => (
-              <GeneBasedRow
-                key={item._id}
-                item={item}
-                link={`/${
-                  props.match.url.split("/")[1]
-                }/genebased/result_view/${item._id}`}
-                page={page}
-                route={"genebased"}
-                rowsPerPage={rowsPerPage}
-                getResults={getResults}
-              />
-            ))}
+            {data &&
+              data.length > 0 &&
+              recordsAfterSorting().map((item: any, index) => (
+                <GeneBasedRow
+                  key={item._id}
+                  item={item}
+                  link={`/${
+                    props.match.url.split("/")[1]
+                  }/genebased/result_view/${item._id}`}
+                  page={page}
+                  route={"genebased"}
+                  rowsPerPage={rowsPerPage}
+                  getResults={getResults}
+                />
+              ))}
           </TableBody>
         </TblContainer>
         <TblPagination />
