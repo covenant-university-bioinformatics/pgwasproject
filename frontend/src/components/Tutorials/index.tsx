@@ -13,6 +13,7 @@ const Tutorials: React.FC<Props> = (props: Props) => {
           <h3>Download Test Files</h3>
           <p>
             <a
+              rel="noreferrer"
               target="_blank"
               href="https://drive.google.com/file/d/193L8JZ-yEbZUmE2iSckUZSkIqpS4KPXh/view?usp=sharing"
             >
@@ -23,6 +24,7 @@ const Tutorials: React.FC<Props> = (props: Props) => {
           </p>
           <p>
             <a
+              rel="noreferrer"
               target="_blank"
               href="https://drive.google.com/file/d/1xc-ezHEXYD-Vrow5M5YW9c-60Zu9fY7X/view?usp=sharing"
             >

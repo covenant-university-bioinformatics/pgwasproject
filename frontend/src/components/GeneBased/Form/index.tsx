@@ -12,12 +12,10 @@ import {
 } from "../../utility/general_utils";
 import {
   Button,
-  Checkbox,
   CircularProgress,
   FormControl,
-  FormControlLabel,
-  FormGroup,
   Grid,
+  Hidden,
   InputLabel,
   NativeSelect,
   Paper,
@@ -39,57 +37,13 @@ type UserFormData = {
   sample_size: string | undefined;
   population: string;
   synonym: string;
-  Adipose_Subcutaneous: boolean;
-  Adipose_Visceral_Omentum: boolean;
-  Adrenal_Gland: boolean;
-  Artery_Aorta: boolean;
-  Artery_Coronary: boolean;
-  Artery_Tibial: boolean;
-  Brain_Amygdala: boolean;
-  Brain_Anterior_cingulate_cortex_BA24: boolean;
-  Brain_Caudate_basal_ganglia: boolean;
-  Brain_Cerebellar_Hemisphere: boolean;
-  Brain_Cerebellum: boolean;
-  Brain_Cortex: boolean;
-  Brain_Frontal_Cortex_BA9: boolean;
-  Brain_Hippocampus: boolean;
-  Brain_Hypothalamus: boolean;
-  Brain_Nucleus_accumbens_basal_ganglia: boolean;
-  Brain_Putamen_basal_ganglia: boolean;
-  Brain_Spinal_cord_cervical_c_1: boolean;
-  Brain_Substantia_nigra: boolean;
-  Breast_Mammary_Tissue: boolean;
-  Cells_EBV_transformed_lymphocytes: boolean;
-  Colon_Sigmoid: boolean;
-  Colon_Transverse: boolean;
-  Esophagus_Gastroesophageal_Junction: boolean;
-  Esophagus_Mucosa: boolean;
-  Esophagus_Muscularis: boolean;
-  Heart_Atrial_Appendage: boolean;
-  Heart_Left_Ventricle: boolean;
-  Liver: boolean;
-  Lung: boolean;
-  Minor_Salivary_Gland: boolean;
-  Muscle_Skeletal: boolean;
-  Nerve_Tibial: boolean;
-  Ovary: boolean;
-  Pancreas: boolean;
-  Pituitary: boolean;
-  Prostate: boolean;
-  Skin_Not_Sun_Exposed_Suprapubic: boolean;
-  Skin_Sun_Exposed_Lower_leg: boolean;
-  Small_Intestine_Terminal_Ileum: boolean;
-  Spleen: boolean;
-  Stomach: boolean;
-  Testis: boolean;
-  Thyroid: boolean;
-  Uterus: boolean;
-  Vagina: boolean;
-  Whole_Blood: boolean;
+  up_window: string;
+  down_window: string;
+  tissue: string;
   [key: string]: any;
 };
 
-const EQTLForm: React.FC<Props & RouteComponentProps> = (props) => {
+const GeneBasedForm: React.FC<Props & RouteComponentProps> = (props) => {
   const [uploadFile, setUploadFile] = useState<any>(null);
   const fileInput = useRef<any>(null);
   const [loading, setLoading] = useState(false);
@@ -105,53 +59,9 @@ const EQTLForm: React.FC<Props & RouteComponentProps> = (props) => {
       sample_size: "",
       population: "",
       synonym: "",
-      Adipose_Subcutaneous: false,
-      Adipose_Visceral_Omentum: false,
-      Adrenal_Gland: false,
-      Artery_Aorta: false,
-      Artery_Coronary: false,
-      Artery_Tibial: false,
-      Brain_Amygdala: false,
-      Brain_Anterior_cingulate_cortex_BA24: false,
-      Brain_Caudate_basal_ganglia: false,
-      Brain_Cerebellar_Hemisphere: false,
-      Brain_Cerebellum: false,
-      Brain_Cortex: false,
-      Brain_Frontal_Cortex_BA9: false,
-      Brain_Hippocampus: false,
-      Brain_Hypothalamus: false,
-      Brain_Nucleus_accumbens_basal_ganglia: false,
-      Brain_Putamen_basal_ganglia: false,
-      Brain_Spinal_cord_cervical_c_1: false,
-      Brain_Substantia_nigra: false,
-      Breast_Mammary_Tissue: false,
-      Cells_EBV_transformed_lymphocytes: false,
-      Colon_Sigmoid: false,
-      Colon_Transverse: false,
-      Esophagus_Gastroesophageal_Junction: false,
-      Esophagus_Mucosa: false,
-      Esophagus_Muscularis: false,
-      Heart_Atrial_Appendage: false,
-      Heart_Left_Ventricle: false,
-      Liver: false,
-      Lung: false,
-      Minor_Salivary_Gland: false,
-      Muscle_Skeletal: false,
-      Nerve_Tibial: false,
-      Ovary: false,
-      Pancreas: false,
-      Pituitary: false,
-      Prostate: false,
-      Skin_Not_Sun_Exposed_Suprapubic: false,
-      Skin_Sun_Exposed_Lower_leg: false,
-      Small_Intestine_Terminal_Ileum: false,
-      Spleen: false,
-      Stomach: false,
-      Testis: false,
-      Thyroid: false,
-      Uterus: false,
-      Vagina: false,
-      Whole_Blood: false,
+      up_window: "0",
+      down_window: "0",
+      tissue: "",
     },
 
     validationSchema: Yup.object({
@@ -176,28 +86,32 @@ const EQTLForm: React.FC<Props & RouteComponentProps> = (props) => {
         .min(1, "The minimum is one")
         .max(15, "the max is fifteen"),
       job_name: Yup.string().required("Job name is required"),
-      population: Yup.string().required("Please select a population"),
+      population: Yup.string().required("Please select a closest population"),
       synonym: Yup.string().required(
         "Please select how to handle similar SNPs"
       ),
+      up_window: Yup.number(),
+      down_window: Yup.number(),
     }),
+
     onSubmit: (values: FormikValues) => {
       const data = new FormData();
       data.append("file", uploadFile);
       for (const element in values) {
         if (values.hasOwnProperty(element)) {
+          console.log(element + ": " + values[element].toString());
           data.append(element, values[element]);
         }
       }
       setLoading(true);
       pgwasAxios
-        .post("/eqtl/jobs", data)
+        .post("/genebased/jobs", data)
         .then((res) => {
           // then print response status
           showToastMessage("Job submitted successfully");
           setLoading(false);
           props.history.push(
-            `/${props.match.url.split("/")[1]}/eqtl/all_results`
+            `/${props.match.url.split("/")[1]}/genebased/all_results`
           );
         })
         .catch((error) => {
@@ -341,13 +255,30 @@ const EQTLForm: React.FC<Props & RouteComponentProps> = (props) => {
   ];
 
   return (
-    <div className={classes.eqtl_form}>
+    <div className={classes.genebased_form}>
       <form onSubmit={formik.handleSubmit}>
         <Grid container spacing={3}>
           <div className={classes.header_div}>
+            <h2>Job Name</h2>
+          </div>
+          <Grid className={classes.grid} item xs={12} sm={4}>
+            <Paper elevation={0} className={classes.paper}>
+              <FormControl className={classes.formControl}>
+                <TextField
+                  id={"job_name"}
+                  variant={"outlined"}
+                  label={"Job Name"}
+                  size={"medium"}
+                  {...formik.getFieldProps("job_name")}
+                  {...textErrorHelper(formik, "job_name")}
+                />
+              </FormControl>
+            </Paper>
+          </Grid>
+          <div className={classes.header_div}>
             <h2>Upload a file</h2>
           </div>
-          <Grid className={classes.grid} item xs={6}>
+          <Grid className={classes.grid} item xs={12} sm={4}>
             <Paper elevation={0} className={classes.paper}>
               <FormControl
                 error={selectIsError(formik, "filename")}
@@ -379,20 +310,6 @@ const EQTLForm: React.FC<Props & RouteComponentProps> = (props) => {
               )}
             </Paper>
           </Grid>
-          <Grid className={classes.grid} item xs={6}>
-            <Paper elevation={0} className={classes.paper}>
-              <FormControl className={classes.formControl}>
-                <TextField
-                  id={"job_name"}
-                  variant={"outlined"}
-                  label={"Job Name"}
-                  size={"medium"}
-                  {...formik.getFieldProps("job_name")}
-                  {...textErrorHelper(formik, "job_name")}
-                />
-              </FormControl>
-            </Paper>
-          </Grid>
           <div className={classes.header_div}>
             <h2>Summary statistics column positions</h2>
           </div>
@@ -406,7 +323,7 @@ const EQTLForm: React.FC<Props & RouteComponentProps> = (props) => {
           <div className={classes.header_div}>
             <h2>Tool Parameters</h2>
           </div>
-          <Grid className={classes.grid} item xs={12} sm={3}>
+          <Grid className={classes.grid} item xs={12} sm={4}>
             <Paper variant="outlined" className={classes.paper}>
               <FormControl
                 className={classes.formControl}
@@ -428,13 +345,13 @@ const EQTLForm: React.FC<Props & RouteComponentProps> = (props) => {
               </FormControl>
             </Paper>
           </Grid>
-          <Grid className={classes.grid} item xs={12} sm={3}>
+          <Grid className={classes.grid} item xs={12} sm={4}>
             <Paper variant="outlined" className={classes.paper}>
               <FormControl
                 className={classes.formControl}
                 error={selectIsError(formik, "synonym")}
               >
-                <InputLabel htmlFor="synonym">Select Population</InputLabel>
+                <InputLabel htmlFor="synonym">Select Synonym</InputLabel>
                 <NativeSelect id="synonym" {...formik.getFieldProps("synonym")}>
                   <option aria-label="None" value="" />
                   {synonyms.map((db, i) => (
@@ -447,26 +364,54 @@ const EQTLForm: React.FC<Props & RouteComponentProps> = (props) => {
               </FormControl>
             </Paper>
           </Grid>
-          <div className={classes.header_div}>
-            <h2>Select tissues</h2>
-          </div>
-          <Grid className={classes.grid} item xs={12} sm={12}>
+
+          <Grid className={classes.grid} item xs={12} sm={4}>
             <Paper variant="outlined" className={classes.paper}>
-              <FormGroup row className={classes.db_list}>
-                {tissues.map((data, index) => (
-                  <FormControlLabel
-                    className={classes.tissue}
-                    key={`check_${index}`}
-                    control={
-                      <Checkbox
-                        checked={formik.values[data.variable]}
-                        {...formik.getFieldProps(data.variable)}
-                      />
-                    }
-                    label={data.name}
-                  />
-                ))}
-              </FormGroup>
+              <FormControl
+                className={classes.formControl}
+                // error={selectIsError(formik, "synonym")}
+              >
+                <InputLabel htmlFor="tissue">Select a Tissue</InputLabel>
+                <NativeSelect id="tissue" {...formik.getFieldProps("tissue")}>
+                  <option aria-label="None" value="" />
+                  {tissues.map((db, i) => (
+                    <option key={i} value={db.variable}>
+                      {db.name}
+                    </option>
+                  ))}
+                </NativeSelect>
+                {/*{selectErrorHelper(formik, "synonym")}*/}
+              </FormControl>
+            </Paper>
+          </Grid>
+
+          <Grid className={classes.grid} item xs={4}>
+            <Paper elevation={0} className={classes.paper}>
+              <FormControl className={classes.formControl}>
+                <TextField
+                  id={"up_window"}
+                  variant={"outlined"}
+                  label={"Up Window Size(KB)"}
+                  size={"medium"}
+                  {...formik.getFieldProps("up_window")}
+                  {...textErrorHelper(formik, "up_window")}
+                />
+              </FormControl>
+            </Paper>
+          </Grid>
+
+          <Grid className={classes.grid} item xs={4}>
+            <Paper elevation={0} className={classes.paper}>
+              <FormControl className={classes.formControl}>
+                <TextField
+                  id={"down_window"}
+                  variant={"outlined"}
+                  label={"Down Window Size(KB)"}
+                  size={"medium"}
+                  {...formik.getFieldProps("down_window")}
+                  {...textErrorHelper(formik, "down_window")}
+                />
+              </FormControl>
             </Paper>
           </Grid>
         </Grid>
@@ -481,10 +426,8 @@ const EQTLForm: React.FC<Props & RouteComponentProps> = (props) => {
               type={"submit"}
               variant="contained"
               color="primary"
-              disabled={true}
             >
-              {/*Execute <Hidden xsDown> Analysis</Hidden>*/}
-              Coming Soon
+              Execute <Hidden xsDown> Analysis</Hidden>
             </Button>
           )}
         </div>
@@ -493,4 +436,4 @@ const EQTLForm: React.FC<Props & RouteComponentProps> = (props) => {
   );
 };
 
-export default EQTLForm;
+export default GeneBasedForm;

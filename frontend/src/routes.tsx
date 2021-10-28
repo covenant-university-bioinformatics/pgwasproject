@@ -64,7 +64,7 @@ const Routes: React.FC<Props> = (props) => {
         <Route path="/tools/liftover" component={AuthGuard(Liftover)} />
         <Route path="/tools/ld_structure" component={AuthGuard(LDStructure)} />
         <Route path="/tools/eqtl" component={AuthGuard(EQTL)} />
-        <Route path="/tools/gene_based" component={AuthGuard(GeneBased)} />
+        <Route path="/tools/genebased" component={AuthGuard(GeneBased)} />
         <Route path="/tools" exact component={ToolsHome} />
         <Route path="/dashboard" exact component={HomeComingSoon} />
         <Route path="/tutorials" exact component={Tutorials} />
