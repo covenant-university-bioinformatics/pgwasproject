@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { ReactComponent as TClass } from "../../resources/images/class.svg";
-import { ReactComponent as Combined } from "../../resources/images/combine.svg";
-import { ReactComponent as Pipeline } from "../../resources/images/workflow.svg";
+import { ReactComponent as TClass } from "../../resources/images/individual_1.svg";
+import { ReactComponent as Combined } from "../../resources/images/workflow_1.svg";
+import { ReactComponent as Pipeline } from "../../resources/images/custom_1.svg";
 import classes from "./index.module.scss";
 type Props = {};
 
