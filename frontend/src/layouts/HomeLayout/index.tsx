@@ -6,7 +6,11 @@ type Props = {
 };
 
 const HomeLayout: React.FC<Props> = (props) => {
-  return <div className={classes.Home}>{props.children}</div>;
+  return (
+    <div className={classes.Home}>
+      <div className={classes.container}>{props.children}</div>
+    </div>
+  );
 };
 
 export default HomeLayout;

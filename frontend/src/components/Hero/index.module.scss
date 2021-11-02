@@ -17,164 +17,183 @@
     padding: 0;
   }
   //background-color: black;
-
-  .Col1 {
-    flex: 1.5;
-    position: relative;
-    width: 100%;
-    height: 100%;
-    //background-color: black;
-    //transform: scale(0.85);
-    //top: -10rem;
-    @include respondMax(tab-port) {
-      display: none;
-    }
-  }
-  .Col2 {
-    //margin-left: 2rem;
-    flex: 1;
+  .container {
     width: 100%;
     height: 100%;
     display: flex;
+    align-items: flex-start;
     justify-content: center;
-    flex-direction: column;
-    //background-color: blue;
-    padding: 2rem;
-    @include respondMax(ipad-port) {
-      padding: 10px;
-      //justify-content: flex-start;
-    }
-    //display: flex;
-    //align-items: center;
-    @include respondMax(tab-port) {
-      background-color: rgba(0, 0, 0, 0.4);
-      margin-left: 0;
-    }
-    //background-color: rgba(255,255,255,0.3);
-    .main_header {
-      margin-top: -4rem;
-      font-size: 2.7rem;
-      padding: 5px;
 
-      border-radius: 5px;
-      margin-bottom: 1rem;
-      @include respondMax(tab-land) {
-        //margin-top: 1rem;
-        font-size: 2rem;
-      }
-
-      @include respondMax(ipad-land) {
-        margin-top: -10rem;
-        //font-size: 2rem;
-      }
-      //text-align: justify;
-      color: $color-white;
-      font-weight: bold;
-      //width: 24rem;
-      //transform: translateX(100rem);
-      //animation: slideIn;
-      //animation-duration: 2s;
-      //animation-delay: 1s;
-      //animation-iteration-count: 1;
-      //animation-fill-mode: forwards;
-      //animation-play-state: running;
-      //animation-timing-function: ease-in-out;
-      @include respondMax(tab-port) {
-        font-size: 3rem;
-        width: 100%;
-        text-align: center;
-      }
-      @include respondMax(ipad-land) {
-        padding: 1rem;
-        font-size: 2rem;
-      }
-      //background-color: $color-alpha;
+    @include respondMin(big-desktop) {
+      max-width: 125rem;
+      margin: 0 auto;
     }
 
-    .sub_content {
-      font-size: 1.1rem;
-      text-align: justify;
-      line-height: 1.3;
-      padding: 5px;
-      color: $color-white;
-      margin-bottom: 1.5rem;
-      @include respondMax(tab-port) {
-        margin: 2rem 0;
-      }
+    .Col1 {
+      //margin-left: 2rem;
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      //background-color: blue;
+      padding: 2rem;
       @include respondMax(ipad-port) {
-        margin: 5px 0;
+        padding: 10px;
+        //justify-content: flex-start;
       }
-      @include respondMax(phone-port) {
-        line-height: 1.3;
-        font-size: 0.9rem;
-      }
-    }
-
-    .buttons {
-      padding: 5px;
+      //display: flex;
+      //align-items: center;
       @include respondMax(tab-port) {
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        background-color: rgba(0, 0, 0, 0.4);
+        margin-left: 0;
       }
-      @include respondMax(ipad-port) {
-        flex-direction: column;
-      }
-      .tool_button {
-        width: 13.7rem;
-        height: 3.2rem;
-        margin: 5px 2rem 5px 0;
+      //background-color: rgba(255,255,255,0.3);
+      .main_header {
+        margin-top: -4rem;
+        font-size: 2.7rem;
+        padding: 5px;
+
+        border-radius: 5px;
+        margin-bottom: 1rem;
+        @include respondMax(tab-land) {
+          //margin-top: 1rem;
+          font-size: 2rem;
+        }
+
+        @include respondMax(ipad-land) {
+          margin-top: -10rem;
+          //font-size: 2rem;
+        }
+        //text-align: justify;
+        color: $color-white;
+        font-weight: bold;
+        //width: 24rem;
+        //transform: translateX(100rem);
+        //animation: slideIn;
+        //animation-duration: 2s;
+        //animation-delay: 1s;
+        //animation-iteration-count: 1;
+        //animation-fill-mode: forwards;
+        //animation-play-state: running;
+        //animation-timing-function: ease-in-out;
         @include respondMax(tab-port) {
-          margin: 0 1rem 0 0;
+          font-size: 3rem;
+          width: 100%;
+          text-align: center;
+        }
+        @include respondMax(ipad-land) {
+          padding: 1rem;
+          font-size: 2rem;
+        }
+        //background-color: $color-alpha;
+      }
+
+      .sub_content {
+        font-size: 1.1rem;
+        text-align: justify;
+        line-height: 1.3;
+        padding: 5px;
+        color: $color-white;
+        margin-bottom: 1.5rem;
+        @include respondMax(tab-port) {
+          margin: 2rem 0;
         }
         @include respondMax(ipad-port) {
-          margin: 0 0 5px 0;
-          padding: 0.5rem 1rem;
-          width: 90%;
-          height: 2.5rem;
+          margin: 5px 0;
         }
         @include respondMax(phone-port) {
-          width: 90%;
-          height: 2.5rem;
-        }
-        padding: 0.5rem 2rem;
-        font-size: 1.2rem;
-        border: 2px solid white;
-        //background-color: #f7bd35;
-        &:hover {
-          top: -5px;
-          transition: top 1s;
-          background-color: #f7bd35;
-          border: none;
-        }
-        .link {
-          text-decoration: none;
-          color: #fff;
+          line-height: 1.3;
+          font-size: 0.9rem;
         }
       }
-      .workflow_button {
-        width: 13.7rem;
-        height: 3.2rem;
-        padding: 0.5rem 2rem;
-        font-size: 1.2rem;
+
+      .buttons {
+        padding: 5px;
+        display: inline-block;
+        @include respondMax(tab-port) {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
         @include respondMax(ipad-port) {
-          padding: 0.5rem 1rem;
-          width: 90%;
-          height: 2.5rem;
+          flex-direction: column;
         }
-        @include respondMax(phone-port) {
-          width: 90%;
-          height: 2.5rem;
+
+        .tool_button {
+          width: 13.7rem;
+          height: 3.2rem;
+          margin: 5px 2rem 5px 0;
+          @include respondMax(tab-port) {
+            margin: 0 1rem 0 0;
+          }
+          @include respondMax(ipad-port) {
+            margin: 0 0 5px 0;
+            padding: 0.5rem 1rem;
+            width: 90%;
+            height: 2.5rem;
+          }
+          @include respondMax(phone-port) {
+            width: 90%;
+            height: 2.5rem;
+          }
+          padding: 0.5rem 2rem;
+          font-size: 1.2rem;
+          border: 2px solid white;
+          //background-color: #f7bd35;
+          &:hover {
+            top: -5px;
+            transition: top 1s;
+            background-color: #f7bd35;
+            border: none;
+          }
+
+          .link {
+            text-decoration: none;
+            color: #fff;
+          }
         }
-        &:hover {
-          top: -5px;
-          transition: top 1s;
-          //background-color: transparent;
+
+        .workflow_button {
+          width: 13.7rem;
+          height: 3.2rem;
+          padding: 0.5rem 2rem;
+          font-size: 1.2rem;
+          @include respondMax(ipad-port) {
+            padding: 0.5rem 1rem;
+            width: 90%;
+            height: 2.5rem;
+          }
+          @include respondMax(phone-port) {
+            width: 90%;
+            height: 2.5rem;
+          }
+
+          &:hover {
+            top: -5px;
+            transition: top 1s;
+            //background-color: transparent;
+          }
+
+          .link {
+            text-decoration: none;
+            color: #fff;
+          }
         }
-        .link {
-          text-decoration: none;
-          color: #fff;
-        }
+      }
+    }
+
+    .Col2 {
+      flex: 1.5;
+      position: relative;
+      width: 100%;
+      height: 100%;
+      //background-color: black;
+      //transform: scale(0.85);
+      //top: -10rem;
+      @include respondMax(tab-port) {
+        display: none;
       }
     }
   }
