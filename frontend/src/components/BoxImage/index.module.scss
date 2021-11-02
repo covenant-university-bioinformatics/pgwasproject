@@ -42,6 +42,9 @@
       position: absolute;
       top: 5rem;
       left: 0;
+      @include respondMax(tab-land) {
+        left: -30px;
+      }
       width: 12.5rem;
       height: 12.5rem;
       box-shadow: 3px 5px 5px 0 rgba(0, 0, 0, 0.4);
@@ -57,6 +60,9 @@
       position: absolute;
       top: 19rem;
       left: 0;
+      @include respondMax(tab-land) {
+        left: -30px;
+      }
       width: 12.5rem;
       height: 12.5rem;
       box-shadow: 3px 5px 5px 0 rgba(0, 0, 0, 0.4);
@@ -73,7 +79,7 @@
       top: 83px;
       left: 30%;
       @include respondMax(tab-land) {
-        left: 40%;
+        left: 35%;
       }
       width: 31.25rem;
       height: 26.25rem;

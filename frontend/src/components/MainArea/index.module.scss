@@ -8,6 +8,7 @@
 
   @include respondMin(big-desktop) {
     max-width: 125rem;
+    padding: 2rem;
   }
 
   @include respondMax(ipad-land) {
