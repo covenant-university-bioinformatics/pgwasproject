@@ -1,108 +1,257 @@
 @import "../../partials/mixins";
 
-.container {
-  width: 75rem;
-  @include respondMax(phone-land) {
-    width: 90%;
-  }
-  @include respondMax(phone-port) {
-    width: 100%;
-    padding: 1rem;
-  }
-  @include specialMax(281px) {
-    width: 100%;
-    padding: 5px;
-  }
-  height: 100%;
-  padding: 2rem;
-  color: #fff;
-  h1{
-    text-align: left;
-    margin-bottom: 2rem;
-  }
+.Tutorial{
+  width: 100%;
+  min-height: 100vh;
+  margin: 5.2rem auto 0;
+  //background-color: #032f72;
+  //background-color: #fff;
+  background-color: #fff;
+  //.container {
+  //  width: 75rem;
+  //  margin: 0 auto;
+  //  @include respondMax(phone-land) {
+  //    width: 90%;
+  //  }
+  //  @include respondMax(phone-port) {
+  //    width: 100%;
+  //    padding: 1rem;
+  //  }
+  //  @include specialMax(281px) {
+  //    width: 100%;
+  //    padding: 5px;
+  //  }
+  //  height: 100%;
+  //  padding: 2rem;
+  //  color: #000;
 
-  .files{
-    width: 100%;
-    height: 10rem;
+  .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     @include respondMax(ipad-land) {
-      height: 13rem;
+      flex-direction: column;
     }
-    @include respondMax(ipad-port) {
-      height: 17rem;
+    width: 75rem;
+    margin: 0 auto;
+    height: 100%;
+    padding: 4rem;
+    color: #000;
+
+    @include respondMax(tab-land) {
+      width: 100%;
+      padding: 1rem;
     }
-    @include respondMax(phone-land) {
-      height: 23rem;
-    }
-    @include respondMax(phone-port) {
-      height: 31rem;
-    }
-    background-color: #fbfcf2;
-    padding: 1rem;
-    margin-bottom: 2rem;
-    box-shadow: 2px 2px 2px 2px rgba(0,0,0,0.3);
-    border-radius: 5px;
-    color: black;
-    p{
-      margin: 1rem;
+    @include specialMax(281px) {
+      padding: 5px;
     }
   }
 
-  .register{
-    width: 100%;
-    //padding: 1rem;
-    h2{
-      margin-bottom: 1rem;
+  .heading{
+    width: 75rem;
+    padding-left: 4rem;
+    margin: 0 auto;
+    @include respondMax(tab-land) {
+      width: 100%;
+      padding: 1rem;
     }
-    ul{
-      margin-left: 2rem;
+  }
 
-      li{
+    .header{
+      background-color: #fbfcf2;
+      margin-bottom: 4rem;
+
+        h1{
+          text-align: left;
+          margin-bottom: 2rem;
+          flex: 1;
+        }
+
+        .files{
+          width: 100%;
+          height: 10rem;
+          color: black;
+          position: relative;
+          flex: 2;
+          p{
+            margin: 1rem;
+            text-align: justify;
+          }
+
+          &:before{
+            content : "";
+            position: absolute;
+            left    : -50px;
+            top  : 70px;
+            @include specialMax(1055px) {
+              left    : -30px;
+            }
+
+            @include respondMax(ipad-land) {
+              display: none;
+            }
+
+            height  : 1px;
+            width   : 10%;  /* or 100px */
+            border-bottom:1px solid rgba(0,0,0,0.4);
+            transform: rotate(90deg);
+          }
+
+          //@include respondMax(ipad-land) {
+          //  height: 13rem;
+          //}
+          //@include respondMax(ipad-port) {
+          //  height: 17rem;
+          //}
+          //@include respondMax(phone-land) {
+          //  height: 23rem;
+          //}
+          //@include respondMax(phone-port) {
+          //  height: 31rem;
+          //}
+
+        }
+    }
+
+    .register{
+      width: 100%;
+      //padding: 1rem;
+      h2{
         margin-bottom: 1rem;
       }
-    }
-  }
-  .analysis{
-    width: 100%;
-    //padding: 1rem;
-    h2{
-      margin-bottom: 1rem;
-    }
-    ul{
-      margin-left: 2rem;
+      .image{
+        flex: 1;
 
-      li{
-        margin-bottom: 1rem;
+        .SVGIcon {
+          width: 17rem;
+          height: 17rem;
+        }
+        @include respondMax(ipad-land) {
+          display: none;
+        }
+      }
+
+      ul{
+        margin-left: 2rem;
+        flex: 2;
+        li{
+          margin-bottom: 1rem;
+        }
       }
     }
-  }
 
-  .results{
-    width: 100%;
-    //padding: 1rem;
-    h2{
-      margin-bottom: 1rem;
-    }
-    ul{
-      margin-left: 2rem;
-
-      li{
+    .analysis{
+      width: 100%;
+      background-color: #e5e5e5;
+      margin-bottom: 4rem;
+      h2{
         margin-bottom: 1rem;
+        padding-top: 2rem;
+      }
+      .image{
+        flex: 1;
+
+        .SVGIcon {
+          width: 17rem;
+          height: 17rem;
+        }
+        @include respondMax(ipad-land) {
+          display: none;
+        }
+      }
+      ul{
+        flex: 2;
+        margin-left: 2rem;
+
+        li{
+          margin-bottom: 1rem;
+        }
       }
     }
-  }
 
-  .errors{
-    width: 100%;
-    //padding: 1rem;
-    h2{
-      margin-bottom: 1rem;
-    }
-    ul{
-      margin-left: 2rem;
+    .results{
+      width: 100%;
+      .result_list{
+        width: 75rem;
+        margin: 0 auto;
+        height: 100%;
+        padding: 4rem;
 
-      li{
-        margin-bottom: 1rem;
+        @include respondMax(tab-land) {
+          width: 100%;
+          padding: 1rem;
+        }
+
+        .liftover{
+          display: flex;
+          margin-bottom: 2rem;
+          @include respondMax(ipad-land) {
+            flex-direction: column;
+          }
+        }
+
+        .annotation{
+          display: flex;
+          margin-bottom: 2rem;
+          @include respondMax(ipad-land) {
+            flex-direction: column;
+          }
+        }
+
+        .delet{
+          display: flex;
+          margin-bottom: 2rem;
+          @include respondMax(ipad-land) {
+            flex-direction: column;
+          }
+        }
+
+        h3{
+          margin-bottom: 1rem;
+          flex: 1;
+          font-size: 1.4rem;
+        }
+        ul{
+          margin-left: 2rem;
+          flex: 2;
+          li{
+            margin-bottom: 1rem;
+          }
+        }
+
+
+
       }
     }
-  }
+
+    .errors{
+      width: 100%;
+      background-color: #ededed;
+      h2{
+        margin-bottom: 1rem;
+        padding-top: 1rem;
+      }
+      .image{
+        flex: 1;
+
+        .SVGIcon {
+          width: 17rem;
+          height: 17rem;
+        }
+        @include respondMax(ipad-land) {
+          display: none;
+        }
+      }
+      ul{
+        margin-left: 2rem;
+        flex: 2;
+        li{
+          margin-bottom: 1rem;
+          @include specialMax(281px) {
+            font-size: 0.8rem;
+          }
+        }
+      }
+    }
+  //}
 }

@@ -139,10 +139,13 @@
         }
         padding: 0.5rem 2rem;
         font-size: 1.2rem;
-        background-color: #f7bd35;
+        border: 2px solid white;
+        //background-color: #f7bd35;
         &:hover {
           top: -5px;
           transition: top 1s;
+          background-color: #f7bd35;
+          border: none;
         }
         .link {
           text-decoration: none;
@@ -166,6 +169,7 @@
         &:hover {
           top: -5px;
           transition: top 1s;
+          //background-color: transparent;
         }
         .link {
           text-decoration: none;

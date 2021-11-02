@@ -20,7 +20,7 @@ const Hero: React.FC<Props> = (props: Props) => {
         <div className={classes.buttons}>
           <Button
             className={classes.tool_button}
-            variant="contained"
+            variant="outlined"
             size="large"
             color="primary"
           >
