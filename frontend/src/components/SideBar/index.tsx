@@ -76,6 +76,11 @@ const SideBar: React.FC<Props> = (props) => {
       linkTo: "/tools/genebased",
       icon: <LabelSharp />,
     },
+    {
+      title: "Pathway-Based Analysis",
+      linkTo: "/tools/pathwaybased",
+      icon: <LabelSharp />,
+    },
     { title: "Regulation", linkTo: "/tools/regulation", icon: <LabelSharp /> },
   ];
 

@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from "react";
+import React, { PropsWithChildren, Suspense } from "react";
 import {
   BrowserRouter,
   Switch,
@@ -10,24 +10,29 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "./components/Header";
 import HomeComingSoon from "./components/utility/HomeComingSoon";
-import LDStructure from "./components/LDStructure";
-import Imputation from "./components/Imputation";
 import ToolsHome from "./components/ToolsHome";
-import Annotation from "./components/Annotation";
-import Deleteriousness from "./components/Deleteriousness";
-import Regulation from "./components/Regulation";
-import Liftover from "./components/Liftover";
 import Footer from "./components/Footer";
-import Finemap from "./components/Finemap";
-import Susie from "./components/Susie";
-import Paintor from "./components/Paintor";
 import SignUp from "./components/SignUp";
 import SignIn from "./components/SignIn";
-import AuthGuard from "./hoc/AuthGuard";
 import Home from "./Pages/Home/Home";
-import EQTL from "./components/EQTL";
-import GeneBased from "./components/GeneBased";
-import Tutorials from "./components/Tutorials";
+import AuthenticatedRoute from "./hoc/AuthenticatedRoute";
+//Lazy imports
+const Annotation = React.lazy(() => import("./components/Annotation"));
+const Imputation = React.lazy(() => import("./components/Imputation"));
+const Finemap = React.lazy(() => import("./components/Finemap"));
+const LDStructure = React.lazy(() => import("./components/LDStructure"));
+const Deleteriousness = React.lazy(
+  () => import("./components/Deleteriousness")
+);
+const Regulation = React.lazy(() => import("./components/Regulation"));
+const Liftover = React.lazy(() => import("./components/Liftover"));
+const Susie = React.lazy(() => import("./components/Susie"));
+const Paintor = React.lazy(() => import("./components/Paintor"));
+const EQTL = React.lazy(() => import("./components/EQTL"));
+const PathwayBased = React.lazy(() => import("./components/PathwayBased"));
+const GeneBased = React.lazy(() => import("./components/GeneBased"));
+const Tutorials = React.lazy(() => import("./components/Tutorials"));
+
 type Props = {};
 
 const Routes: React.FC<Props> = (props) => {
@@ -38,36 +43,155 @@ const Routes: React.FC<Props> = (props) => {
         <Route
           path="/tools/imputation"
           exact
-          component={AuthGuard(Imputation)}
+          render={(props) => (
+            <Suspense
+              fallback={<div className={"suspense_center"}>Loading...</div>}
+            >
+              <AuthenticatedRoute Component={Imputation} {...props} />
+            </Suspense>
+          )}
+          // component={AuthGuard(Imputation)}
         />
-        <Route path="/tools/annotation" component={AuthGuard(Annotation)} />
+        <Route
+          path="/tools/annotation"
+          render={(props) => (
+            <Suspense
+              fallback={<div className={"suspense_center"}>Loading...</div>}
+            >
+              {/*{AuthGuard(Annotation)}*/}
+              <AuthenticatedRoute Component={Annotation} {...props} />
+            </Suspense>
+          )}
+          // component={AuthGuard(Annotation)}
+        />
         <Route
           path="/tools/bayes_finemap"
           exact
-          component={AuthGuard(Finemap)}
+          render={(props) => (
+            <Suspense
+              fallback={<div className={"suspense_center"}>Loading...</div>}
+            >
+              <AuthenticatedRoute Component={Finemap} {...props} />
+            </Suspense>
+          )}
+          // component={AuthGuard(Finemap)}
         />
-        <Route path="/tools/bayes_susie" exact component={AuthGuard(Susie)} />
         <Route
           path="/tools/bayes_paintor"
           exact
-          component={AuthGuard(Paintor)}
+          render={(props) => (
+            <Suspense
+              fallback={<div className={"suspense_center"}>Loading...</div>}
+            >
+              <AuthenticatedRoute Component={Paintor} {...props} />
+            </Suspense>
+          )}
+          // component={AuthGuard(Paintor)}
+        />
+        <Route
+          path="/tools/bayes_susie"
+          exact
+          render={(props) => (
+            <Suspense
+              fallback={<div className={"suspense_center"}>Loading...</div>}
+            >
+              <AuthenticatedRoute Component={Susie} {...props} />
+            </Suspense>
+          )}
+          // component={AuthGuard(Paintor)}
         />
         <Route
           path="/tools/deleteriousness"
-          component={AuthGuard(Deleteriousness)}
+          render={(props) => (
+            <Suspense
+              fallback={<div className={"suspense_center"}>Loading...</div>}
+            >
+              <AuthenticatedRoute Component={Deleteriousness} {...props} />
+            </Suspense>
+          )}
+          // component={AuthGuard(Deleteriousness)}
         />
         <Route
           path="/tools/Regulation"
           exact
-          component={AuthGuard(Regulation)}
+          render={(props) => (
+            <Suspense
+              fallback={<div className={"suspense_center"}>Loading...</div>}
+            >
+              <AuthenticatedRoute Component={Regulation} {...props} />
+            </Suspense>
+          )}
+          // component={AuthGuard(Regulation)}
         />
-        <Route path="/tools/liftover" component={AuthGuard(Liftover)} />
-        <Route path="/tools/ld_structure" component={AuthGuard(LDStructure)} />
-        <Route path="/tools/eqtl" component={AuthGuard(EQTL)} />
-        <Route path="/tools/genebased" component={AuthGuard(GeneBased)} />
+        <Route
+          path="/tools/liftover"
+          // component={AuthGuard(Liftover)}
+          render={(props) => (
+            <Suspense
+              fallback={<div className={"suspense_center"}>Loading...</div>}
+            >
+              <AuthenticatedRoute Component={Liftover} {...props} />
+            </Suspense>
+          )}
+        />
+        <Route
+          path="/tools/ld_structure"
+          // component={AuthGuard(LDStructure)}
+          render={(props) => (
+            <Suspense
+              fallback={<div className={"suspense_center"}>Loading...</div>}
+            >
+              <AuthenticatedRoute Component={LDStructure} {...props} />
+            </Suspense>
+          )}
+        />
+        <Route
+          path="/tools/eqtl"
+          // component={AuthGuard(EQTL)}
+          render={(props) => (
+            <Suspense
+              fallback={<div className={"suspense_center"}>Loading...</div>}
+            >
+              <AuthenticatedRoute Component={EQTL} {...props} />
+            </Suspense>
+          )}
+        />
+        <Route
+          path="/tools/genebased"
+          // component={AuthGuard(GeneBased)}
+          render={(props) => (
+            <Suspense
+              fallback={<div className={"suspense_center"}>Loading...</div>}
+            >
+              <AuthenticatedRoute Component={GeneBased} {...props} />
+            </Suspense>
+          )}
+        />
+        <Route
+          path="/tools/pathwaybased"
+          // component={AuthGuard(PathwayBased)}
+          render={(props) => (
+            <Suspense
+              fallback={<div className={"suspense_center"}>Loading...</div>}
+            >
+              <AuthenticatedRoute Component={PathwayBased} {...props} />
+            </Suspense>
+          )}
+        />
         <Route path="/tools" exact component={ToolsHome} />
         <Route path="/dashboard" exact component={HomeComingSoon} />
-        <Route path="/tutorials" exact component={Tutorials} />
+        <Route
+          path="/tutorials"
+          exact
+          // component={Tutorials}
+          render={(props) => (
+            <Suspense
+              fallback={<div className={"suspense_center"}>Loading...</div>}
+            >
+              <Tutorials />
+            </Suspense>
+          )}
+        />
         <Route path="/Documentation" exact component={HomeComingSoon} />
         <Route path="/workflows" exact component={HomeComingSoon} />
         <Route path="/sign_in" exact component={SignIn} />
