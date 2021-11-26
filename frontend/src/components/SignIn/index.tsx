@@ -80,7 +80,7 @@ const SignIn: React.FC<
       {redirect}
       <HomeLayout>
         <div className={classes.container}>
-          <h2>Please Sign In</h2>
+          <h2>Please Sign in</h2>
           {message}
           <form onSubmit={formik.handleSubmit}>
             <FormControl className={classes.formControl}>

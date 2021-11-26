@@ -19,15 +19,15 @@ const ToolsHome: React.FC<Props> = (props) => {
     { title: "Imputation", linkTo: "/tools/imputation" },
     {
       title: "SuSie",
-      linkTo: "/tools/bayes_finemap/susie",
+      linkTo: "/tools/bayes_susie",
     },
     {
       title: "FineMap",
-      linkTo: "/tools/bayes_finemap/finemap",
+      linkTo: "/tools/bayes_finemap",
     },
     {
       title: "Paintor",
-      linkTo: "/tools/bayes_finemap/paintor",
+      linkTo: "/tools/bayes_paintor",
       icon: <LabelImportant />,
     },
     { title: "Annotation", linkTo: "/tools/annotation" },
@@ -38,6 +38,7 @@ const ToolsHome: React.FC<Props> = (props) => {
     },
     { title: "EQTL", linkTo: "/tools/eqtl" },
     { title: "Gene-Based Analysis", linkTo: "/tools/genebased" },
+    { title: "Pathway-Based Analysis", linkTo: "/tools/pathwaybased" },
     { title: "Regulation", linkTo: "/tools/regulation" },
   ];
 

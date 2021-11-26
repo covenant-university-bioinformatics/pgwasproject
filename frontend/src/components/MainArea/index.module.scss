@@ -2,12 +2,14 @@
 
 .MainArea {
   max-width: 75rem;
+  margin: 0 auto 5rem auto;
+
   @include specialMax(1300px) {
     padding: 4rem;
   }
 
   @include respondMin(big-desktop) {
-    max-width: 125rem;
+    max-width: 80rem;
     padding: 2rem;
   }
 
@@ -16,9 +18,6 @@
     padding: 1rem;
   }
 
-  margin: 0 auto 5rem auto;
-  //margin: 0 auto;
-  //padding: 10rem 0;
   h3{
     text-align: center;
     font-size: 2rem;
@@ -26,77 +25,92 @@
   }
   span{
     display: block;
-    width: 17rem;
+    width: 13rem;
     height: 0.5rem;
     margin: 0 auto 3.5rem auto;
     border-radius: 10px;
     background-color: #f7bd35;
-    //margin-bottom: 5rem;
   }
   .AnalysisGroup {
     width: 100%;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-column-gap: 5rem;
-    grid-row-gap: 3rem;
+    //margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     @include respondMax(ipad-land) {
-      grid-template-columns: 1fr;
+      flex-direction: column;
     }
 
     .AnalysisBox {
-      //height: 20rem;
-      //width: 20rem;
-      //box-shadow: 2px 2px 5px rgba(0,0,0,0.4);
-      //border-radius: 15px;
-      //padding: 10px;
-      &:nth-of-type(3){
+      height: 23rem;
+      width: 21rem;
+      @include respondMax(phone-port) {
+        width: 16rem;
       }
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.4);
+      border-radius: 15px;
+      padding: 10px;
       position: relative;
       display: flex;
-      //flex-direction: column;
       align-items: center;
       justify-content: center;
-      margin-bottom: 3rem;
-      //&:hover{
-      //  transform: translateY(-1rem);
-      //}
+      flex-direction: column;
+      &:not(:last-of-type){
+        margin-right: 3.5rem;
+      }
+      @include respondMax(tab-land) {
+        &:not(:last-of-type){
+          margin-right: 1.5rem;
+        }
+      }
+
+      @include respondMax(ipad-land) {
+        &:not(:last-of-type){
+          margin-bottom: 3.5rem;
+          margin-right: 0;
+        }
+      }
+
+      &:hover{
+        transform: translateY(-3px);
+      }
 
       .AnalysisLeft {
         position: relative;
-        top: -43px;
-        //left: -53px;
+        flex: 1;
         .SVGIcon {
-          width: 4rem;
-          height: 4rem;
+          width: 3rem;
+          height: 3rem;
         }
       }
       .AnalysisRight {
-        @include respondMax(phone-port) {
-          //height: 20rem;
-          //font-size: 1.2rem;
-        }
-
-        @include respondMax(phone-land) {
-          //font-size: 1.4rem;
-        }
+        position: relative;
         flex: 3;
-        //height: 13rem;
         .analysis_content{
-          padding: 1rem;
+          padding: 5px;
           font-size: 1rem;
-          line-height: 1.4;
+          line-height: 1.3;
           color: #02081a;
           text-align: justify;
         }
         .analysis_header{
-          padding: 1rem;
-          font-size: 1.6rem;
+          padding: 5px;
+          font-size: 1.2rem;
           color: #4880ef;
           font-weight: bold;
-          text-align: justify;
+          text-align: left;
         }
         .analysis_link{
           padding: 1rem;
+          @include respondMax(phone-port) {
+            padding: 5px;
+          }
+          font-weight: bold;
+          text-decoration: none;
+          position: absolute;
+          bottom: 10px;
+          display: flex;
+          align-items: center;
         }
 
       }

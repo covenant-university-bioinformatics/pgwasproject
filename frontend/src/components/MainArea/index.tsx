@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { ArrowRightAlt } from "@material-ui/icons";
 import { ReactComponent as TClass } from "../../resources/images/individual_1.svg";
 import { ReactComponent as Combined } from "../../resources/images/workflow_1.svg";
 import { ReactComponent as Pipeline } from "../../resources/images/custom_1.svg";
@@ -24,7 +25,7 @@ const MainArea: React.FC<Props> = (props: Props) => {
               we have provided.
             </p>
             <Link className={classes.analysis_link} to={"/tools"}>
-              Click to start
+              Click to start <ArrowRightAlt />
             </Link>
           </div>
         </div>
@@ -43,7 +44,7 @@ const MainArea: React.FC<Props> = (props: Props) => {
               single run.
             </p>
             <Link className={classes.analysis_link} to={"/workflows"}>
-              Click to start
+              Click to start <ArrowRightAlt />
             </Link>
           </div>
         </div>

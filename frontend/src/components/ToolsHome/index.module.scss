@@ -13,7 +13,7 @@
     @include respondMax(ipad-port) {
       //font-size: 1rem;
     }
-    color: #ffffff;
+    color: #000000;
     text-align: center;
   }
   .line_bar{
@@ -57,7 +57,7 @@
             align-items: center;
             background: rgb(255,255,255);
             //background: linear-gradient(152deg, rgba(255,255,255,1) 18%, rgba(255,243,182,1) 49%, rgba(255,255,255,1) 84%);
-            background: linear-gradient(152deg, rgba(255,255,255,1) 18%, rgba(255,209,209,1) 49%, rgba(255,255,255,1) 84%);
+            background: linear-gradient(152deg, rgba(255,255,255,1) 18%, rgb(246, 233, 233) 49%, rgba(255,255,255,1) 84%);
             box-shadow: 2px 2px 5px 2px rgba(0,0,0, 0.4);
             border-radius: 4px;
             padding: 1.25rem;

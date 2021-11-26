@@ -3,7 +3,7 @@
   width: 100%;
   min-height: 100vh;
   margin: 5.2rem auto 0;
-  background-color: #032f72;
+  background-color: #a1bcf5;
   //background-color: #fff;
   //background-color: #005fb1;
 
@@ -13,6 +13,7 @@
     align-items: center;
     width: 100%;
     height: 100%;
+    padding-top: 5rem;
 
     @include respondMin(big-desktop) {
       width: 75rem;
