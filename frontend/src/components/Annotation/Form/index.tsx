@@ -189,9 +189,26 @@ const AnnotationForm: React.FC<Props & RouteComponentProps> = (props) => {
       <form onSubmit={formik.handleSubmit}>
         <Grid container spacing={3}>
           <div className={classes.header_div}>
+            <h2>Enter Job Name</h2>
+          </div>
+          <Grid className={classes.grid} item xs={12} sm={4}>
+            <Paper elevation={0} className={classes.paper}>
+              <FormControl className={classes.formControl}>
+                <TextField
+                  id={"job_name"}
+                  variant={"outlined"}
+                  label={"Job Name"}
+                  size={"medium"}
+                  {...formik.getFieldProps("job_name")}
+                  {...textErrorHelper(formik, "job_name")}
+                />
+              </FormControl>
+            </Paper>
+          </Grid>
+          <div className={classes.header_div}>
             <h2>Upload a file</h2>
           </div>
-          <Grid className={classes.grid} item xs={6}>
+          <Grid className={classes.grid} item xs={12} sm={4}>
             <Paper elevation={0} className={classes.paper}>
               <FormControl
                 error={selectIsError(formik, "filename")}
@@ -221,20 +238,6 @@ const AnnotationForm: React.FC<Props & RouteComponentProps> = (props) => {
                   remove
                 </Button>
               )}
-            </Paper>
-          </Grid>
-          <Grid className={classes.grid} item xs={6}>
-            <Paper elevation={0} className={classes.paper}>
-              <FormControl className={classes.formControl}>
-                <TextField
-                  id={"job_name"}
-                  variant={"outlined"}
-                  label={"Job Name"}
-                  size={"medium"}
-                  {...formik.getFieldProps("job_name")}
-                  {...textErrorHelper(formik, "job_name")}
-                />
-              </FormControl>
             </Paper>
           </Grid>
           <div className={classes.header_div}>

@@ -401,7 +401,11 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
                 <TableRow key={`row${index}`}>
                   {item.map((element: string, idx: number) => (
                     <TableCell key={`idx${idx}`}>
-                      {element === "." ? "NA" : element}
+                      {element === "."
+                        ? "NA"
+                        : element.length > 30
+                        ? `${element.substr(0, 31)} ...`
+                        : element}
                     </TableCell>
                   ))}
                 </TableRow>
@@ -428,7 +432,11 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
                   <TableRow key={`row${index}`}>
                     {item.map((element: string, idx: number) => (
                       <TableCell key={`idx${idx}`}>
-                        {element === "." ? "NA" : element}
+                        {element === "."
+                          ? "NA"
+                          : element.length > 30
+                          ? `${element.substr(0, 31)} ...`
+                          : element}
                       </TableCell>
                     ))}
                   </TableRow>
