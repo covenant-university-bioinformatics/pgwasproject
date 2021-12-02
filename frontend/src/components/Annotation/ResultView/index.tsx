@@ -17,6 +17,7 @@ import Paper from "@material-ui/core/Paper";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import TabPanel from "./TabPanel";
 import { GetAppRounded } from "@material-ui/icons";
+import { useTypedSelector } from "../../../hooks/useTypedSelector";
 
 type Props = {};
 type JobParam = {
@@ -76,6 +77,15 @@ const useStyles = makeStyles((theme: Theme) =>
 const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
   props
 ) => {
+  const { user } = useTypedSelector((state) => state.auth);
+
+  let apiPath = "";
+  if (user?.username) {
+    apiPath = "annot";
+  } else {
+    apiPath = "annot/noauth";
+  }
+
   const reloadLimit = 60;
   const { jobId: id } = props.match.params;
   const [annotRes, setAnnotRes] = useState<AnnotationResult | undefined>(
@@ -778,7 +788,7 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
   useEffect(() => {
     setLoading(true);
     pgwasAxios
-      .get<AnnotationResult>(`/annot/jobs/${id}`)
+      .get<AnnotationResult>(`/${apiPath}/jobs/${id}`)
       .then((result) => {
         setAnnotRes(result.data);
         setLoading(false);
@@ -828,7 +838,7 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
       if (snpAnnotResult.length === 0) {
         setLoadingAnnot(true);
         pgwasAxios
-          .get(`/annot/jobs/output/${id}/outputFile`)
+          .get(`/${apiPath}/jobs/output/${id}/outputFile`)
           .then((response) => {
             const alllines = response.data.split("\n");
             const header: string[] = alllines[0].split("\t");
@@ -864,7 +874,7 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
       if (snpDisgenetResult.length === 0) {
         setLoadingDisgenet(true);
         pgwasAxios
-          .get(`/annot/jobs/output/${id}/disgenet`)
+          .get(`/${apiPath}/jobs/output/${id}/disgenet`)
           .then((response) => {
             const alllines = response.data.split("\n");
             const header: string[] = alllines[0].split("\t");

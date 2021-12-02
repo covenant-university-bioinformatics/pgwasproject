@@ -16,6 +16,7 @@ import {
   createJobStatus,
   getInfoSection,
 } from "../../utility/general";
+import { useTypedSelector } from "../../../hooks/useTypedSelector";
 
 type Props = {};
 type JobParam = {
@@ -54,6 +55,15 @@ export type PathwayBasedResult = {
 
 const PathwayBasedResultView: React.FC<Props & RouteComponentProps<JobParam>> =
   (props) => {
+    const { user } = useTypedSelector((state) => state.auth);
+
+    let apiPath = "";
+    if (user?.username) {
+      apiPath = "pathwaybased";
+    } else {
+      apiPath = "pathwaybased/noauth";
+    }
+
     const reloadLimit = 60;
     const { jobId: id } = props.match.params;
 
@@ -410,7 +420,7 @@ const PathwayBasedResultView: React.FC<Props & RouteComponentProps<JobParam>> =
     useEffect(() => {
       setLoading(true);
       pgwasAxios
-        .get<PathwayBasedResult>(`/pathwayBased/jobs/${id}`)
+        .get<PathwayBasedResult>(`/${apiPath}/jobs/${id}`)
         .then((result) => {
           setPathwayBasedRes(result.data);
           setLoading(false);
@@ -429,7 +439,7 @@ const PathwayBasedResultView: React.FC<Props & RouteComponentProps<JobParam>> =
           setErrorInfo(e.response.data.message);
           clearTimeout(timeout.current);
         });
-    }, [id, reload]);
+    }, [apiPath, id, reload]);
 
     //controls timer
     useEffect(() => {
@@ -460,7 +470,7 @@ const PathwayBasedResultView: React.FC<Props & RouteComponentProps<JobParam>> =
         if (geneScoreResults.length === 0) {
           setLoadingGeneScoreResults(true);
           pgwasAxios
-            .get(`/pathwayBased/jobs/output/${id}/geneScoresFile`)
+            .get(`/${apiPath}/jobs/output/${id}/geneScoresFile`)
             .then((response) => {
               const alllines = response.data.split("\n");
               const header: string[] = alllines[0].split("\t");
@@ -475,7 +485,7 @@ const PathwayBasedResultView: React.FC<Props & RouteComponentProps<JobParam>> =
         }
       }
       // eslint-disable-next-line
-    }, [pathwayBasedRes, id]);
+    }, [apiPath, pathwayBasedRes, id]);
 
     //download file two
     useEffect(() => {
@@ -487,7 +497,7 @@ const PathwayBasedResultView: React.FC<Props & RouteComponentProps<JobParam>> =
         if (pathwayBasedResults.length === 0) {
           setLoadingPathwayBasedResults(true);
           pgwasAxios
-            .get(`/pathwaybased/jobs/output/${id}/pathwaySetFile`)
+            .get(`/${apiPath}/jobs/output/${id}/pathwaySetFile`)
             .then((response) => {
               const alllines = response.data.split("\n");
               const header: string[] = alllines[0].split("\t");
@@ -502,7 +512,7 @@ const PathwayBasedResultView: React.FC<Props & RouteComponentProps<JobParam>> =
         }
       }
       // eslint-disable-next-line
-    }, [pathwayBasedRes, id]);
+    }, [apiPath, pathwayBasedRes, id]);
 
     //download file three
     useEffect(() => {
@@ -514,7 +524,7 @@ const PathwayBasedResultView: React.FC<Props & RouteComponentProps<JobParam>> =
         if (fusionScoreResults.length === 0) {
           setLoadingFusionScoreResults(true);
           pgwasAxios
-            .get(`/pathwaybased/jobs/output/${id}/fusionGenesFile`)
+            .get(`/${apiPath}/jobs/output/${id}/fusionGenesFile`)
             .then((response) => {
               const alllines = response.data.split("\n");
               const header: string[] = alllines[0].split("\t");
@@ -529,7 +539,7 @@ const PathwayBasedResultView: React.FC<Props & RouteComponentProps<JobParam>> =
         }
       }
       // eslint-disable-next-line
-    }, [pathwayBasedRes, id]);
+    }, [apiPath, pathwayBasedRes, id]);
 
     return (
       <div className={classes.result_view}>

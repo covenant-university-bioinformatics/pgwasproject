@@ -11,26 +11,36 @@ export const submitToServer = (
   uploadFile: any,
   setLoading: any,
   apiPath: string,
+  frontEndPath: string,
+  username: string | undefined,
   props: any
 ) => {
   const data = new FormData();
+
   data.append("file", uploadFile);
   for (const element in values) {
     if (values.hasOwnProperty(element)) {
-      console.log(element + ": " + values[element].toString());
+      // console.log(element + ": " + values[element].toString());
       data.append(element, values[element]);
     }
   }
+
   setLoading(true);
+
   pgwasAxios
     .post(`/${apiPath}/jobs`, data)
     .then((res) => {
       // then print response status
       showToastMessage("Job submitted successfully");
       setLoading(false);
-      props.history.push(
-        `/${props.match.url.split("/")[1]}/${apiPath}/all_results`
-      );
+      const baseURL = props.match.url.split("/")[1];
+      if (username) {
+        props.history.push(`/${baseURL}/${frontEndPath}/all_results`);
+      } else {
+        props.history.push(
+          `/${baseURL}/${frontEndPath}/result_view/${res.data.jobId}`
+        );
+      }
     })
     .catch((error) => {
       setLoading(false);

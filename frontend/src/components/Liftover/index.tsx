@@ -5,6 +5,7 @@ import ToolsLayout from "../../layouts/ToolsLayout";
 import LiftoverHome from "./Home";
 import LiftoverForm from "./Form";
 import LiftoverResultList from "./ResultList";
+import LiftOverResultView from "./ResultView";
 
 type Props = {};
 
@@ -20,7 +21,11 @@ const Index: React.FC<Props & RouteComponentProps> = (props) => {
             path={props.match.url + "/all_results"}
             component={LiftoverResultList}
           />
-          <Route exact path={props.match.url + "/result_view"} />
+          <Route
+            exact
+            path={props.match.url + "/result_view/:jobId"}
+            component={LiftOverResultView}
+          />
         </Switch>
       </div>
     </ToolsLayout>

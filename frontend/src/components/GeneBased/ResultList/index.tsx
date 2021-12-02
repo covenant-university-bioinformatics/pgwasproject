@@ -8,6 +8,7 @@ import classes from "./index.module.scss";
 import GeneBasedRow from "../../utility/Row";
 import pgwasAxios from "../../../axios-fetches";
 import { getErrorMessage } from "../../utility/general_utils";
+import { useTypedSelector } from "../../../hooks/useTypedSelector";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -21,6 +22,7 @@ const useStyles = makeStyles((theme: Theme) =>
 type Props = {};
 
 const GeneBasedResultList: React.FC<Props & RouteComponentProps> = (props) => {
+  const { user } = useTypedSelector((state) => state.auth);
   const mclasses = useStyles();
 
   const headCells = [
@@ -61,8 +63,10 @@ const GeneBasedResultList: React.FC<Props & RouteComponentProps> = (props) => {
   }, []);
 
   useEffect(() => {
-    getResults(page, rowsPerPage);
-  }, [page, rowsPerPage, getResults]);
+    if (user?.username) {
+      getResults(page, rowsPerPage);
+    }
+  }, [user, page, rowsPerPage, getResults]);
 
   return (
     <div className={classes.result_list}>
@@ -71,6 +75,11 @@ const GeneBasedResultList: React.FC<Props & RouteComponentProps> = (props) => {
           <CircularProgress />
         </div>
       ) : null}
+      {user.username ? null : (
+        <p className={classes.error}>
+          Please sign in to see history of jobs submitted
+        </p>
+      )}
       {error ? <div className={classes.error}>{error}</div> : null}
       <Paper className={[mclasses.pageContent, classes.paper].join(" ")}>
         <TblContainer>

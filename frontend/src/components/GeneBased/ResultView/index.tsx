@@ -16,6 +16,7 @@ import {
   createJobStatus,
   getInfoSection,
 } from "../../utility/general";
+import { useTypedSelector } from "../../../hooks/useTypedSelector";
 
 type Props = {};
 type JobParam = {
@@ -51,6 +52,15 @@ export type GeneBasedResult = {
 const GeneBasedResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
   props
 ) => {
+  const { user } = useTypedSelector((state) => state.auth);
+
+  let apiPath = "";
+  if (user?.username) {
+    apiPath = "genebased";
+  } else {
+    apiPath = "genebased/noauth";
+  }
+
   const reloadLimit = 60;
   const { jobId: id } = props.match.params;
   const [geneBasedRes, setGeneBasedRes] = useState<GeneBasedResult | undefined>(
@@ -344,7 +354,7 @@ const GeneBasedResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
   useEffect(() => {
     setLoading(true);
     pgwasAxios
-      .get<GeneBasedResult>(`/geneBased/jobs/${id}`)
+      .get<GeneBasedResult>(`/${apiPath}/jobs/${id}`)
       .then((result) => {
         setGeneBasedRes(result.data);
         setLoading(false);
@@ -394,7 +404,7 @@ const GeneBasedResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
       if (geneBasedResults.length === 0) {
         setLoadingGeneBasedResults(true);
         pgwasAxios
-          .get(`/geneBased/jobs/output/${id}/gene_based_genes_out`)
+          .get(`/${apiPath}/jobs/output/${id}/gene_based_genes_out`)
           .then((response) => {
             const alllines = response.data.split("\n");
             const header: string[] = alllines[0].split("\t");
@@ -420,7 +430,7 @@ const GeneBasedResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
       if (tissueBasedResults.length === 0) {
         setLoadingTissueBasedResults(true);
         pgwasAxios
-          .get(`/geneBased/jobs/output/${id}/gene_based_tissue_genes_out`)
+          .get(`/${apiPath}/jobs/output/${id}/gene_based_tissue_genes_out`)
           .then((response) => {
             const alllines = response.data.split("\n");
             const header: string[] = alllines[0].split("\t");

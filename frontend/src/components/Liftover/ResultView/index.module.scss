@@ -1,0 +1,148 @@
+@import "../../../partials/mixins";
+
+.result_view {
+  margin: 3rem 0 3rem 0;
+
+  .error_message {
+    width: 100%;
+    background-color: #e34a4a;
+    border-radius: 5px;
+    font-size: 1.4rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    color: #fff;
+  }
+
+  .job_running {
+    width: 350px;
+    background-color: #3d8af3;
+    border-radius: 5px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    p {
+      font-size: 1.4rem;
+      font-weight: bold;
+      margin-bottom: 2rem;
+      color: #fff;
+    }
+  }
+
+  .info_section {
+    margin-bottom: 2rem;
+
+    .sub_heading {
+      font-size: 1.4rem;
+      margin-bottom: 2rem;
+    }
+
+    .info {
+      display: flex;
+      justify-content: flex-start;
+
+      @include respondMax(ipad-land) {
+        flex-direction: column;
+        align-items: center;
+      }
+      @include respondMax(ipad-port) {
+        align-items: center;
+      }
+
+      .job_list {
+        width: 22rem;
+        height: 22rem;
+        @include respondMax(phone-port) {
+          width: 15rem;
+        }
+        box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.3);
+        //background-color: #84a9c6;
+        padding: 0.625rem;
+        margin-right: 3rem;
+        @include respondMax(ipad-land) {
+          margin-right: 0;
+          margin-bottom: 3rem;
+        }
+        ul {
+          width: 100%;
+          list-style-type: none;
+          margin-top: 1rem;
+          li {
+            width: 100%;
+            display: flex;
+            padding: 5px;
+            color: black;
+            &:nth-of-type(even) {
+              color: #000;
+              background-color: white;
+            }
+            &:nth-of-type(odd) {
+              color: #fff;
+              background-color: #6cbbe5;
+            }
+            span {
+              //text-transform: capitalize;
+              flex: 1;
+              font-size: 12px;
+            }
+          }
+        }
+      }
+
+      .params_list {
+        width: 22rem;
+        height: 22rem;
+        @include respondMax(phone-port) {
+          width: 15rem;
+        }
+        box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.3);
+        //background-color: #84a9c6;
+        padding: 0.625rem;
+        margin-right: 3rem;
+        @include respondMax(ipad-land) {
+          margin-right: 0;
+        }
+        ul {
+          width: 100%;
+          list-style-type: none;
+          margin-top: 1rem;
+          li {
+            width: 100%;
+            display: flex;
+            padding: 5px;
+            color: black;
+            &:nth-of-type(even) {
+              color: #000;
+              background-color: white;
+            }
+            &:nth-of-type(odd) {
+              color: #fff;
+              background-color: #6cbbe5;
+            }
+            span {
+              text-transform: capitalize;
+              flex: 1;
+              font-size: 12px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+
+  .download {
+    p {
+      margin-bottom: 1rem;
+    }
+    .buttons {
+      margin-bottom: 1rem;
+      .button {
+        margin-right: 1rem;
+        @include respondMax(ipad-port) {
+          margin-bottom: 1rem;
+          margin-right: 0;
+        }
+      }
+    }
+  }
+
+}

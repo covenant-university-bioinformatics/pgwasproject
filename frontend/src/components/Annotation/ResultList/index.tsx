@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme: Theme) =>
 type Props = {};
 
 const AnnotationResultList: React.FC<Props & RouteComponentProps> = (props) => {
+  const { user } = useTypedSelector((state) => state.auth);
   const mclasses = useStyles();
 
   const { getAnnotationResults } = useActions();
@@ -54,8 +55,10 @@ const AnnotationResultList: React.FC<Props & RouteComponentProps> = (props) => {
   } = useTable(data, headCells, [3, 6, 9], total);
 
   useEffect(() => {
-    getResults(page, rowsPerPage);
-  }, [page, rowsPerPage, getResults]);
+    if (user?.username) {
+      getResults(page, rowsPerPage);
+    }
+  }, [user, page, rowsPerPage, getResults]);
 
   return (
     <div className={classes.result_list}>
@@ -64,6 +67,11 @@ const AnnotationResultList: React.FC<Props & RouteComponentProps> = (props) => {
           <CircularProgress />
         </div>
       ) : null}
+      {user.username ? null : (
+        <p className={classes.error}>
+          Please sign in to see history of jobs submitted
+        </p>
+      )}
       {error ? <div className={classes.error}>{error}</div> : null}
       <Paper className={[mclasses.pageContent, classes.paper].join(" ")}>
         <TblContainer>
