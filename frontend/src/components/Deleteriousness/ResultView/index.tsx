@@ -12,6 +12,7 @@ import {
   createJobStatus,
 } from "../../utility/general";
 import { createScoresObject } from "../../utility/general_utils";
+import { useTypedSelector } from "../../../hooks/useTypedSelector";
 
 type Props = {};
 type JobParam = {
@@ -35,6 +36,15 @@ export type DeletResult = {
 const DeleteriousnessResultView: React.FC<
   Props & RouteComponentProps<JobParam>
 > = (props) => {
+  const { user } = useTypedSelector((state) => state.auth);
+
+  let apiPath = "";
+  if (user?.username) {
+    apiPath = "delet";
+  } else {
+    apiPath = "delet/noauth";
+  }
+
   const reloadLimit = 60;
   const { jobId: id } = props.match.params;
   const [deletRes, setDeletRes] = useState<DeletResult | undefined>(undefined);
@@ -190,24 +200,27 @@ const DeleteriousnessResultView: React.FC<
   };
 
   const showTables = () => {
-    return (
-      <div className={classes.tables}>
-        <h3 className={classes.sub_heading}>Deleteriousness Result Table</h3>
-        {showDownloadButton()}
-        <div className={classes.table_wrapper}>
-          {loadingResults ? (
-            <CircularProgress />
-          ) : (
-            createTableSection(
-              TblContainer,
-              TblHead,
-              TblPagination,
-              recordsAfterPaging
-            )
-          )}
+    if (snpResults.length > 0) {
+      return (
+        <div className={classes.tables}>
+          <h3 className={classes.sub_heading}>Deleteriousness Result Table</h3>
+          {showDownloadButton()}
+          <div className={classes.table_wrapper}>
+            {loadingResults ? (
+              <CircularProgress />
+            ) : (
+              createTableSection(
+                TblContainer,
+                TblHead,
+                TblPagination,
+                recordsAfterPaging
+              )
+            )}
+          </div>
         </div>
-      </div>
-    );
+      );
+    }
+    return null;
   };
 
   if (error) {
@@ -218,7 +231,7 @@ const DeleteriousnessResultView: React.FC<
   useEffect(() => {
     setLoading(true);
     pgwasAxios
-      .get<DeletResult>(`/delet/jobs/${id}`)
+      .get<DeletResult>(`/${apiPath}/jobs/${id}`)
       .then((result) => {
         setDeletRes(result.data);
         setLoading(false);
@@ -268,7 +281,7 @@ const DeleteriousnessResultView: React.FC<
       if (snpResults.length === 0) {
         setLoadingResults(true);
         pgwasAxios
-          .get(`/delet/jobs/output/${id}/outputFile`)
+          .get(`/${apiPath}/jobs/output/${id}/outputFile`)
           .then((response) => {
             const alllines = response.data.split("\n");
             const header: string[] = alllines[0].split("\t");

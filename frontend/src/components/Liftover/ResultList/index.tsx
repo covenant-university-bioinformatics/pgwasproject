@@ -7,6 +7,7 @@ import { CircularProgress, TableBody } from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Row from "../Row";
+import { useTypedSelector } from "../../../hooks/useTypedSelector";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -37,6 +38,7 @@ type axiosResponse = {
 };
 
 const LiftoverResultList: React.FC<Props> = (props: Props) => {
+  const { user } = useTypedSelector((state) => state.auth);
   const reloadLimit = 15;
   const [liftoverRes, setLiftoverRes] = useState<LiftoverResult[]>([]);
   const [totalDocs, setTotalDocs] = useState(0);
@@ -87,62 +89,66 @@ const LiftoverResultList: React.FC<Props> = (props: Props) => {
   } = useTable(liftoverRes, headCells, [3, 6, 9], totalDocs);
 
   useEffect(() => {
-    setLoading(true);
-    pgwasAxios
-      .get<axiosResponse>(
-        `/liftover/jobs?page=${page + 1}&limit=${rowsPerPage}`
-      )
-      .then((result) => {
-        setLiftoverRes(result.data.data);
-        setTotalDocs(result.data.total);
-        setLoading(false);
-        // setError(false);
+    if (user?.username) {
+      setLoading(true);
+      pgwasAxios
+        .get<axiosResponse>(
+          `/liftover/jobs?page=${page + 1}&limit=${rowsPerPage}`
+        )
+        .then((result) => {
+          setLiftoverRes(result.data.data);
+          setTotalDocs(result.data.total);
+          setLoading(false);
+          // setError(false);
 
-        if (result.data.data.some((res) => res.status === "failed")) {
-          showToastError(
-            "One or more jobs failed, click on down arrow to see more information"
+          if (result.data.data.some((res) => res.status === "failed")) {
+            showToastError(
+              "One or more jobs failed, click on down arrow to see more information"
+            );
+          }
+
+          const run = result.data.data.findIndex(
+            (res) => res.status === "running"
           );
-        }
+          const queue = result.data.data.findIndex(
+            (res) => res.status === "queued"
+          );
 
-        const run = result.data.data.findIndex(
-          (res) => res.status === "running"
-        );
-        const queue = result.data.data.findIndex(
-          (res) => res.status === "queued"
-        );
-
-        if (run <= -1 && queue <= -1) {
-          setJobRunning(false);
+          if (run <= -1 && queue <= -1) {
+            setJobRunning(false);
+            clearTimeout(timeout.current);
+          } else {
+            setJobRunning(true);
+          }
+        })
+        .catch((e) => {
+          setLiftoverRes([]);
+          setLoading(false);
+          // setError(true);
+          showToastError(getErrorMessage(e));
           clearTimeout(timeout.current);
-        } else {
-          setJobRunning(true);
-        }
-      })
-      .catch((e) => {
-        setLiftoverRes([]);
-        setLoading(false);
-        // setError(true);
-        showToastError(getErrorMessage(e));
-        clearTimeout(timeout.current);
-        setJobRunning(false);
-      });
-  }, [page, rowsPerPage, reload]);
+          setJobRunning(false);
+        });
+    }
+  }, [user, page, rowsPerPage, reload]);
 
   useEffect(() => {
-    if (
-      liftoverRes.length > 0 &&
-      liftoverRes.some(
-        (res) => res.status === "running" || res.status === "queued"
-      )
-    ) {
-      if (seconds > 0) {
-        timeout.current = setTimeout(() => setSeconds(seconds - 1), 1000);
-      } else {
-        setSeconds(reloadLimit);
-        setReload((prev) => prev + 1);
+    if (user?.username) {
+      if (
+        liftoverRes.length > 0 &&
+        liftoverRes.some(
+          (res) => res.status === "running" || res.status === "queued"
+        )
+      ) {
+        if (seconds > 0) {
+          timeout.current = setTimeout(() => setSeconds(seconds - 1), 1000);
+        } else {
+          setSeconds(reloadLimit);
+          setReload((prev) => prev + 1);
+        }
       }
     }
-  }, [liftoverRes, seconds]);
+  }, [user, liftoverRes, seconds]);
 
   useEffect(() => {
     return () => {
@@ -164,6 +170,11 @@ const LiftoverResultList: React.FC<Props> = (props: Props) => {
             <CircularProgress />
           </div>
         ) : null}
+        {user.username ? null : (
+          <p className={classes.error}>
+            Please sign in to see history of jobs submitted
+          </p>
+        )}
         <Paper className={[mclasses.pageContent, classes.paper].join(" ")}>
           <TblContainer>
             <TblHead />

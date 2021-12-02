@@ -19,12 +19,27 @@ const ToolsLayout: React.FC<Props> = ({ title, path, children }) => {
   const { user } = useTypedSelector((state) => state.auth);
   return (
     <MainLayout title={title}>
-      {!user.emailConfirmed ? (
+      {user.username ? (
+        !user.emailConfirmed ? (
+          <div className={classes.email_confirmed}>
+            <div className={classes.main}>
+              Please you have to verify your email first before you can use any
+              service. Please check this "{user.email}" for the verification
+              email
+            </div>
+            <div className={classes.sub}>Please confirm email</div>
+          </div>
+        ) : null
+      ) : (
         <div className={classes.email_confirmed}>
-          Please you have to verify your email first before you can use any
-          service. Please check this "{user.email}" for the verification email
+          <div className={classes.main}>
+            Sign UP/Sign IN is not required, but it helps us to keep an history
+            of your new jobs and also send emails about the status of your jobs.
+            Please Sign up
+          </div>
+          <div className={classes.sub}>Please Sign IN</div>
         </div>
-      ) : null}
+      )}
       <div className={classes.tool_appbar}>
         <AppBar position="static" className={classes.appBar}>
           <Toolbar variant="dense" className={classes.toolBar}>
@@ -63,7 +78,7 @@ const ToolsLayout: React.FC<Props> = ({ title, path, children }) => {
                 size="medium"
                 color="inherit"
               >
-                <Hidden xsDown>Results</Hidden>
+                <Hidden xsDown>Results (History)</Hidden>
               </Button>
             </NavLink>
           </Toolbar>

@@ -15,6 +15,7 @@ import {
   commonTextElement,
   commonFileElement,
 } from "../../utility/form_common_fields";
+import { useTypedSelector } from "../../../hooks/useTypedSelector";
 
 type Props = {};
 
@@ -36,6 +37,7 @@ enum GeneSetFileOptions {
 type UserFormData = {
   filename: string;
   job_name: string;
+  email?: string;
   marker_name: string | undefined;
   p_value: string | undefined;
   population: string;
@@ -53,6 +55,7 @@ type UserFormData = {
 };
 
 const GeneBasedForm: React.FC<Props & RouteComponentProps> = (props) => {
+  const { user } = useTypedSelector((state) => state.auth);
   const [uploadFile, setUploadFile] = useState<any>(null);
   const fileInput = useRef<any>(null);
   const [loading, setLoading] = useState(false);
@@ -87,6 +90,9 @@ const GeneBasedForm: React.FC<Props & RouteComponentProps> = (props) => {
         .min(1, "The minimum is one")
         .max(15, "the max is fifteen"),
       job_name: Yup.string().required("Job name is required"),
+      ...(!user?.username && {
+        email: Yup.string().email().required("Email field is required"),
+      }),
       population: Yup.string().required("Please select a closest population"),
       run_pathway: Yup.string().required(
         "Please select value for running pathway analysis"
@@ -105,8 +111,27 @@ const GeneBasedForm: React.FC<Props & RouteComponentProps> = (props) => {
     }),
 
     onSubmit: (values: FormikValues) => {
-      console.log("Values", values);
-      submitToServer(values, uploadFile, setLoading, "pathwaybased", props);
+      if (user?.username) {
+        submitToServer(
+          values,
+          uploadFile,
+          setLoading,
+          "pathwaybased",
+          "pathwaybased",
+          user.username,
+          props
+        );
+      } else {
+        submitToServer(
+          values,
+          uploadFile,
+          setLoading,
+          "pathwaybased/noauth",
+          "pathwaybased",
+          undefined,
+          props
+        );
+      }
     },
   });
 
@@ -182,9 +207,17 @@ const GeneBasedForm: React.FC<Props & RouteComponentProps> = (props) => {
       <form onSubmit={formik.handleSubmit}>
         <Grid container spacing={3}>
           <div className={classes.header_div}>
-            <h2>Job Name</h2>
+            <h2>Enter a Job Name</h2>
           </div>
           {commonTextElement(classes, formik, "Job Name", "job_name")}
+          {user?.username ? null : (
+            <>
+              <div className={classes.header_div}>
+                <h2>Enter your email</h2>
+              </div>
+              {commonTextElement(classes, formik, "Email", "email")}
+            </>
+          )}
           <div className={classes.header_div}>
             <h2>Upload a file</h2>
           </div>

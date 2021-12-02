@@ -6,6 +6,20 @@
   color: white;
   text-align: center;
   font-weight: bold;
+  //@include specialMax(1333px) {
+  //  text-align: left;
+  //}
+  .main{
+    @include specialMax(1333px) {
+      display: none;
+    }
+  }
+  .sub{
+    display: none;
+    @include specialMax(1333px) {
+      display: block;
+    }
+  }
 }
 .tool_appbar {
   width: 100%;
