@@ -76,7 +76,7 @@ const Tutorials: React.FC<Props> = (props: Props) => {
               <a
                 rel="noreferrer"
                 target="_blank"
-                href="https://drive.google.com/file/d/1WGJAucehc0z-4tK1J-hKTbIhRpYJq6dG/view?usp=sharing"
+                href="https://drive.google.com/file/d/1JHhxVFmHNURD9O6I7RCX71NkbbfInhpF/view?usp=sharing"
               >
                 Pathway based test (Big)
               </a>{" "}
@@ -324,7 +324,10 @@ const Tutorials: React.FC<Props> = (props: Props) => {
               the application, please kindly send your comments to the email
               below.
             </li>
-            <li>Email: dare.falola@covenantuniversity.edu.ng</li>
+            <li>
+              Email: dare.falola@covenantuniversity.edu.ng,
+              yagoub.adam@covenantuniversity.edu.ng
+            </li>
           </ul>
         </div>
       </div>

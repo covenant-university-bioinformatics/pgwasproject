@@ -35,7 +35,7 @@ const ToolsLayout: React.FC<Props> = ({ title, path, children }) => {
           <div className={classes.main}>
             Sign UP/Sign IN is not required, but it helps us to keep an history
             of your new jobs and also send emails about the status of your jobs.
-            Please Sign up
+            Please Sign in
           </div>
           <div className={classes.sub}>Please Sign IN</div>
         </div>
