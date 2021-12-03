@@ -23,7 +23,7 @@ const Tutorials: React.FC<Props> = (props: Props) => {
               >
                 Small file
               </a>{" "}
-              - it is a small data test in genomic build version hg 19 to test
+              - This is a small data test in genomic build version hg 19 to test
               the Annotation and Deleteriousness tools.
             </p>
             <p>
@@ -39,6 +39,50 @@ const Tutorials: React.FC<Props> = (props: Props) => {
               genomic assembly hg38. Convert it to Genomic assembly hg19 with
               Liftover tool and use the resulting output in the other tools.
             </p>
+            <p>
+              <a
+                rel="noreferrer"
+                target="_blank"
+                href="https://drive.google.com/file/d/1-Nz-yrhG5ThdoMDsPbu6HsUztxEVOe4p/view?usp=sharing"
+              >
+                Gene based test(small)
+              </a>{" "}
+              - This is a small file in genomic build version hg 19 to test the
+              Gene based tools (Magma).
+            </p>
+            <p>
+              <a
+                rel="noreferrer"
+                target="_blank"
+                href="https://drive.google.com/file/d/109RByxkR1o8uJGNslrL60oCP5RGSZWVt/view?usp=sharing"
+              >
+                Gene based test (Big)
+              </a>{" "}
+              - This is a big file in genomic build version hg 19 to test the
+              Gene based tools (Magma).
+            </p>
+            <p>
+              <a
+                rel="noreferrer"
+                target="_blank"
+                href="https://drive.google.com/file/d/15dlfyCcn5fAuLjkWbE1E4fSdRMkhHmz3/view?usp=sharing"
+              >
+                Pathway based test (Small)
+              </a>{" "}
+              - This is a small file in genomic build version hg 19 to test the
+              Pathway based analysis. The file is for chromosome one.
+            </p>
+            <p>
+              <a
+                rel="noreferrer"
+                target="_blank"
+                href="https://drive.google.com/file/d/1WGJAucehc0z-4tK1J-hKTbIhRpYJq6dG/view?usp=sharing"
+              >
+                Pathway based test (Big)
+              </a>{" "}
+              - This is a big file in genomic build version hg 19 to test the
+              Pathway based analysis.
+            </p>
           </div>
         </div>
       </div>
@@ -51,6 +95,11 @@ const Tutorials: React.FC<Props> = (props: Props) => {
             <RegisterImage className={classes.SVGIcon} />
           </div>
           <ul>
+            <li>
+              Sign UP/Sign IN is not required, but it helps us to keep an
+              history of your new jobs and also send emails about the status of
+              your jobs. Please Sign up
+            </li>
             <li>
               Visit the home page site: https://www.spgwas.waslitbre.org/ (Side
               note: In case you have viewed this site before, you might be
@@ -97,12 +146,13 @@ const Tutorials: React.FC<Props> = (props: Props) => {
               On the selected tool dashboard, click on new analysis button on
               the tab panel.
             </li>
+            <li>Fill in the job name.</li>
+            <li>If you are not logged in, fill in your email</li>
             <li>
               Upload the files you want to use for the analysis (important! -
               please ensure your filename doesn't have illegal characters like
               spaces, braces etc!).
             </li>
-            <li>Fill in the job name.</li>
             <li>
               In the next section, fill in the correct column number for the
               uploaded file. The column names in the uploaded file, should be
@@ -124,8 +174,9 @@ const Tutorials: React.FC<Props> = (props: Props) => {
             <ul>
               <li>
                 After clicking on the Execute Analysis button, you will be
-                navigated to a result list. That page will automatically reload
-                until the job is complete.
+                navigated to a result list if you are logged in and a result
+                view if you are not logged in. That page will automatically
+                reload until the job is complete.
               </li>
               <li>Use the download buttons to obtain your result files.</li>
               <li>
@@ -141,7 +192,9 @@ const Tutorials: React.FC<Props> = (props: Props) => {
               <li>
                 After clicking on the Execute Analysis button, you will be
                 navigated to a result list. Click on the 'view' button to go to
-                the results page.
+                the results page. If you are not logged in, you will be
+                navigated directly to the result view. Please keep the link to
+                this page. If you want us to save the jobs, please sign in.
               </li>
               <li>
                 You will see the status of the job, and some tables with
@@ -154,7 +207,7 @@ const Tutorials: React.FC<Props> = (props: Props) => {
                 the download buttons to obtain results of your analysis.
               </li>
               <li>
-                Please note: The annotation service can only run 2 concurrent
+                Please note: The annotation service can only run 1 concurrent
                 jobs per time due to limited cpu resources, these can cause
                 other people's jobs to be queued for long if someone is running
                 an analysis on a big file.
@@ -167,7 +220,9 @@ const Tutorials: React.FC<Props> = (props: Props) => {
               <li>
                 After clicking on the Execute Analysis button, you will be
                 navigated to a result list. Click on the 'view' button to go to
-                the results page.
+                the results page. If you are not logged in, you will be
+                navigated directly to the result view. Please keep the link to
+                this page. If you want us to save the jobs, please sign in.
               </li>
               <li>
                 You will see the status of the job, and some tables with
@@ -184,6 +239,62 @@ const Tutorials: React.FC<Props> = (props: Props) => {
                 concurrent jobs per time due to limited cpu resources, these can
                 cause other people's jobs to be queued for long if someone is
                 running an analysis on a big file.
+              </li>
+            </ul>
+          </div>
+          <div className={classes.gbased}>
+            <h3>Gene Based Analysis</h3>
+            <ul>
+              <li>
+                After clicking on the Execute Analysis button, you will be
+                navigated to a result list. Click on the 'view' button to go to
+                the results page. If you are not logged in, you will be
+                navigated directly to the result view. Please keep the link to
+                this page. If you want us to save the jobs, please sign in.
+              </li>
+              <li>
+                You will see the status of the job, and some tables with
+                information about your jobs. (This page will also automatically
+                reload if the job is not done, if it is a long job, an email
+                will be sent when it is done)
+              </li>
+              <li>
+                When the job is completed, scroll down to view the results. Use
+                the download buttons to obtain results of your analysis.
+              </li>
+              <li>
+                Please note: The gene-based service can only run 1 concurrent
+                jobs per time due to limited cpu resources, these can cause
+                other people's jobs to be queued for long if someone is running
+                an analysis on a big file.
+              </li>
+            </ul>
+          </div>
+          <div className={classes.pbased}>
+            <h3>Pathway Based Analysis</h3>
+            <ul>
+              <li>
+                After clicking on the Execute Analysis button, you will be
+                navigated to a result list. Click on the 'view' button to go to
+                the results page. If you are not logged in, you will be
+                navigated directly to the result view. Please keep the link to
+                this page. If you want us to save the jobs, please sign in.
+              </li>
+              <li>
+                You will see the status of the job, and some tables with
+                information about your jobs. (This page will also automatically
+                reload if the job is not done, if it is a long job, an email
+                will be sent when it is done)
+              </li>
+              <li>
+                When the job is completed, scroll down to view the results. Use
+                the download buttons to obtain results of your analysis.
+              </li>
+              <li>
+                Please note: The pathway based service can only run 1 concurrent
+                jobs per time due to limited cpu resources, these can cause
+                other people's jobs to be queued for long if someone is running
+                an analysis on a big file.
               </li>
             </ul>
           </div>
