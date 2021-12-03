@@ -324,7 +324,10 @@ const Tutorials: React.FC<Props> = (props: Props) => {
               the application, please kindly send your comments to the email
               below.
             </li>
-            <li>Email: dare.falola@covenantuniversity.edu.ng</li>
+            <li>
+              Email: dare.falola@covenantuniversity.edu.ng,
+              yagoub.adam@covenantuniversity.edu.ng
+            </li>
           </ul>
         </div>
       </div>
