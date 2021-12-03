@@ -76,7 +76,7 @@ const Tutorials: React.FC<Props> = (props: Props) => {
               <a
                 rel="noreferrer"
                 target="_blank"
-                href="https://drive.google.com/file/d/1WGJAucehc0z-4tK1J-hKTbIhRpYJq6dG/view?usp=sharing"
+                href="https://drive.google.com/file/d/1JHhxVFmHNURD9O6I7RCX71NkbbfInhpF/view?usp=sharing"
               >
                 Pathway based test (Big)
               </a>{" "}
