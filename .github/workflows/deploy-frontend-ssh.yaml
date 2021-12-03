@@ -35,7 +35,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           script: |
-            helm upgrade pgwasfrontendapp ${{ secrets.HOME_DIR }}/files/dist/frontend/deployment/helm-micro/ --install --wait --set image=cubrenig/pgwasfrontendapp:$GITHUB_SHA --values=${{ secrets.HOME_DIR }}/files/dist/frontend/deployment/helm-micro/client-values.yaml
+            helm upgrade pgwasfrontendapp ${{ secrets.HOME_DIR }}/files/dist/frontend/deployment/helm-micro/ --install --wait --set image=cubrenig/pgwasfrontendapp:latest --values=${{ secrets.HOME_DIR }}/files/dist/frontend/deployment/helm-micro/client-values.yaml
 #      - uses: digitalocean/action-doctl@v2
 #        with:
 #          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
