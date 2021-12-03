@@ -252,7 +252,7 @@ const DeleteriousnessResultView: React.FC<
         // clearInterval(interval.current);
         clearTimeout(timeout.current);
       });
-  }, [id, reload]);
+  }, [id, reload, apiPath]);
 
   useEffect(() => {
     if (

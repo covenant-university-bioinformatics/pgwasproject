@@ -1,15 +1,8 @@
 import React, { useRef, useState } from "react";
 import { FormikValues, useFormik } from "formik";
-import pgwasAxios from "../../../axios-fetches";
 import * as Yup from "yup";
 import classes from "./index.module.scss";
-import {
-  getErrorMessage,
-  selectIsError,
-  showToastError,
-  showToastMessage,
-  textErrorHelper,
-} from "../../utility/general_utils";
+import { selectIsError } from "../../utility/general_utils";
 import {
   Button,
   CircularProgress,
@@ -19,10 +12,9 @@ import {
   InputLabel,
   NativeSelect,
   Paper,
-  TextField,
 } from "@material-ui/core";
 import { generalFileForm, selectErrorHelper } from "../../utility/general";
-import { PlayArrow, DeleteOutlineSharp } from "@material-ui/icons";
+import { PlayArrow } from "@material-ui/icons";
 import { RouteComponentProps } from "react-router-dom";
 import { useTypedSelector } from "../../../hooks/useTypedSelector";
 import {

@@ -2,14 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import pgwasAxios from "../../../axios-fetches";
 import classes from "./index.module.scss";
-import useTable from "../../../hooks/useTable";
-import {
-  Button,
-  CircularProgress,
-  TableBody,
-  TableCell,
-  TableRow,
-} from "@material-ui/core";
+import { Button, CircularProgress } from "@material-ui/core";
 import { GetAppRounded } from "@material-ui/icons";
 import {
   createJobFailedReason,
@@ -138,7 +131,7 @@ const LiftOverResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
         // clearInterval(interval.current);
         clearTimeout(timeout.current);
       });
-  }, [id, reload]);
+  }, [id, reload, apiPath]);
 
   useEffect(() => {
     if (

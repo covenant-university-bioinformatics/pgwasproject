@@ -375,7 +375,7 @@ const GeneBasedResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
         // clearInterval(interval.current);
         clearTimeout(timeout.current);
       });
-  }, [id, reload]);
+  }, [id, reload, apiPath]);
 
   useEffect(() => {
     if (

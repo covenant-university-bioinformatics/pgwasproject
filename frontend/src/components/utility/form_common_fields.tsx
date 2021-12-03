@@ -54,7 +54,7 @@ export const commonTextElement = (
   textVariable: string
 ) => {
   return (
-    <Grid className={classes.grid} item xs={12} sm={6} md={4}>
+    <Grid className={classes.grid} item={true} xs={12} sm={6} md={4}>
       <Paper elevation={0} className={classes.paper}>
         <FormControl className={classes.formControl}>
           <TextField
@@ -80,7 +80,7 @@ export const commonFileElement = (
   handleRemove: any
 ) => {
   return (
-    <Grid className={classes.grid} xs={12} sm={6} md={4}>
+    <Grid className={classes.grid} item={true} xs={12} sm={6} md={4}>
       <Paper elevation={0} className={classes.paper}>
         <FormControl
           error={selectIsError(formik, "filename")}
