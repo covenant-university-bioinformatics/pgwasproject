@@ -2,19 +2,8 @@ import React, { useRef, useState } from "react";
 import { FormikValues, useFormik } from "formik";
 import * as Yup from "yup";
 import classes from "./index.module.scss";
-import { selectIsError, textErrorHelper } from "../../utility/general_utils";
-import {
-  Button,
-  CircularProgress,
-  FormControl,
-  Grid,
-  Hidden,
-  InputLabel,
-  NativeSelect,
-  Paper,
-  TextField,
-} from "@material-ui/core";
-import { generalFileForm, selectErrorHelper } from "../../utility/general";
+import { Button, CircularProgress, Grid, Hidden } from "@material-ui/core";
+import { generalFileForm } from "../../utility/general";
 import { PlayArrow } from "@material-ui/icons";
 import { RouteComponentProps } from "react-router-dom";
 import { useTypedSelector } from "../../../hooks/useTypedSelector";
@@ -23,8 +12,10 @@ import {
   submitToServer,
 } from "../../utility/form_common";
 import {
-  commonFileElement,
-  commonTextElement,
+  CommonFileElement,
+  CommonTextElement,
+  LoadTestData,
+  SelectFieldsElement,
 } from "../../utility/form_common_fields";
 
 type Props = {};
@@ -33,6 +24,7 @@ type UserFormData = {
   filename: string;
   job_name: string;
   email?: string;
+  useTest: boolean;
   marker_name: string | undefined;
   chromosome: string | undefined;
   position: string | undefined;
@@ -49,25 +41,48 @@ type UserFormData = {
 const GeneBasedForm: React.FC<Props & RouteComponentProps> = (props) => {
   const { user } = useTypedSelector((state) => state.auth);
   const [uploadFile, setUploadFile] = useState<any>(null);
+  const [useTest, setUseTest] = useState<boolean>(false);
+  const [formValues, setFormValues] = useState<UserFormData>();
   const fileInput = useRef<any>(null);
   const [loading, setLoading] = useState(false);
 
-  const formik = useFormik<UserFormData>({
-    initialValues: {
-      filename: "",
-      job_name: "",
-      marker_name: "",
-      chromosome: "",
-      position: "",
-      p_value: "",
-      sample_size: "",
-      population: "",
-      synonym: "",
-      up_window: "0",
-      down_window: "0",
-      tissue: "",
-    },
+  const initialValues = {
+    filename: "",
+    job_name: "",
+    ...(!user?.username && { email: "" }),
+    useTest: false,
+    marker_name: "",
+    chromosome: "",
+    position: "",
+    p_value: "",
+    sample_size: "",
+    population: "",
+    synonym: "",
+    up_window: "0",
+    down_window: "0",
+    tissue: "",
+  };
 
+  const testValues = {
+    filename: "test.txt",
+    job_name: "Test Gbased",
+    ...(!user?.username && { email: "" }),
+    useTest: true,
+    marker_name: "1",
+    chromosome: "2",
+    position: "3",
+    p_value: "4",
+    sample_size: "5",
+    population: "eur",
+    synonym: "No",
+    up_window: "0",
+    down_window: "0",
+    tissue: "Adrenal_Gland",
+  };
+
+  const formik = useFormik<UserFormData>({
+    initialValues: formValues || initialValues,
+    enableReinitialize: true,
     validationSchema: Yup.object({
       filename: Yup.string().required("Please upload a file"),
       marker_name: Yup.number()
@@ -125,6 +140,22 @@ const GeneBasedForm: React.FC<Props & RouteComponentProps> = (props) => {
       }
     },
   });
+
+  const handleUseTest = (event: any) => {
+    formik.resetForm();
+    setUseTest(true);
+    setFormValues(testValues);
+    fileInput.current.querySelector("input").disabled = true;
+  };
+
+  const handleRemoveUseTest = (event: any) => {
+    setUseTest(false);
+    setFormValues(undefined);
+    formik.setFieldValue("filename", "");
+    fileInput.current.querySelector("input").value = "";
+    fileInput.current.querySelector("input").disabled = false;
+    formik.resetForm();
+  };
 
   const handleFileUploadChange = (event: any) => {
     handleFileUploadChangedCommon(event, formik, setUploadFile);
@@ -247,32 +278,50 @@ const GeneBasedForm: React.FC<Props & RouteComponentProps> = (props) => {
     <div className={classes.genebased_form}>
       <form onSubmit={formik.handleSubmit}>
         <Grid container spacing={3}>
+          <LoadTestData
+            classes={classes}
+            useTest={useTest}
+            handleUseTest={handleUseTest}
+            handleRemoveUseTest={handleRemoveUseTest}
+          />
           <div className={classes.header_div}>
             <h2>Enter Job Name</h2>
           </div>
-          {commonTextElement(classes, formik, "Job Name", "job_name")}
+          <CommonTextElement
+            classes={classes}
+            formik={formik}
+            label={"Job Name"}
+            textVariable={"job_name"}
+          />
           {user?.username ? null : (
             <>
               <div className={classes.header_div}>
                 <h2>Enter your email</h2>
               </div>
-              {commonTextElement(classes, formik, "Email", "email")}
+              <CommonTextElement
+                classes={classes}
+                formik={formik}
+                label={"Email"}
+                textVariable={"email"}
+              />
             </>
           )}
           <div className={classes.header_div}>
             <h2>Upload a file</h2>
           </div>
-          {commonFileElement(
-            classes,
-            formik,
-            fileInput,
-            handleFileUploadChange,
-            handleFileBlur,
-            handleRemove
-          )}
+          <CommonFileElement
+            classes={classes}
+            formik={formik}
+            fileInput={fileInput}
+            handleFileUploadChange={handleFileUploadChange}
+            handleFileBlur={handleFileBlur}
+            handleRemove={handleRemove}
+          />
+
           <div className={classes.header_div}>
             <h2>Summary statistics column positions</h2>
           </div>
+
           {generalFileForm(classes, formik, [
             "marker_name",
             "chromosome",
@@ -280,100 +329,48 @@ const GeneBasedForm: React.FC<Props & RouteComponentProps> = (props) => {
             "p_value",
             "sample_size",
           ])}
+
           <div className={classes.header_div}>
             <h2>Tool Parameters</h2>
           </div>
-          <Grid className={classes.grid} item xs={12} sm={4}>
-            <Paper variant="outlined" className={classes.paper}>
-              <FormControl
-                className={classes.formControl}
-                error={selectIsError(formik, "population")}
-              >
-                <InputLabel htmlFor="population">Select Population</InputLabel>
-                <NativeSelect
-                  id="population"
-                  {...formik.getFieldProps("population")}
-                >
-                  <option aria-label="None" value="" />
-                  {populations.map((db, i) => (
-                    <option key={i} value={db.variable}>
-                      {db.name}
-                    </option>
-                  ))}
-                </NativeSelect>
-                {selectErrorHelper(formik, "population")}
-              </FormControl>
-            </Paper>
-          </Grid>
-          <Grid className={classes.grid} item xs={12} sm={4}>
-            <Paper variant="outlined" className={classes.paper}>
-              <FormControl
-                className={classes.formControl}
-                error={selectIsError(formik, "synonym")}
-              >
-                <InputLabel htmlFor="synonym">Select Synonym</InputLabel>
-                <NativeSelect id="synonym" {...formik.getFieldProps("synonym")}>
-                  <option aria-label="None" value="" />
-                  {synonyms.map((db, i) => (
-                    <option key={i} value={db.variable}>
-                      {db.name}
-                    </option>
-                  ))}
-                </NativeSelect>
-                {selectErrorHelper(formik, "synonym")}
-              </FormControl>
-            </Paper>
-          </Grid>
 
-          <Grid className={classes.grid} item xs={12} sm={4}>
-            <Paper variant="outlined" className={classes.paper}>
-              <FormControl
-                className={classes.formControl}
-                // error={selectIsError(formik, "synonym")}
-              >
-                <InputLabel htmlFor="tissue">Select a Tissue</InputLabel>
-                <NativeSelect id="tissue" {...formik.getFieldProps("tissue")}>
-                  <option aria-label="None" value="" />
-                  {tissues.map((db, i) => (
-                    <option key={i} value={db.variable}>
-                      {db.name}
-                    </option>
-                  ))}
-                </NativeSelect>
-                {/*{selectErrorHelper(formik, "synonym")}*/}
-              </FormControl>
-            </Paper>
-          </Grid>
+          <SelectFieldsElement
+            classes={classes}
+            formik={formik}
+            selectElement={populations}
+            selectVariable={"population"}
+            selectName={"Populations"}
+          />
 
-          <Grid className={classes.grid} item xs={4}>
-            <Paper elevation={0} className={classes.paper}>
-              <FormControl className={classes.formControl}>
-                <TextField
-                  id={"up_window"}
-                  variant={"outlined"}
-                  label={"Up Window Size(KB)"}
-                  size={"medium"}
-                  {...formik.getFieldProps("up_window")}
-                  {...textErrorHelper(formik, "up_window")}
-                />
-              </FormControl>
-            </Paper>
-          </Grid>
+          <SelectFieldsElement
+            classes={classes}
+            formik={formik}
+            selectElement={synonyms}
+            selectVariable={"synonym"}
+            selectName={"Synonyms"}
+          />
 
-          <Grid className={classes.grid} item xs={4}>
-            <Paper elevation={0} className={classes.paper}>
-              <FormControl className={classes.formControl}>
-                <TextField
-                  id={"down_window"}
-                  variant={"outlined"}
-                  label={"Down Window Size(KB)"}
-                  size={"medium"}
-                  {...formik.getFieldProps("down_window")}
-                  {...textErrorHelper(formik, "down_window")}
-                />
-              </FormControl>
-            </Paper>
-          </Grid>
+          <SelectFieldsElement
+            classes={classes}
+            formik={formik}
+            selectElement={tissues}
+            selectVariable={"tissue"}
+            selectName={"Tissue"}
+          />
+
+          <CommonTextElement
+            classes={classes}
+            formik={formik}
+            label={"Up Window Size(KB)"}
+            textVariable={"up_window"}
+          />
+
+          <CommonTextElement
+            classes={classes}
+            formik={formik}
+            label={"Down Window Size(KB)"}
+            textVariable={"down_window"}
+          />
         </Grid>
         <div className={classes.button_container}>
           {loading ? (
@@ -386,6 +383,7 @@ const GeneBasedForm: React.FC<Props & RouteComponentProps> = (props) => {
               type={"submit"}
               variant="contained"
               color="primary"
+              disabled={!formik.isValid}
             >
               Execute <Hidden xsDown> Analysis</Hidden>
             </Button>
