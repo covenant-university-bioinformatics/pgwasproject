@@ -2,18 +2,14 @@ import React, { useRef, useState } from "react";
 import { FormikValues, useFormik } from "formik";
 import * as Yup from "yup";
 import classes from "./index.module.scss";
-import { selectIsError } from "../../utility/general_utils";
 import {
   Button,
   CircularProgress,
-  FormControl,
   Grid,
   Hidden,
-  InputLabel,
-  NativeSelect,
   Paper,
 } from "@material-ui/core";
-import { generalFileForm, selectErrorHelper } from "../../utility/general";
+import { generalFileForm } from "../../utility/general";
 import { PlayArrow } from "@material-ui/icons";
 import { RouteComponentProps } from "react-router-dom";
 import { useTypedSelector } from "../../../hooks/useTypedSelector";
@@ -22,8 +18,10 @@ import {
   submitToServer,
 } from "../../utility/form_common";
 import {
-  commonFileElement,
-  commonTextElement,
+  CommonTextElement,
+  CommonFileElement,
+  LoadTestData,
+  SelectFieldsElement,
 } from "../../utility/form_common_fields";
 
 type Props = {};
@@ -44,21 +42,39 @@ type UserFormData = {
 const DeleteriousnessForm: React.FC<Props & RouteComponentProps> = (props) => {
   const { user } = useTypedSelector((state) => state.auth);
   const [uploadFile, setUploadFile] = useState<any>(null);
+  const [useTest, setUseTest] = useState<boolean>(false);
+  const [formValues, setFormValues] = useState<UserFormData>();
   const fileInput = useRef<any>(null);
   const [loading, setLoading] = useState(false);
 
-  const formik = useFormik<UserFormData>({
-    initialValues: {
-      filename: "",
-      job_name: "",
-      marker_name: "",
-      chromosome: "",
-      position: "",
-      effect_allele: "",
-      alternate_allele: "",
-      gene_db: "",
-    },
+  const initialValues = {
+    filename: "",
+    job_name: "",
+    ...(!user?.username && { email: "" }),
+    useTest: false,
+    marker_name: "",
+    chromosome: "",
+    position: "",
+    effect_allele: "",
+    alternate_allele: "",
+    gene_db: "",
+  };
+  const testValues = {
+    filename: "Test.txt",
+    job_name: "Test Delet",
+    ...(!user?.username && { email: "" }),
+    useTest: true,
+    marker_name: "6",
+    chromosome: "1",
+    position: "2",
+    effect_allele: "4",
+    alternate_allele: "5",
+    gene_db: "refseq",
+  };
 
+  const formik = useFormik<UserFormData>({
+    initialValues: formValues || initialValues,
+    enableReinitialize: true,
     validationSchema: Yup.object({
       filename: Yup.string().required("Please upload a file"),
       marker_name: Yup.number()
@@ -112,6 +128,22 @@ const DeleteriousnessForm: React.FC<Props & RouteComponentProps> = (props) => {
     },
   });
 
+  const handleUseTest = (event: any) => {
+    formik.resetForm();
+    setUseTest(true);
+    setFormValues(testValues);
+    fileInput.current.querySelector("input").disabled = true;
+  };
+
+  const handleRemoveUseTest = (event: any) => {
+    setUseTest(false);
+    setFormValues(undefined);
+    formik.setFieldValue("filename", "");
+    fileInput.current.querySelector("input").value = "";
+    fileInput.current.querySelector("input").disabled = false;
+    formik.resetForm();
+  };
+
   const handleFileUploadChange = (event: any) => {
     handleFileUploadChangedCommon(event, formik, setUploadFile);
   };
@@ -164,29 +196,45 @@ const DeleteriousnessForm: React.FC<Props & RouteComponentProps> = (props) => {
     <div className={classes.delet_form}>
       <form onSubmit={formik.handleSubmit}>
         <Grid container spacing={3}>
+          <LoadTestData
+            classes={classes}
+            useTest={useTest}
+            handleUseTest={handleUseTest}
+            handleRemoveUseTest={handleRemoveUseTest}
+          />
           <div className={classes.header_div}>
             <h2>Enter a Job Name</h2>
           </div>
-          {commonTextElement(classes, formik, "Job Name", "job_name")}
+          <CommonTextElement
+            classes={classes}
+            formik={formik}
+            label={"Job Name"}
+            textVariable={"job_name"}
+          />
           {user?.username ? null : (
             <>
               <div className={classes.header_div}>
                 <h2>Enter your email</h2>
               </div>
-              {commonTextElement(classes, formik, "Email", "email")}
+              <CommonTextElement
+                classes={classes}
+                formik={formik}
+                label={"Email"}
+                textVariable={"email"}
+              />
             </>
           )}
           <div className={classes.header_div}>
             <h2>Upload a file</h2>
           </div>
-          {commonFileElement(
-            classes,
-            formik,
-            fileInput,
-            handleFileUploadChange,
-            handleFileBlur,
-            handleRemove
-          )}
+          <CommonFileElement
+            classes={classes}
+            formik={formik}
+            fileInput={fileInput}
+            handleFileUploadChange={handleFileUploadChange}
+            handleFileBlur={handleFileBlur}
+            handleRemove={handleRemove}
+          />
           <div className={classes.header_div}>
             <h2>Summary statistics column positions</h2>
           </div>
@@ -200,25 +248,13 @@ const DeleteriousnessForm: React.FC<Props & RouteComponentProps> = (props) => {
           <div className={classes.header_div}>
             <h2>Gene Annotation Database</h2>
           </div>
-          <Grid className={classes.grid} item xs={12} sm={3}>
-            <Paper variant="outlined" className={classes.paper}>
-              <FormControl
-                className={classes.formControl}
-                error={selectIsError(formik, "gene_db")}
-              >
-                <InputLabel htmlFor="gene_db">Gene annotation</InputLabel>
-                <NativeSelect id="gene_db" {...formik.getFieldProps("gene_db")}>
-                  <option aria-label="None" value="" />
-                  {gene_dbs.map((db, i) => (
-                    <option key={i} value={db.variable}>
-                      {db.name}
-                    </option>
-                  ))}
-                </NativeSelect>
-                {selectErrorHelper(formik, "gene_db")}
-              </FormControl>
-            </Paper>
-          </Grid>
+          <SelectFieldsElement
+            classes={classes}
+            formik={formik}
+            selectElement={gene_dbs}
+            selectVariable={"gene_db"}
+            selectName={"Gene Annotation"}
+          />
           <div className={classes.header_div}>
             <h2>Deleteriousness Databases</h2>
           </div>

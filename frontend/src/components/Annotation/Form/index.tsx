@@ -17,9 +17,10 @@ import { PlayArrow } from "@material-ui/icons";
 import { RouteComponentProps } from "react-router-dom";
 import { useTypedSelector } from "../../../hooks/useTypedSelector";
 import {
-  commonFileElement,
-  commonTextElement,
-  selectFieldsElement,
+  CommonTextElement,
+  CommonFileElement,
+  LoadTestData,
+  SelectFieldsElement,
 } from "../../utility/form_common_fields";
 import {
   handleFileUploadChangedCommon,
@@ -32,54 +33,86 @@ type UserFormData = {
   filename: string;
   job_name: string;
   email?: string;
+  useTest: boolean;
   marker_name: string | undefined;
   chromosome: string | undefined;
   position: string | undefined;
   effect_allele: string | undefined;
   alternate_allele: string | undefined;
-  cytoband: false;
-  kgp_all: false;
-  kgp_afr: false;
-  kgp_amr: false;
-  kgp_eas: false;
-  kgp_eur: false;
-  kgp_sas: false;
-  exac: false;
-  disgenet: false;
-  clinvar: false;
-  intervar: false;
+  gene_db: string;
+  cytoband: boolean;
+  kgp_all: boolean;
+  kgp_afr: boolean;
+  kgp_amr: boolean;
+  kgp_eas: boolean;
+  kgp_eur: boolean;
+  kgp_sas: boolean;
+  exac: boolean;
+  disgenet: boolean;
+  clinvar: boolean;
+  intervar: boolean;
   [key: string]: any;
 };
 
 const AnnotationForm: React.FC<Props & RouteComponentProps> = (props) => {
   const { user } = useTypedSelector((state) => state.auth);
   const [uploadFile, setUploadFile] = useState<any>(null);
+  const [useTest, setUseTest] = useState<boolean>(false);
+  const [formValues, setFormValues] = useState<UserFormData>();
   const fileInput = useRef<any>(null);
   const [loading, setLoading] = useState(false);
 
-  const formik = useFormik<UserFormData>({
-    initialValues: {
-      filename: "",
-      job_name: "",
-      marker_name: "",
-      chromosome: "",
-      position: "",
-      effect_allele: "",
-      alternate_allele: "",
-      gene_db: "",
-      cytoband: false,
-      kgp_all: false,
-      kgp_afr: false,
-      kgp_amr: false,
-      kgp_eas: false,
-      kgp_eur: false,
-      kgp_sas: false,
-      exac: false,
-      disgenet: false,
-      clinvar: false,
-      intervar: false,
-    },
+  const initialValues = {
+    filename: "",
+    job_name: "",
+    ...(!user?.username && { email: "" }),
+    useTest: false,
+    marker_name: "",
+    chromosome: "",
+    position: "",
+    effect_allele: "",
+    alternate_allele: "",
+    gene_db: "",
+    cytoband: false,
+    kgp_all: false,
+    kgp_afr: false,
+    kgp_amr: false,
+    kgp_eas: false,
+    kgp_eur: false,
+    kgp_sas: false,
+    exac: false,
+    disgenet: false,
+    clinvar: false,
+    intervar: false,
+  };
 
+  const testValues = {
+    filename: "test.txt",
+    job_name: "Test Annot",
+    ...(!user?.username && { email: "" }),
+    useTest: true,
+    marker_name: "6",
+    chromosome: "1",
+    position: "2",
+    effect_allele: "4",
+    alternate_allele: "5",
+    gene_db: "refseq",
+    cytoband: true,
+    kgp_all: true,
+    kgp_afr: true,
+    kgp_amr: false,
+    kgp_eas: true,
+    kgp_eur: true,
+    kgp_sas: false,
+    exac: true,
+    disgenet: true,
+    clinvar: true,
+    intervar: false,
+  };
+
+  const formik = useFormik<UserFormData>({
+    initialValues: formValues || initialValues,
+    enableReinitialize: true,
     validationSchema: Yup.object({
       filename: Yup.string().required("Please upload a file"),
       marker_name: Yup.number()
@@ -108,7 +141,11 @@ const AnnotationForm: React.FC<Props & RouteComponentProps> = (props) => {
       }),
       gene_db: Yup.string().required("Please select a database"),
     }),
+    // validateOnChange: true,
+    // validateOnBlur: true,
+    // validateOnMount: true,
     onSubmit: (values: FormikValues) => {
+      console.log(values);
       if (user?.username) {
         submitToServer(
           values,
@@ -132,6 +169,22 @@ const AnnotationForm: React.FC<Props & RouteComponentProps> = (props) => {
       }
     },
   });
+
+  const handleUseTest = (event: any) => {
+    formik.resetForm();
+    setUseTest(true);
+    setFormValues(testValues);
+    fileInput.current.querySelector("input").disabled = true;
+  };
+
+  const handleRemoveUseTest = (event: any) => {
+    setUseTest(false);
+    setFormValues(undefined);
+    formik.setFieldValue("filename", "");
+    fileInput.current.querySelector("input").value = "";
+    fileInput.current.querySelector("input").disabled = false;
+    formik.resetForm();
+  };
 
   const handleFileUploadChange = (event: any) => {
     handleFileUploadChangedCommon(event, formik, setUploadFile);
@@ -175,29 +228,45 @@ const AnnotationForm: React.FC<Props & RouteComponentProps> = (props) => {
     <div className={classes.annot_form}>
       <form onSubmit={formik.handleSubmit}>
         <Grid container spacing={3}>
+          <LoadTestData
+            classes={classes}
+            useTest={useTest}
+            handleUseTest={handleUseTest}
+            handleRemoveUseTest={handleRemoveUseTest}
+          />
           <div className={classes.header_div}>
             <h2>Enter Job Name</h2>
           </div>
-          {commonTextElement(classes, formik, "Job Name", "job_name")}
+          <CommonTextElement
+            classes={classes}
+            formik={formik}
+            label={"Job Name"}
+            textVariable={"job_name"}
+          />
           {user?.username ? null : (
             <>
               <div className={classes.header_div}>
                 <h2>Enter your email</h2>
               </div>
-              {commonTextElement(classes, formik, "Email", "email")}
+              <CommonTextElement
+                classes={classes}
+                formik={formik}
+                label={"Email"}
+                textVariable={"email"}
+              />
             </>
           )}
           <div className={classes.header_div}>
             <h2>Upload a file</h2>
           </div>
-          {commonFileElement(
-            classes,
-            formik,
-            fileInput,
-            handleFileUploadChange,
-            handleFileBlur,
-            handleRemove
-          )}
+          <CommonFileElement
+            classes={classes}
+            formik={formik}
+            fileInput={fileInput}
+            handleFileUploadChange={handleFileUploadChange}
+            handleFileBlur={handleFileBlur}
+            handleRemove={handleRemove}
+          />
           <div className={classes.header_div}>
             <h2>Summary statistics column positions</h2>
           </div>
@@ -211,13 +280,13 @@ const AnnotationForm: React.FC<Props & RouteComponentProps> = (props) => {
           <div className={classes.header_div}>
             <h2>Gene Annotation Database</h2>
           </div>
-          {selectFieldsElement(
-            classes,
-            formik,
-            gene_dbs,
-            "gene_db",
-            "Gene Annotation"
-          )}
+          <SelectFieldsElement
+            classes={classes}
+            formik={formik}
+            selectElement={gene_dbs}
+            selectVariable={"gene_db"}
+            selectName={"Gene Annotation"}
+          />
           <div className={classes.header_div}>
             <h2>Other Annotation Databases</h2>
           </div>

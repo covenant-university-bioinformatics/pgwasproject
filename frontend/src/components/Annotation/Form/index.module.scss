@@ -1,5 +1,12 @@
 @import "../../../partials/mixins";
 .annot_form {
+
+  .test_button{
+    padding: 10px 2rem;
+    margin-left: 1.3rem;
+    margin-bottom: 2rem;
+  }
+
   width: 100%;
   .header_div {
     width: 100%;

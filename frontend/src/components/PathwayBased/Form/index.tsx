@@ -11,9 +11,10 @@ import {
   submitToServer,
 } from "../../utility/form_common";
 import {
-  selectFieldsElement,
-  commonTextElement,
-  commonFileElement,
+  LoadTestData,
+  CommonTextElement,
+  CommonFileElement,
+  SelectFieldsElement,
 } from "../../utility/form_common_fields";
 import { useTypedSelector } from "../../../hooks/useTypedSelector";
 
@@ -38,6 +39,7 @@ type UserFormData = {
   filename: string;
   job_name: string;
   email?: string;
+  useTest: boolean;
   marker_name: string | undefined;
   p_value: string | undefined;
   population: string;
@@ -57,27 +59,54 @@ type UserFormData = {
 const GeneBasedForm: React.FC<Props & RouteComponentProps> = (props) => {
   const { user } = useTypedSelector((state) => state.auth);
   const [uploadFile, setUploadFile] = useState<any>(null);
+  const [useTest, setUseTest] = useState<boolean>(false);
+  const [formValues, setFormValues] = useState<UserFormData>();
   const fileInput = useRef<any>(null);
   const [loading, setLoading] = useState(false);
 
+  const initialValues = {
+    filename: "",
+    job_name: "",
+    ...(!user?.username && { email: "" }),
+    useTest: false,
+    marker_name: "",
+    p_value: "",
+    population: "",
+    run_pathway: RunPathwayOptions.ON,
+    chr: "",
+    gene_set_file: GeneSetFileOptions.KEGG_REACTOME,
+    pvalue_cutoff: "0.05",
+    up_window: "50000",
+    down_window: "50000",
+    max_snp: "3000",
+    gene_scoring: GeneScoringOptions.SUM,
+    merge_distance: "1",
+    maf_cutoff: "0.05",
+  };
+
+  const testValues = {
+    filename: "test.txt",
+    job_name: "Test Pathway",
+    ...(!user?.username && { email: "" }),
+    useTest: true,
+    marker_name: "1",
+    p_value: "2",
+    population: "eur",
+    run_pathway: RunPathwayOptions.ON,
+    chr: "1",
+    gene_set_file: GeneSetFileOptions.KEGG_REACTOME,
+    pvalue_cutoff: "0.05",
+    up_window: "50000",
+    down_window: "50000",
+    max_snp: "3000",
+    gene_scoring: GeneScoringOptions.SUM,
+    merge_distance: "1",
+    maf_cutoff: "0.05",
+  };
+
   const formik = useFormik<UserFormData>({
-    initialValues: {
-      filename: "",
-      job_name: "",
-      marker_name: "",
-      p_value: "",
-      population: "",
-      run_pathway: RunPathwayOptions.ON,
-      chr: "",
-      gene_set_file: GeneSetFileOptions.KEGG_REACTOME,
-      pvalue_cutoff: "0.05",
-      up_window: "50000",
-      down_window: "50000",
-      max_snp: "3000",
-      gene_scoring: GeneScoringOptions.SUM,
-      merge_distance: "1",
-      maf_cutoff: "0.05",
-    },
+    initialValues: formValues || initialValues,
+    enableReinitialize: true,
 
     validationSchema: Yup.object({
       filename: Yup.string().required("Please upload a file"),
@@ -134,6 +163,22 @@ const GeneBasedForm: React.FC<Props & RouteComponentProps> = (props) => {
       }
     },
   });
+
+  const handleUseTest = (event: any) => {
+    formik.resetForm();
+    setUseTest(true);
+    setFormValues(testValues);
+    fileInput.current.querySelector("input").disabled = true;
+  };
+
+  const handleRemoveUseTest = (event: any) => {
+    setUseTest(false);
+    setFormValues(undefined);
+    formik.setFieldValue("filename", "");
+    fileInput.current.querySelector("input").value = "";
+    fileInput.current.querySelector("input").disabled = false;
+    formik.resetForm();
+  };
 
   const handleFileUploadChange = (event: any) => {
     handleFileUploadChangedCommon(event, formik, setUploadFile);
@@ -206,29 +251,45 @@ const GeneBasedForm: React.FC<Props & RouteComponentProps> = (props) => {
     <div className={classes.pathwaybased_form}>
       <form onSubmit={formik.handleSubmit}>
         <Grid container spacing={3}>
+          <LoadTestData
+            classes={classes}
+            useTest={useTest}
+            handleUseTest={handleUseTest}
+            handleRemoveUseTest={handleRemoveUseTest}
+          />
           <div className={classes.header_div}>
             <h2>Enter a Job Name</h2>
           </div>
-          {commonTextElement(classes, formik, "Job Name", "job_name")}
+          <CommonTextElement
+            classes={classes}
+            formik={formik}
+            label={"Job Name"}
+            textVariable={"job_name"}
+          />
           {user?.username ? null : (
             <>
               <div className={classes.header_div}>
                 <h2>Enter your email</h2>
               </div>
-              {commonTextElement(classes, formik, "Email", "email")}
+              <CommonTextElement
+                classes={classes}
+                formik={formik}
+                label={"Email"}
+                textVariable={"email"}
+              />
             </>
           )}
           <div className={classes.header_div}>
             <h2>Upload a file</h2>
           </div>
-          {commonFileElement(
-            classes,
-            formik,
-            fileInput,
-            handleFileUploadChange,
-            handleFileBlur,
-            handleRemove
-          )}
+          <CommonFileElement
+            classes={classes}
+            formik={formik}
+            fileInput={fileInput}
+            handleFileUploadChange={handleFileUploadChange}
+            handleFileBlur={handleFileBlur}
+            handleRemove={handleRemove}
+          />
           <div className={classes.header_div}>
             <h2>Summary statistics column positions</h2>
           </div>
@@ -236,68 +297,84 @@ const GeneBasedForm: React.FC<Props & RouteComponentProps> = (props) => {
           <div className={classes.header_div}>
             <h2>Tool Parameters</h2>
           </div>
-          {selectFieldsElement(
-            classes,
-            formik,
-            populations,
-            "population",
-            "Population"
-          )}
+          <SelectFieldsElement
+            classes={classes}
+            formik={formik}
+            selectElement={populations}
+            selectVariable={"population"}
+            selectName={"Population"}
+          />
 
-          {selectFieldsElement(
-            classes,
-            formik,
-            run_pathways,
-            "run_pathway",
-            "Run Pathway Option"
-          )}
-          {selectFieldsElement(
-            classes,
-            formik,
-            chromosomes,
-            "chr",
-            "Chromosome"
-          )}
-          {selectFieldsElement(
-            classes,
-            formik,
-            geneSetFileOptions,
-            "gene_set_file",
-            "Gene set file"
-          )}
-          {commonTextElement(
-            classes,
-            formik,
-            "Pvalue Cut off",
-            "pvalue_cutoff"
-          )}
-          {commonTextElement(
-            classes,
-            formik,
-            "Up Window Size(bp)",
-            "up_window"
-          )}
-          {commonTextElement(
-            classes,
-            formik,
-            "Down Window Size(bp)",
-            "down_window"
-          )}
-          {commonTextElement(classes, formik, "Max SNPs", "max_snp")}
-          {selectFieldsElement(
-            classes,
-            formik,
-            geneScoringOptions,
-            "gene_scoring",
-            "Gene Scoring Option"
-          )}
-          {commonTextElement(
-            classes,
-            formik,
-            "Merge Distance",
-            "merge_distance"
-          )}
-          {commonTextElement(classes, formik, "MAF Cut off", "maf_cutoff")}
+          <SelectFieldsElement
+            classes={classes}
+            formik={formik}
+            selectElement={run_pathways}
+            selectVariable={"run_pathway"}
+            selectName={"Run Pathway Option"}
+          />
+
+          <SelectFieldsElement
+            classes={classes}
+            formik={formik}
+            selectElement={chromosomes}
+            selectVariable={"chr"}
+            selectName={"Chromosome"}
+          />
+
+          <SelectFieldsElement
+            classes={classes}
+            formik={formik}
+            selectElement={geneSetFileOptions}
+            selectVariable={"gene_set_file"}
+            selectName={"Gene Set File"}
+          />
+
+          <CommonTextElement
+            classes={classes}
+            formik={formik}
+            label={"Pvalue Cut off"}
+            textVariable={"pvalue_cutoff"}
+          />
+
+          <CommonTextElement
+            classes={classes}
+            formik={formik}
+            label={"Up Window Size(bp)"}
+            textVariable={"up_window"}
+          />
+
+          <CommonTextElement
+            classes={classes}
+            formik={formik}
+            label={"Down Window Size(bp)"}
+            textVariable={"down_window"}
+          />
+
+          <CommonTextElement
+            classes={classes}
+            formik={formik}
+            label={"Max SNPs"}
+            textVariable={"max_snp"}
+          />
+          <SelectFieldsElement
+            classes={classes}
+            formik={formik}
+            selectElement={geneScoringOptions}
+            selectVariable={"gene_scoring"}
+            selectName={"Gene Scoring Option"}
+          />
+          <CommonTextElement
+            classes={classes}
+            formik={formik}
+            label={"Merge Distance"}
+            textVariable={"merge_distance"}
+          />
+          <CommonTextElement
+            classes={classes}
+            formik={formik}
+            label={"MAF Cut off"}
+            textVariable={"maf_cutoff"}
+          />
         </Grid>
         <div className={classes.button_container}>
           {loading ? (

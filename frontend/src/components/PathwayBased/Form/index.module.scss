@@ -1,6 +1,13 @@
 @import "../../../partials/mixins";
 .pathwaybased_form {
   width: 100%;
+
+  .test_button{
+    padding: 10px 2rem;
+    margin-left: 1.3rem;
+    margin-bottom: 2rem;
+  }
+
   .header_div {
     width: 100%;
     h2 {
