@@ -1,29 +1,25 @@
 import React, { useRef, useState } from "react";
 import { FormikValues, useFormik } from "formik";
 import * as Yup from "yup";
+// import classes from "./index.module.scss";
 import classes from "../../utility/form_styles.module.scss";
 import { Button, CircularProgress, Grid, Hidden } from "@material-ui/core";
 import { generalFileForm } from "../../utility/general";
 import { GetAppRounded, PlayArrow } from "@material-ui/icons";
 import { RouteComponentProps } from "react-router-dom";
+import { useTypedSelector } from "../../../hooks/useTypedSelector";
 import {
   handleFileUploadChangedCommon,
   submitToServer,
 } from "../../utility/form_common";
 import {
-  LoadTestData,
-  CommonTextElement,
   CommonFileElement,
+  CommonTextElement,
+  LoadTestData,
   SelectFieldsElement,
 } from "../../utility/form_common_fields";
-import { useTypedSelector } from "../../../hooks/useTypedSelector";
 
 type Props = {};
-
-enum OnOffOptions {
-  ON = "on",
-  OFF = "off",
-}
 
 enum Populations {
   AFR = "afr",
@@ -47,9 +43,10 @@ type UserFormData = {
   p_value: string | undefined;
   sample_size: string | undefined;
   population: string;
-  heidi: OnOffOptions;
-  trans: OnOffOptions;
-  smr_multi: OnOffOptions;
+  eqtl_summary: string;
+  probe: string;
+  probe_wind: string;
+  gene_list: string;
   maf: string;
   diff_freq: string;
   diff_freq_prop: string;
@@ -61,16 +58,14 @@ type UserFormData = {
   heidi_mtd: string;
   heidi_min_m: string;
   heidi_max_m: string;
-  trans_wind: string;
-  set_wind: string;
-  ld_multi_snp: string;
-  Westra_eqtl: boolean;
-  CAGE_eqtl: boolean;
-  GTEx_v8_tissue: string;
+  smr_thresh: string;
+  heidi_thresh: string;
+  plotWindow: string;
+  max_anno_probe: string;
   [key: string]: any;
 };
 
-const EqtlForm: React.FC<Props & RouteComponentProps> = (props) => {
+const EQTLPlotForm: React.FC<Props & RouteComponentProps> = (props) => {
   const { user } = useTypedSelector((state) => state.auth);
   const [uploadFile, setUploadFile] = useState<any>(null);
   const [useTest, setUseTest] = useState<boolean>(false);
@@ -92,31 +87,30 @@ const EqtlForm: React.FC<Props & RouteComponentProps> = (props) => {
     p_value: "",
     sample_size: "",
     population: "",
-    heidi: OnOffOptions.OFF,
-    trans: OnOffOptions.OFF,
-    smr_multi: OnOffOptions.OFF,
+    eqtl_summary: "",
+    probe: "",
+    probe_wind: "500",
+    gene_list: "glist-hg19",
     maf: "0.05",
     diff_freq: "0.2",
     diff_freq_prop: "0.05",
     cis_wind: "2000",
-    peqtl_smr: "0.00000005",
+    peqtl_smr: "0.000000050",
     ld_upper_limit: "0.9",
     ld_lower_limit: "0.05",
     peqtl_heidi: "0.00157",
     heidi_mtd: "1",
     heidi_min_m: "3",
     heidi_max_m: "20",
-    trans_wind: "1000",
-    set_wind: "-9",
-    ld_multi_snp: "0.1",
-    Westra_eqtl: false,
-    CAGE_eqtl: false,
-    GTEx_v8_tissue: "",
+    smr_thresh: "0.0000084",
+    heidi_thresh: "0.05",
+    plotWindow: "1000",
+    max_anno_probe: "16",
   };
 
   const testValues = {
     filename: "test.txt",
-    job_name: "Test EQTL",
+    job_name: "EQTL Plot",
     ...(!user?.username && { email: "" }),
     useTest: true,
     marker_name: "1",
@@ -128,32 +122,30 @@ const EqtlForm: React.FC<Props & RouteComponentProps> = (props) => {
     p_value: "7",
     sample_size: "8",
     population: Populations.EUR,
-    heidi: OnOffOptions.ON,
-    trans: OnOffOptions.ON,
-    smr_multi: OnOffOptions.ON,
+    eqtl_summary: "CAGE_eqtl",
+    probe: "ILMN_2349633",
+    probe_wind: "500",
+    gene_list: "glist-hg19",
     maf: "0.05",
     diff_freq: "0.2",
     diff_freq_prop: "0.05",
     cis_wind: "2000",
-    peqtl_smr: "0.00000005",
+    peqtl_smr: "0.000000050",
     ld_upper_limit: "0.9",
     ld_lower_limit: "0.05",
     peqtl_heidi: "0.00157",
     heidi_mtd: "1",
     heidi_min_m: "3",
     heidi_max_m: "20",
-    trans_wind: "1000",
-    set_wind: "-9",
-    ld_multi_snp: "0.1",
-    Westra_eqtl: true,
-    CAGE_eqtl: true,
-    GTEx_v8_tissue: "Liver",
+    smr_thresh: "0.0000084",
+    heidi_thresh: "0.05",
+    plotWindow: "1000",
+    max_anno_probe: "16",
   };
 
   const formik = useFormik<UserFormData>({
     initialValues: formValues || initialValues,
     enableReinitialize: true,
-
     validationSchema: Yup.object({
       filename: Yup.string().required("Please upload a file"),
       job_name: Yup.string().required("Job name is required"),
@@ -193,9 +185,12 @@ const EqtlForm: React.FC<Props & RouteComponentProps> = (props) => {
         .min(1, "The minimum is one")
         .max(15, "the max is fifteen"),
       population: Yup.string().required("Please select a closest population"),
-      heidi: Yup.string().required("Please select a value"),
-      trans: Yup.string().required("Please select a value"),
-      smr_multi: Yup.string().required("Please select a value"),
+      eqtl_summary: Yup.string().required("Please select a data to use"),
+      probe: Yup.string().required("Please enter in a probe"),
+      probe_wind: Yup.number().required(
+        "This value is required and must be a number value"
+      ),
+      gene_list: Yup.string().required("Please select a gene list"),
       maf: Yup.number().required(
         "This value is required and must be a number value"
       ),
@@ -229,22 +224,18 @@ const EqtlForm: React.FC<Props & RouteComponentProps> = (props) => {
       heidi_max_m: Yup.number().required(
         "This value is required and must be a number value"
       ),
-      trans_wind: Yup.number().required(
+      smr_thresh: Yup.number().required(
         "This value is required and must be a number value"
       ),
-      set_wind: Yup.number().required(
+      heidi_thresh: Yup.number().required(
         "This value is required and must be a number value"
       ),
-      ld_multi_snp: Yup.number().required(
+      plotWindow: Yup.number().required(
         "This value is required and must be a number value"
       ),
-      Westra_eqtl: Yup.boolean().required(
-        "This value is required and must be a boolean value"
+      max_anno_probe: Yup.number().required(
+        "This value is required and must be a number value"
       ),
-      CAGE_eqtl: Yup.boolean().required(
-        "This value is required and must be a boolean value"
-      ),
-      GTEx_v8_tissue: Yup.string().required("Please select a value"),
     }),
 
     onSubmit: (values: FormikValues) => {
@@ -253,8 +244,8 @@ const EqtlForm: React.FC<Props & RouteComponentProps> = (props) => {
           values,
           uploadFile,
           setLoading,
-          "eqtl",
-          "eqtl",
+          "eqtlplot",
+          "eqtlplot",
           user.username,
           props
         );
@@ -263,8 +254,8 @@ const EqtlForm: React.FC<Props & RouteComponentProps> = (props) => {
           values,
           uploadFile,
           setLoading,
-          "eqtl/noauth",
-          "eqtl",
+          "eqtlplot/noauth",
+          "eqtlplot",
           undefined,
           props
         );
@@ -314,17 +305,9 @@ const EqtlForm: React.FC<Props & RouteComponentProps> = (props) => {
     { variable: "sas", name: "SAS" },
   ];
 
-  const onOffOptions = [
-    { variable: "on", name: "ON" },
-    { variable: "off", name: "OFF" },
-  ];
-
-  const trueFalseOptions = [
-    { variable: "true", name: "TRUE" },
-    { variable: "false", name: "FALSE" },
-  ];
-
-  const tissues = [
+  const EQTLOptions = [
+    { variable: "Westra_eqtl", name: "WESTRA" },
+    { variable: "CAGE_eqtl", name: "CAGE" },
     { variable: "Adipose_Subcutaneous", name: "Adipose_Subcutaneous" },
     { variable: "Adipose_Visceral_Omentum", name: "Adipose_Visceral_Omentum" },
     { variable: "Adrenal_Gland", name: "Adrenal_Gland" },
@@ -412,6 +395,11 @@ const EqtlForm: React.FC<Props & RouteComponentProps> = (props) => {
     { variable: "Whole_Blood", name: "Whole_Blood" },
   ];
 
+  const GeneListOptions = [
+    { variable: "glist-hg19", name: "HG19" },
+    { variable: "glist-hg38", name: "HG38" },
+  ];
+
   const eqtlVariables = [
     { variable: "maf", name: "MAF" },
     { variable: "diff_freq", name: "diff freq" },
@@ -424,9 +412,11 @@ const EqtlForm: React.FC<Props & RouteComponentProps> = (props) => {
     { variable: "heidi_mtd", name: "heidi mtd" },
     { variable: "heidi_min_m", name: "heidi min m" },
     { variable: "heidi_max_m", name: "heidi max m" },
-    { variable: "trans_wind", name: "trans wind" },
-    { variable: "set_wind", name: "set wind" },
-    { variable: "ld_multi_snp", name: "ld multi snp" },
+    { variable: "probe_wind", name: "probe wind" },
+    { variable: "smr_thresh", name: "smr thresh" },
+    { variable: "heidi_thresh", name: "heidi thresh" },
+    { variable: "plotWindow", name: "plotWindow" },
+    { variable: "max_anno_probe", name: "max anno probe" },
   ];
 
   return (
@@ -454,7 +444,7 @@ const EqtlForm: React.FC<Props & RouteComponentProps> = (props) => {
             Download Test File
           </Button>
           <div className={classes.header_div}>
-            <h2>Enter a Job Name</h2>
+            <h2>Enter Job Name</h2>
           </div>
           <CommonTextElement
             classes={classes}
@@ -486,9 +476,11 @@ const EqtlForm: React.FC<Props & RouteComponentProps> = (props) => {
             handleFileBlur={handleFileBlur}
             handleRemove={handleRemove}
           />
+
           <div className={classes.header_div}>
             <h2>Summary statistics column positions</h2>
           </div>
+
           {generalFileForm(classes, formik, [
             "marker_name",
             "effect_allele",
@@ -499,39 +491,40 @@ const EqtlForm: React.FC<Props & RouteComponentProps> = (props) => {
             "p_value",
             "sample_size",
           ])}
+
           <div className={classes.header_div}>
             <h2>Tool Parameters</h2>
           </div>
+
           <SelectFieldsElement
             classes={classes}
             formik={formik}
             selectElement={populations}
             selectVariable={"population"}
-            selectName={"Population"}
+            selectName={"Populations"}
           />
 
           <SelectFieldsElement
             classes={classes}
             formik={formik}
-            selectElement={onOffOptions}
-            selectVariable={"heidi"}
-            selectName={"Option (Heidi)"}
+            selectElement={EQTLOptions}
+            selectVariable={"eqtl_summary"}
+            selectName={"EQTL Dataset"}
           />
 
           <SelectFieldsElement
             classes={classes}
             formik={formik}
-            selectElement={onOffOptions}
-            selectVariable={"trans"}
-            selectName={"option (Trans)"}
+            selectElement={GeneListOptions}
+            selectVariable={"gene_list"}
+            selectName={"Gene List"}
           />
 
-          <SelectFieldsElement
+          <CommonTextElement
             classes={classes}
             formik={formik}
-            selectElement={onOffOptions}
-            selectVariable={"smr_multi"}
-            selectName={"option (SMR Multi)"}
+            label={"Probe ID"}
+            textVariable={"probe"}
           />
 
           {eqtlVariables.map((element) => (
@@ -543,34 +536,6 @@ const EqtlForm: React.FC<Props & RouteComponentProps> = (props) => {
               textVariable={element.variable}
             />
           ))}
-
-          <div className={classes.header_div}>
-            <h2>Select Datasets</h2>
-          </div>
-
-          <SelectFieldsElement
-            classes={classes}
-            formik={formik}
-            selectElement={trueFalseOptions}
-            selectVariable={"Westra_eqtl"}
-            selectName={"option (Westra)"}
-          />
-
-          <SelectFieldsElement
-            classes={classes}
-            formik={formik}
-            selectElement={trueFalseOptions}
-            selectVariable={"CAGE_eqtl"}
-            selectName={"option (CAGE)"}
-          />
-
-          <SelectFieldsElement
-            classes={classes}
-            formik={formik}
-            selectElement={tissues}
-            selectVariable={"GTEx_v8_tissue"}
-            selectName={"GTEX V8 Tissue"}
-          />
         </Grid>
         <div className={classes.button_container}>
           {loading ? (
@@ -583,6 +548,7 @@ const EqtlForm: React.FC<Props & RouteComponentProps> = (props) => {
               type={"submit"}
               variant="contained"
               color="primary"
+              disabled={!formik.isValid}
             >
               Execute <Hidden xsDown> Analysis</Hidden>
             </Button>
@@ -593,4 +559,4 @@ const EqtlForm: React.FC<Props & RouteComponentProps> = (props) => {
   );
 };
 
-export default EqtlForm;
+export default EQTLPlotForm;

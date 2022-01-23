@@ -29,6 +29,7 @@ const Liftover = React.lazy(() => import("./components/Liftover"));
 const Susie = React.lazy(() => import("./components/Susie"));
 const Paintor = React.lazy(() => import("./components/Paintor"));
 const EQTL = React.lazy(() => import("./components/EQTL"));
+const EQTLPlot = React.lazy(() => import("./components/EQTLPlot"));
 const PathwayBased = React.lazy(() => import("./components/PathwayBased"));
 const GeneBased = React.lazy(() => import("./components/GeneBased"));
 const Tutorials = React.lazy(() => import("./components/Tutorials"));
@@ -153,6 +154,17 @@ const Routes: React.FC<Props> = (props) => {
               fallback={<div className={"suspense_center"}>Loading...</div>}
             >
               <AuthenticatedRoute Component={EQTL} {...props} />
+            </Suspense>
+          )}
+        />
+        <Route
+          path="/tools/eqtlplot"
+          // component={AuthGuard(EQTL)}
+          render={(props) => (
+            <Suspense
+              fallback={<div className={"suspense_center"}>Loading...</div>}
+            >
+              <AuthenticatedRoute Component={EQTLPlot} {...props} />
             </Suspense>
           )}
         />

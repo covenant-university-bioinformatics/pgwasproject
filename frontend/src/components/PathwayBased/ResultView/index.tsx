@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import pgwasAxios from "../../../axios-fetches";
 import classes from "./index.module.scss";
+// import classes from "../../utility/result_view.module.scss";
 import useTable from "../../../hooks/useTable";
 import {
   Button,
