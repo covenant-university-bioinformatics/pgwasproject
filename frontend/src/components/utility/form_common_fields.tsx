@@ -101,6 +101,11 @@ type SelectFieldsElementProps = {
   selectName: string;
 };
 
+const isVowel = (word: string) => {
+  const vowels = "aeiouAEIOU";
+  return vowels.indexOf(word[0]) !== -1;
+};
+
 export const SelectFieldsElement: React.FC<SelectFieldsElementProps> = ({
   classes,
   formik,
@@ -108,6 +113,8 @@ export const SelectFieldsElement: React.FC<SelectFieldsElementProps> = ({
   selectVariable,
   selectName,
 }: SelectFieldsElementProps) => {
+  let article = isVowel(selectName) ? "an" : "a";
+
   return (
     <Grid className={classes.grid} item xs={12} sm={4}>
       <Paper variant="outlined" className={classes.paper}>
@@ -116,7 +123,7 @@ export const SelectFieldsElement: React.FC<SelectFieldsElementProps> = ({
           error={selectIsError(formik, selectVariable)}
         >
           <InputLabel htmlFor={selectVariable}>
-            Select a {selectName}
+            Select {article} {selectName}
           </InputLabel>
           <NativeSelect
             id={selectVariable}

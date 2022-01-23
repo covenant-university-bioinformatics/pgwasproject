@@ -1,7 +1,8 @@
 import React, { useRef, useState } from "react";
 import { FormikValues, useFormik } from "formik";
 import * as Yup from "yup";
-import classes from "./index.module.scss";
+// import classes from "./index.module.scss";
+import classes from "../../utility/form_styles.module.scss";
 import {
   Button,
   CircularProgress,
@@ -10,7 +11,7 @@ import {
   Paper,
 } from "@material-ui/core";
 import { generalFileForm } from "../../utility/general";
-import { PlayArrow } from "@material-ui/icons";
+import { GetAppRounded, PlayArrow } from "@material-ui/icons";
 import { RouteComponentProps } from "react-router-dom";
 import { useTypedSelector } from "../../../hooks/useTypedSelector";
 import {
@@ -193,7 +194,7 @@ const DeleteriousnessForm: React.FC<Props & RouteComponentProps> = (props) => {
   ];
 
   return (
-    <div className={classes.delet_form}>
+    <div className={classes.job_form}>
       <form onSubmit={formik.handleSubmit}>
         <Grid container spacing={3}>
           <LoadTestData
@@ -202,6 +203,20 @@ const DeleteriousnessForm: React.FC<Props & RouteComponentProps> = (props) => {
             handleUseTest={handleUseTest}
             handleRemoveUseTest={handleRemoveUseTest}
           />
+          <Button
+            type={"button"}
+            variant="contained"
+            color="primary"
+            size={"small"}
+            className={classes.button}
+            endIcon={<GetAppRounded />}
+            href={
+              "https://drive.google.com/file/d/1SEDlM3EjXq4Mfdfvcp85j9rESBy3JXNT/view?usp=sharing"
+            }
+            target="_blank"
+          >
+            Download Test File
+          </Button>
           <div className={classes.header_div}>
             <h2>Enter a Job Name</h2>
           </div>

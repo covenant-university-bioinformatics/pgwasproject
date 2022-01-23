@@ -50,7 +50,7 @@ const ToolsLayout: React.FC<Props> = ({ title, path, children }) => {
               exact
             >
               <Button startIcon={<HomeRounded />} size="medium" color="inherit">
-                <Hidden xsDown>Home</Hidden>
+                <Hidden xsDown>Index</Hidden>
               </Button>
             </NavLink>
             <NavLink

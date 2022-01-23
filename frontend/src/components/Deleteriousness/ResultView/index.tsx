@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import pgwasAxios from "../../../axios-fetches";
-import classes from "./index.module.scss";
+import mainClasses from "./index.module.scss";
+import classes from "../../utility/result_view.module.scss";
 import useTable from "../../../hooks/useTable";
 import { Button, CircularProgress, TableBody } from "@material-ui/core";
 import ListRow from "../../utility/RowExtra";
@@ -131,7 +132,7 @@ const DeleteriousnessResultView: React.FC<
   ) => {
     if (snpResults.length > 0) {
       return (
-        <div className={classes.table_section}>
+        <div className={mainClasses.table_section}>
           {/*<Paper className={mclasses.pageContent}>*/}
           <TblContainer>
             <TblHead />
@@ -156,16 +157,16 @@ const DeleteriousnessResultView: React.FC<
   const showDownloadButton = () => {
     if (deletRes && deletRes.status === "completed") {
       return (
-        <div className={classes.download}>
+        <div className={mainClasses.download}>
           <p>
             The tables below have been chunked and pruned to allow for proper
             display. Use the buttons below to download the full files.
           </p>
-          <div className={classes.buttons}>
+          <div className={mainClasses.buttons}>
             <Button
               variant="contained"
               color="primary"
-              className={classes.button}
+              className={mainClasses.button}
               endIcon={<GetAppRounded />}
               href={`/results${deletRes.outputFile}`}
             >
@@ -181,17 +182,17 @@ const DeleteriousnessResultView: React.FC<
   const createChartSection = () => {
     if (deletRes && deletRes.status === "completed") {
       const exons = (
-        <div className={classes.image_tab}>
+        <div className={mainClasses.image_tab}>
           <h3>Exon Locations</h3>
-          <div className={classes.image_box}>
+          <div className={mainClasses.image_box}>
             <img src={`/results${deletRes!.exon_plot}`} alt="exon plot" />
           </div>
         </div>
       );
 
       return (
-        <div className={classes.delet_overview}>
-          <h3 className={classes.sub_heading}>Data Overview</h3>
+        <div className={mainClasses.delet_overview}>
+          <h3 className={mainClasses.sub_heading}>Data Overview</h3>
           <div>{exons}</div>
         </div>
       );
@@ -202,10 +203,12 @@ const DeleteriousnessResultView: React.FC<
   const showTables = () => {
     if (snpResults.length > 0) {
       return (
-        <div className={classes.tables}>
-          <h3 className={classes.sub_heading}>Deleteriousness Result Table</h3>
+        <div className={mainClasses.tables}>
+          <h3 className={mainClasses.sub_heading}>
+            Deleteriousness Result Table
+          </h3>
           {showDownloadButton()}
-          <div className={classes.table_wrapper}>
+          <div className={mainClasses.table_wrapper}>
             {loadingResults ? (
               <CircularProgress />
             ) : (

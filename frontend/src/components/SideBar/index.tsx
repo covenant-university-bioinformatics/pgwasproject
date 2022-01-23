@@ -71,6 +71,7 @@ const SideBar: React.FC<Props> = (props) => {
       icon: <LabelSharp />,
     },
     { title: "EQTL", linkTo: "/tools/eqtl", icon: <LabelSharp /> },
+    { title: "EQTL Plot", linkTo: "/tools/eqtlplot", icon: <LabelSharp /> },
     {
       title: "Gene-Based Analysis",
       linkTo: "/tools/genebased",
@@ -202,7 +203,7 @@ const SideBar: React.FC<Props> = (props) => {
             className={classes.link}
             to={"/tools"}
           >
-            Home
+            Tools Home
           </NavLink>
         </ListItemText>
       </ListItem>

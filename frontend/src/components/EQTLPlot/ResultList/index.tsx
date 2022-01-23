@@ -4,12 +4,12 @@ import ResultList from "../../utility/ResultList";
 
 type Props = {};
 
-const AnnotationResultList: React.FC<Props & RouteComponentProps> = (props) => {
+const EqtlPlotResultList: React.FC<Props & RouteComponentProps> = (props) => {
   return (
     <>
       <ResultList
-        apiPath={"annot"}
-        frontendPath={"annotation"}
+        apiPath={"eqtlplot"}
+        frontendPath={"eqtlplot"}
         history={props.history}
         location={props.location}
         match={props.match}
@@ -18,4 +18,4 @@ const AnnotationResultList: React.FC<Props & RouteComponentProps> = (props) => {
   );
 };
 
-export default AnnotationResultList;
+export default EqtlPlotResultList;

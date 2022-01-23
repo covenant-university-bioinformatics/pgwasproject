@@ -1,213 +1,141 @@
 import React, { useEffect, useRef, useState } from "react";
 import { RouteComponentProps } from "react-router-dom";
+// import SimpleBar from "simplebar-react";
+// import "simplebar/dist/simplebar.min.css";
 import pgwasAxios from "../../../axios-fetches";
-import classes from "./index.module.scss";
-import useTable from "../../../hooks/useTable";
-import { Button, CircularProgress, TableBody } from "@material-ui/core";
-import ListRow from "../../utility/RowExtra";
-import { GetAppRounded } from "@material-ui/icons";
+// import mainClasses from "./index.module.scss";
+import classes from "../../utility/result_view.module.scss";
+import { CircularProgress } from "@material-ui/core";
 import {
-  createInfoSection,
   createJobFailedReason,
   createJobStatus,
+  getInfoSection,
 } from "../../utility/general";
-import { createScoresObject } from "../../utility/general_utils";
+import { useTypedSelector } from "../../../hooks/useTypedSelector";
+import TableTabs from "./TableTabs";
 
 type Props = {};
 type JobParam = {
   jobId: string;
 };
 
-export type DeletResult = {
+export type EqtlResult = {
   _id: string;
-  status: string;
-  job_name: string;
   jobUID: string;
+  job_name: string;
   inputFile: string;
-  createdAt: string;
-  outputFile: string;
-  exon_plot: string;
-  failed_reason: string | undefined;
-  longJob: string;
+  status: string;
+  cageSMRFile: string;
+  cageTransFile: string;
+  cageMultiFile: string;
+  cageSMRManhattanPlot: string;
+  cageSMRQQPlot: string;
+  cageMultiManhattanPlot: string;
+  cageMultiQQPlot: string;
+  tissueSMRFile: string;
+  tissueTransFile: string;
+  tissueMultiFile: string;
+  tissueSMRManhattanPlot: string;
+  tissueSMRQQPlot: string;
+  tissueMultiManhattanPlot: string;
+  tissueMultiQQPlot: string;
+  westraSMRFile: string;
+  westraTransFile: string;
+  westraMultiFile: string;
+  westraSMRManhattanPlot: string;
+  westraSMRQQPlot: string;
+  westraMultiManhattanPlot: string;
+  westraMultiQQPlot: string;
+  failed_reason: string;
+  longJob: boolean;
+  version: number;
   completionTime: string;
+  eqtl_params: {
+    population: string;
+    heidi: string;
+    trans: string;
+    smr_multi: string;
+    maf: string;
+    diff_freq: string;
+    diff_freq_prop: string;
+    cis_wind: string;
+    peqtl_smr: string;
+    ld_upper_limit: string;
+    ld_lower_limit: string;
+    peqtl_heidi: string;
+    heidi_mtd: string;
+    heidi_min_m: string;
+    heidi_max_m: string;
+    trans_wind: string;
+    set_wind: string;
+    ld_multi_snp: string;
+    Westra_eqtl: string;
+    CAGE_eqtl: string;
+    GTEx_v8_tissue: string;
+    [key: string]: any;
+  };
+  [key: string]: any;
 };
 
-const DeleteriousnessResultView: React.FC<
-  Props & RouteComponentProps<JobParam>
-> = (props) => {
+const EqtlResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
+  props
+) => {
+  const { user } = useTypedSelector((state) => state.auth);
+
+  let apiPath = "";
+  if (user?.username) {
+    apiPath = "eqtl";
+  } else {
+    apiPath = "eqtl/noauth";
+  }
+
   const reloadLimit = 60;
   const { jobId: id } = props.match.params;
-  const [deletRes, setDeletRes] = useState<DeletResult | undefined>(undefined);
-  const [error, setError] = useState(false);
+
+  const [eqtlRes, setEqtlRes] = useState<EqtlResult | undefined>(undefined);
+
   const [errorInfo, setErrorInfo] = useState("");
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [reload, setReload] = useState(0);
   const [seconds, setSeconds] = useState(reloadLimit);
-  const [loading, setLoading] = useState(false);
+
   const timeout = useRef<any>(null);
   let errorMessage: any | null = null;
   let genMessage: any | null = null;
 
-  const [snpResults, setSnpResults] = useState<string[][]>([]);
-  const [snpHeader, setSnpHeader] = useState<
-    { id: string; label: string; disableSorting: boolean }[]
-  >([]);
-  const [loadingResults, setLoadingResults] = useState(false);
-  const [deletScores, setDeletScores] = useState<
-    (
-      | {
-          name: string;
-          score: string;
-          rank_score: string;
-          prediction: string;
-        }[]
-      | null
-    )[]
-  >([]);
+  const createTheInfoSection = () => {
+    const toRemove = ["_id", "job", "createdAt", "updatedAt", "version", "id"];
+    if (eqtlRes) {
+      const list = Object.keys(eqtlRes.eqtl_params).filter(
+        (x) => !toRemove.includes(x)
+      );
 
-  const { TblContainer, TblHead, TblPagination, recordsAfterPaging } = useTable(
-    snpResults,
-    snpHeader,
-    [10, 15, 20],
-    snpResults.length
-  );
-
-  const createHeaders = (headers: string[]) => {
-    const deletHead = headers.slice(0, 9);
-    deletHead.push(headers[headers.length - 1]);
-    const dcd = deletHead.map((ele, i) => {
-      return {
-        id: ele.toLowerCase(),
-        label: ele,
-        disableSorting: true,
-      };
-    });
-    dcd.unshift({ id: "123", label: "", disableSorting: true });
-    setSnpHeader(dcd);
-  };
-
-  const getScores = (headers: string[], allines: string[]) => {
-    const deletHead = headers.slice(10);
-    deletHead.splice(-1);
-
-    const deletBody = allines.slice(1).map((list_string: string) => {
-      const list = list_string.split("\t");
-      const temp = list.slice(10);
-      temp.splice(-1);
-      return temp;
-    });
-
-    const result = createScoresObject(deletHead, deletBody);
-    setDeletScores(result);
-  };
-
-  const createTableBody = (allines: string[]) => {
-    const ddd = allines
-      .filter((line) => line !== "")
-      .slice(1)
-      .map((list_string: string) => {
-        const list = list_string.split("\t");
-        const temp = list.slice(0, 9);
-        temp.push(list[list.length - 1]);
-        return temp;
-      });
-    setSnpResults(ddd);
-  };
-
-  const createTableSection = (
-    TblContainer: React.FC,
-    TblHead: React.FC,
-    TblPagination: any,
-    recordsAfterPaging: () => any[]
-  ) => {
-    if (snpResults.length > 0) {
-      return (
-        <div className={classes.table_section}>
-          {/*<Paper className={mclasses.pageContent}>*/}
-          <TblContainer>
-            <TblHead />
-            <TableBody>
-              {recordsAfterPaging().map((item, index) => (
-                <ListRow
-                  key={`row${index}`}
-                  item={item}
-                  scores={deletScores[index]}
-                />
-              ))}
-            </TableBody>
-          </TblContainer>
-          <TblPagination />
-          {/*</Paper>*/}
+      const paramsList = (
+        <div className={classes.params_list}>
+          <h3>Selected Parameters</h3>
+          <ul>
+            {list.map((element) => (
+              <li key={element}>
+                <span>{element}</span>
+                <span>{String(eqtlRes.eqtl_params[element])}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       );
-    }
-    return null;
-  };
-
-  const showDownloadButton = () => {
-    if (deletRes && deletRes.status === "completed") {
       return (
-        <div className={classes.download}>
-          <p>
-            The tables below have been chunked and pruned to allow for proper
-            display. Use the buttons below to download the full files.
-          </p>
-          <div className={classes.buttons}>
-            <Button
-              variant="contained"
-              color="primary"
-              className={classes.button}
-              endIcon={<GetAppRounded />}
-              href={`/results${deletRes.outputFile}`}
-            >
-              Download Deleteriousness Results
-            </Button>
+        <div className={classes.info_section}>
+          <h3 className={classes.sub_heading}>Job Information</h3>
+          <div className={classes.info}>
+            {getInfoSection(eqtlRes, classes)}
+            {paramsList}
           </div>
         </div>
       );
     }
-    return null;
-  };
 
-  const createChartSection = () => {
-    if (deletRes && deletRes.status === "completed") {
-      const exons = (
-        <div className={classes.image_tab}>
-          <h3>Exon Locations</h3>
-          <div className={classes.image_box}>
-            <img src={`/results${deletRes!.exon_plot}`} alt="exon plot" />
-          </div>
-        </div>
-      );
-
-      return (
-        <div className={classes.delet_overview}>
-          <h3 className={classes.sub_heading}>Data Overview</h3>
-          <div>{exons}</div>
-        </div>
-      );
-    }
     return false;
-  };
-
-  const showTables = () => {
-    return (
-      <div className={classes.tables}>
-        <h3 className={classes.sub_heading}>Deleteriousness Result Table</h3>
-        {showDownloadButton()}
-        <div className={classes.table_wrapper}>
-          {loadingResults ? (
-            <CircularProgress />
-          ) : (
-            createTableSection(
-              TblContainer,
-              TblHead,
-              TblPagination,
-              recordsAfterPaging
-            )
-          )}
-        </div>
-      </div>
-    );
   };
 
   if (error) {
@@ -215,37 +143,37 @@ const DeleteriousnessResultView: React.FC<
     errorMessage = <p>Message from server: {errorInfo}</p>;
   }
 
+  //Get status object
   useEffect(() => {
     setLoading(true);
     pgwasAxios
-      .get<DeletResult>(`/delet/jobs/${id}`)
+      .get<EqtlResult>(`/${apiPath}/jobs/${id}`)
       .then((result) => {
-        setDeletRes(result.data);
+        setEqtlRes(result.data);
         setLoading(false);
         setError(false);
         if (
           result.data.status === "completed" ||
           result.data.status === "failed"
         ) {
-          // clearInterval(interval.current);
           clearTimeout(timeout.current);
         }
       })
       .catch((e) => {
-        setDeletRes(undefined);
+        setEqtlRes(undefined);
         setLoading(false);
         setError(true);
-        setErrorInfo(e.response.data.message);
-        // clearInterval(interval.current);
+        setErrorInfo(e.response.data);
         clearTimeout(timeout.current);
       });
-  }, [id, reload]);
+  }, [apiPath, id, reload]);
 
+  //controls timer
   useEffect(() => {
     if (
-      deletRes &&
-      !deletRes.longJob &&
-      (deletRes.status === "running" || deletRes.status === "queued")
+      eqtlRes &&
+      !eqtlRes.longJob &&
+      (eqtlRes.status === "running" || eqtlRes.status === "queued")
     ) {
       if (seconds > 0) {
         timeout.current = setTimeout(() => setSeconds(seconds - 1), 1000);
@@ -254,37 +182,13 @@ const DeleteriousnessResultView: React.FC<
         setReload((prev) => prev + 1);
       }
     }
-  }, [deletRes, seconds]);
+  }, [eqtlRes, seconds]);
 
   useEffect(() => {
     return () => {
-      // clearInterval(interval.current);
       clearTimeout(timeout.current);
     };
   }, []);
-
-  useEffect(() => {
-    if (deletRes && deletRes.status === "completed") {
-      if (snpResults.length === 0) {
-        setLoadingResults(true);
-        pgwasAxios
-          .get(`/delet/jobs/output/${id}/outputFile`)
-          .then((response) => {
-            const alllines = response.data.split("\n");
-            const header: string[] = alllines[0].split("\t");
-            createHeaders(header);
-            createTableBody(alllines);
-            getScores(header, alllines);
-            setLoadingResults(false);
-          })
-          .catch((error) => {
-            console.dir(error);
-            setLoadingResults(false);
-          });
-      }
-    }
-    // eslint-disable-next-line
-  }, [deletRes, id]);
 
   return (
     <div className={classes.result_view}>
@@ -295,16 +199,42 @@ const DeleteriousnessResultView: React.FC<
           {errorMessage}
         </div>
       )}
-      {createJobStatus(deletRes, seconds, classes)}
+      {createJobStatus(eqtlRes, seconds, classes)}
       <h2 style={{ marginBottom: "2rem" }}>
-        Results for Job: {deletRes ? deletRes.job_name : id}
+        Results for Job: {eqtlRes ? eqtlRes.job_name : id}
       </h2>
-      {createInfoSection(deletRes, classes)}
-      {createJobFailedReason(deletRes, classes)}
-      {createChartSection()}
-      {showTables()}
+      {createTheInfoSection()}
+      {createJobFailedReason(eqtlRes, classes)}
+      {eqtlRes?.eqtl_params?.GTEx_v8_tissue && (
+        <TableTabs
+          eqtlRes={eqtlRes}
+          apiPath={apiPath}
+          dataset={"Tissue"}
+          jobId={id}
+          classes={classes}
+          tissueName={eqtlRes.eqtl_params.GTEx_v8_tissue}
+        />
+      )}
+      {eqtlRes?.eqtl_params?.CAGE_eqtl === "true" && (
+        <TableTabs
+          eqtlRes={eqtlRes}
+          apiPath={apiPath}
+          dataset={"Cage"}
+          jobId={id}
+          classes={classes}
+        />
+      )}
+      {eqtlRes?.eqtl_params?.Westra_eqtl === "true" && (
+        <TableTabs
+          eqtlRes={eqtlRes}
+          apiPath={apiPath}
+          dataset={"Westra"}
+          jobId={id}
+          classes={classes}
+        />
+      )}
     </div>
   );
 };
 
-export default DeleteriousnessResultView;
+export default EqtlResultView;

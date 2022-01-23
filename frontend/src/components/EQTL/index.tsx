@@ -2,32 +2,32 @@ import React from "react";
 import ToolsLayout from "../../layouts/ToolsLayout";
 import classes from "./index.module.scss";
 import { Route, RouteComponentProps, Switch } from "react-router-dom";
-import EQTLHome from "./Home";
-import EQTLForm from "./Form";
-import EQTLResultList from "./ResultList";
-import EQTLResultView from "./ResultView";
+import EqtlHome from "./Home";
+import EqtlForm from "./Form";
+import EqtlResultList from "./ResultList";
+import EqtlResultView from "./ResultView";
 
 type Props = {};
 
 const EQTL: React.FC<Props & RouteComponentProps> = (props) => {
   return (
     <ToolsLayout
-      title={"Expression Qualitative Trait Loci analysis"}
+      title={"Expression Qualitative Trait Loci Analysis"}
       path={props.match.url}
     >
-      <div className={classes.eqtl}>
+      <div className={classes.eqtl_home}>
         <Switch>
-          <Route exact path={props.match.url} component={EQTLHome} />
-          <Route path={props.match.url + "/form"} component={EQTLForm} />
+          <Route exact path={props.match.url} component={EqtlHome} />
+          <Route path={props.match.url + "/form"} component={EqtlForm} />
           <Route
             exact
             path={props.match.url + "/all_results"}
-            component={EQTLResultList}
+            component={EqtlResultList}
           />
           <Route
             exact
             path={props.match.url + "/result_view/:jobId"}
-            component={EQTLResultView}
+            component={EqtlResultView}
           />
         </Switch>
       </div>

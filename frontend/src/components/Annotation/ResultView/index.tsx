@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import pgwasAxios from "../../../axios-fetches";
-import classes from "./index.module.scss";
+import mainClasses from "./index.module.scss";
+import classes from "../../utility/result_view.module.scss";
 import useTable from "../../../hooks/useTable";
 import {
   AppBar,
@@ -402,7 +403,7 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
   ) => {
     if (snpAnnotResult.length > 0) {
       return (
-        <div className={classes.table_section}>
+        <div className={mainClasses.table_section}>
           {/*<Paper className={mclasses.pageContent}>*/}
           <TblContainer>
             <TblHead />
@@ -433,7 +434,7 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
   const createTableDisgenetSection = () => {
     if (snpDisgenetResult.length > 0) {
       return (
-        <div className={classes.table_section}>
+        <div className={mainClasses.table_section}>
           <Paper className={mclasses.pageContent}>
             <TblContainerDisgenet>
               <TblHeadDisgenet />
@@ -464,16 +465,16 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
   const showDownloadButton = () => {
     if (annotRes && annotRes.status === "completed") {
       return (
-        <div className={classes.download}>
+        <div className={mainClasses.download}>
           <p>
             The tables below have been chunked and pruned to allow for proper
             display. Use the buttons below to download the full files.
           </p>
-          <div className={classes.buttons}>
+          <div className={mainClasses.buttons}>
             <Button
               variant="contained"
               color="primary"
-              className={classes.button}
+              className={mainClasses.button}
               endIcon={<GetAppRounded />}
               href={`/results${annotRes.outputFile}`}
             >
@@ -483,7 +484,7 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
               <Button
                 variant="contained"
                 color="default"
-                className={classes.button}
+                className={mainClasses.button}
                 endIcon={<GetAppRounded />}
                 href={`/results${annotRes.disgenet}`}
               >
@@ -523,11 +524,11 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
   const createTableTabs = () => {
     if (annotRes && annotRes.status === "completed") {
       return (
-        <div className={classes.table_tabs}>
-          <h3 className={classes.sub_heading}>Annotation Result Tables</h3>
+        <div className={mainClasses.table_tabs}>
+          <h3 className={mainClasses.sub_heading}>Annotation Result Tables</h3>
           {showDownloadButton()}
           <AppBar
-            className={classes.tabs_header}
+            className={mainClasses.tabs_header}
             color="default"
             position="static"
           >
@@ -544,7 +545,7 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
               <Tab label="Disgenet" {...a11yProps(4)} />
             </Tabs>
           </AppBar>
-          <div className={classes.panels}>
+          <div className={mainClasses.panels}>
             <TabPanel value={value} index={0}>
               {loadingAnnot ? <CircularProgress /> : null}
               {createTableSection(
@@ -627,7 +628,7 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
   const createInfoSection = () => {
     if (annotRes) {
       const dbList = (
-        <div className={classes.db_list}>
+        <div className={classes.params_list}>
           <h3>Selected Databases</h3>
           <ul>
             <li>
@@ -768,7 +769,7 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
       );
 
       return (
-        <div className={classes.annot_overview}>
+        <div className={classes.chart_section}>
           <h3 className={classes.sub_heading}>Annotation Overview</h3>
           <div className={classes.images}>
             {chart}
