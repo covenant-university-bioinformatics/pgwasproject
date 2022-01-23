@@ -34,9 +34,11 @@
     height: inherit;
     .grid_container {
       padding: 3rem 0;
-      min-height: 35rem;
+      //min-height: 42rem;
       align-items: stretch;
       .grid_element {
+        width: 270px;
+        height: 140px;
         margin-bottom: 1rem;
         //background-color: #ca0dac;
         a {
