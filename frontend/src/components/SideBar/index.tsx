@@ -33,7 +33,12 @@ const SideBar: React.FC<Props> = (props) => {
     setOpen(!open);
   };
 
-  const links = [
+  const links: {
+    title: string;
+    linkTo: string;
+    icon: any;
+    steps?: { title: string; linkTo: string; icon: any }[];
+  }[] = [
     // { title: "Home", linkTo: "/tools", icon: <HomeSharp /> },
     { title: "Liftover", linkTo: "/tools/liftover", icon: <LabelSharp /> },
     {
@@ -42,30 +47,30 @@ const SideBar: React.FC<Props> = (props) => {
       icon: <LabelSharp />,
     },
     { title: "Imputation", linkTo: "/tools/imputation", icon: <LabelSharp /> },
-    {
-      title: "Finemapping",
-      linkTo: "/tools/bayes_finemap",
-      icon: <LabelSharp />,
-      steps: [
-        {
-          title: "SuSie",
-          linkTo: "/tools/bayes_susie",
-          icon: <LabelImportant />,
-        },
-        {
-          title: "FineMap",
-          linkTo: "/tools/bayes_finemap",
-          icon: <LabelImportant />,
-        },
-        {
-          title: "Paintor",
-          linkTo: "/tools/bayes_paintor",
-          icon: <LabelImportant />,
-        },
-      ],
-    },
-    // { title: "SuSie", linkTo: "/tools/bayes_susie", icon: <LabelSharp /> },
-    // { title: "FineMap", linkTo: "/tools/bayes_finemap", icon: <LabelSharp /> },
+    // {
+    //   title: "Finemapping",
+    //   linkTo: "/tools/bayes_finemap",
+    //   icon: <LabelSharp />,
+    //   steps: [
+    //     {
+    //       title: "SuSie",
+    //       linkTo: "/tools/bayes_susie",
+    //       icon: <LabelImportant />,
+    //     },
+    //     {
+    //       title: "FineMap",
+    //       linkTo: "/tools/bayes_finemap",
+    //       icon: <LabelImportant />,
+    //     },
+    //     {
+    //       title: "Paintor",
+    //       linkTo: "/tools/bayes_paintor",
+    //       icon: <LabelImportant />,
+    //     },
+    //   ],
+    // },
+    { title: "SuSie", linkTo: "/tools/bayes_susie", icon: <LabelSharp /> },
+    { title: "FineMap", linkTo: "/tools/bayes_finemap", icon: <LabelSharp /> },
     // { title: "Paintor", linkTo: "/tools/bayes_paintor", icon: <LabelSharp /> },
     { title: "Annotation", linkTo: "/tools/annotation", icon: <LabelSharp /> },
     {
