@@ -12,7 +12,7 @@ import {
 } from "../utility/general_utils";
 import pgwasAxios from "../../axios-fetches";
 import { PersonAdd } from "@material-ui/icons";
-import { RouteComponentProps } from "react-router-dom";
+import { Link, RouteComponentProps } from "react-router-dom";
 
 type Props = {};
 
@@ -135,6 +135,12 @@ const SignUp: React.FC<Props & RouteComponentProps> = (props) => {
                 )}
               </div>
             </form>
+            <div className={classes.info}>
+              <p>
+                Already registered? Please sign in{" "}
+                <Link to={"/sign_in"}>here</Link>
+              </p>
+            </div>
           </>
         )}
       </div>
