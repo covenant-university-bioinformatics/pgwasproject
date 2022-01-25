@@ -298,6 +298,34 @@ const Tutorials: React.FC<Props> = (props: Props) => {
               </li>
             </ul>
           </div>
+          <div className={classes.eqtl}>
+            <h3>EQTL Analysis</h3>
+            <ul>
+              <li>
+                After clicking on the Execute Analysis button, you will be
+                navigated to a result list. Click on the 'view' button to go to
+                the results page. If you are not logged in, you will be
+                navigated directly to the result view. Please keep the link to
+                this page. If you want us to save your jobs, please sign in.
+              </li>
+              <li>
+                After clicking on the view link, you will see the status of the
+                job, and some tables with information about your jobs. (This
+                page will also automatically reload if the job is not done, if
+                it is a long job, an email will be sent when it is done)
+              </li>
+              <li>
+                When the job is completed, scroll down to view the results. Use
+                the download buttons to obtain results of your analysis.
+              </li>
+              <li>
+                Please note: The EQTL service can only run 1 concurrent jobs per
+                time due to limited cpu resources, these can cause other
+                people's jobs to be queued for long if someone is running an
+                analysis on a big file.
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
 

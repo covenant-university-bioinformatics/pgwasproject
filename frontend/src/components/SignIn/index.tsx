@@ -129,6 +129,12 @@ const SignIn: React.FC<
               Not registered? Please sign up <Link to={"/sign_up"}>here</Link>
             </p>
           </div>
+          <div className={classes.info}>
+            <p>
+              Forgot Password? Please reset{" "}
+              <Link to={"/forgotpassword"}>here</Link>
+            </p>
+          </div>
         </div>
       </HomeLayout>
     </>

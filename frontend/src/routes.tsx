@@ -14,6 +14,8 @@ import ToolsHome from "./components/ToolsHome";
 import Footer from "./components/Footer";
 import SignUp from "./components/SignUp";
 import SignIn from "./components/SignIn";
+import ForgotPassword from "./components/ForgotPassword";
+import ChangePassword from "./components/ChangePassword";
 import Home from "./Pages/Home/Home";
 import AuthenticatedRoute from "./hoc/AuthenticatedRoute";
 //Lazy imports
@@ -204,10 +206,12 @@ const Routes: React.FC<Props> = (props) => {
             </Suspense>
           )}
         />
-        <Route path="/Documentation" exact component={HomeComingSoon} />
+        <Route path="/documentation" exact component={HomeComingSoon} />
         <Route path="/workflows" exact component={HomeComingSoon} />
         <Route path="/sign_in" exact component={SignIn} />
         <Route path="/sign_up" exact component={SignUp} />
+        <Route path="/forgotpassword" exact component={ForgotPassword} />
+        <Route path="/resetpassword/:token" exact component={ChangePassword} />
         <Route path="/" exact component={Home} />
         <Route
           render={(
