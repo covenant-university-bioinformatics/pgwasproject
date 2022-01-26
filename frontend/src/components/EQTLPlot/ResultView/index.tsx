@@ -202,7 +202,7 @@ const EqtlPlotResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
         setEqtlPlotRes(undefined);
         setLoading(false);
         setError(true);
-        setErrorInfo(e.response.data);
+        setErrorInfo(e.response.data.message);
         // clearInterval(interval.current);
         clearTimeout(timeout.current);
       });

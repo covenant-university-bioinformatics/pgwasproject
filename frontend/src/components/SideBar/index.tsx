@@ -2,7 +2,6 @@ import React, { Fragment } from "react";
 import { NavLink, withRouter } from "react-router-dom";
 import {
   HomeSharp,
-  LabelImportant,
   LabelSharp,
   ArrowRightSharp,
   ArrowDropDownSharp,

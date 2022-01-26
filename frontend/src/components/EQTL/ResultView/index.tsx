@@ -101,8 +101,6 @@ const EqtlResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
   const [seconds, setSeconds] = useState(reloadLimit);
 
   const timeout = useRef<any>(null);
-  let errorMessage: any | null = null;
-  let genMessage: any | null = null;
 
   const createTheInfoSection = () => {
     const toRemove = ["_id", "job", "createdAt", "updatedAt", "version", "id"];
@@ -138,17 +136,13 @@ const EqtlResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
     return false;
   };
 
-  if (error) {
-    genMessage = <p>Issue with fetching job with id: {id}</p>;
-    errorMessage = <p>Message from server: {errorInfo}</p>;
-  }
-
   //Get status object
   useEffect(() => {
     setLoading(true);
     pgwasAxios
       .get<EqtlResult>(`/${apiPath}/jobs/${id}`)
       .then((result) => {
+        console.log(result.data);
         setEqtlRes(result.data);
         setLoading(false);
         setError(false);
@@ -160,10 +154,11 @@ const EqtlResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
         }
       })
       .catch((e) => {
+        console.dir(e);
         setEqtlRes(undefined);
         setLoading(false);
         setError(true);
-        setErrorInfo(e.response.data);
+        setErrorInfo(e.response.data.message);
         clearTimeout(timeout.current);
       });
   }, [apiPath, id, reload]);
@@ -190,13 +185,15 @@ const EqtlResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
     };
   }, []);
 
+  console.log(eqtlRes);
+
   return (
     <div className={classes.result_view}>
       {loading ? <CircularProgress /> : null}
       {error && (
         <div className={classes.error_message}>
-          {genMessage}
-          {errorMessage}
+          <p>Issue with fetching job with id: {id}</p>
+          <p>Message from server: {errorInfo}</p>
         </div>
       )}
       {createJobStatus(eqtlRes, seconds, classes)}

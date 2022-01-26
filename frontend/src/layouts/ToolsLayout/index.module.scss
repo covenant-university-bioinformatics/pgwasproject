@@ -1,11 +1,17 @@
 @import "../../partials/mixins";
 .email_confirmed{
   width: 100%;
-  height: 20px;
+  height: 40px;
   background-color: #f53333;
   color: white;
   text-align: center;
   font-weight: bold;
+  button{
+    cursor: pointer;
+    border-radius: 3px;
+    //border: none;
+    //background-color: #f7bd35;
+  }
   //@include specialMax(1333px) {
   //  text-align: left;
   //}

@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import pgwasAxios from "../../axios-fetches";
 import MainLayout from "../MainLayout";
 import classes from "./index.module.scss";
 import { AppBar, Button, Hidden, Toolbar } from "@material-ui/core";
@@ -9,6 +10,10 @@ import {
   TableChartRounded,
 } from "@material-ui/icons";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
+import {
+  showToastError,
+  showToastSuccess,
+} from "../../components/utility/general_utils";
 
 type Props = {
   title: string;
@@ -17,6 +22,19 @@ type Props = {
 
 const ToolsLayout: React.FC<Props> = ({ title, path, children }) => {
   const { user } = useTypedSelector((state) => state.auth);
+  const [showButton, setShowButton] = useState(true);
+  const resendConfirm = () => {
+    pgwasAxios
+      .get("/auth/resendconfirm")
+      .then((res) => {
+        showToastSuccess("Verification email sent");
+        setShowButton(false);
+      })
+      .catch((error) => {
+        setShowButton(true);
+        showToastError("Could not send email, please try again");
+      });
+  };
   return (
     <MainLayout title={title}>
       {user.username ? (
@@ -24,8 +42,14 @@ const ToolsLayout: React.FC<Props> = ({ title, path, children }) => {
           <div className={classes.email_confirmed}>
             <div className={classes.main}>
               Please you have to verify your email first before you can use any
-              service. Please check this "{user.email}" for the verification
-              email
+              service. Please check "{user.email}" for the verification email.{" "}
+              {showButton && (
+                <p>
+                  If you did not get the email please click{" "}
+                  <button onClick={resendConfirm}>here</button> to resend
+                  confirmation.
+                </p>
+              )}
             </div>
             <div className={classes.sub}>Please confirm email</div>
           </div>
