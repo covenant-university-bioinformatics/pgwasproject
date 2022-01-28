@@ -45,6 +45,11 @@ const authReducer = (
           role: null,
         },
       };
+    case ActionType.CLEAR_ERROR:
+      return {
+        ...state,
+        error: null,
+      };
     case ActionType.AUTH_SUCCESS:
       return {
         ...state,

@@ -296,7 +296,7 @@ const GeneBasedResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
     if (geneBasedRes && geneBasedRes.status === "completed") {
       return (
         <div className={classes.tables}>
-          <h3 className={classes.sub_heading}>GeneBased Result Table</h3>
+          <h3 className={classes.sub_heading}>Gene Based Result Table</h3>
           {showDownloadButton("gene_based_genes_out", "Gene Based")}
           <div className={classes.table_wrapper}>
             {loadingGeneBasedResults ? (
@@ -324,7 +324,7 @@ const GeneBasedResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
     ) {
       return (
         <div className={classes.tables}>
-          <h3 className={classes.sub_heading}>GeneBased Result Table</h3>
+          <h3 className={classes.sub_heading}>Tissue Based Result Table</h3>
           {showDownloadButton(
             "gene_based_tissue_genes_out",
             `Tissue Based: ${geneBasedRes.genebased_params.tissue}`

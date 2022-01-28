@@ -168,3 +168,11 @@ export const signOut = () => {
     }
   };
 };
+
+export const clearError = () => {
+  return async (dispatch: Dispatch<AuthAction>) => {
+    dispatch({
+      type: ActionType.CLEAR_ERROR,
+    });
+  };
+};

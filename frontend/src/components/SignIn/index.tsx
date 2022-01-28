@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import HomeLayout from "../../layouts/HomeLayout";
 import { FormikValues, useFormik } from "formik";
 import * as Yup from "yup";
@@ -26,7 +26,7 @@ type SignInFormData = {
 const SignIn: React.FC<
   Props & RouteComponentProps<{}, {}, { referrer: string }>
 > = (props) => {
-  const { signinUser } = useActions();
+  const { signinUser, clearError } = useActions();
 
   const signIn = useCallback(
     (user: { username: string; password: string }) => {
@@ -34,6 +34,10 @@ const SignIn: React.FC<
     },
     [signinUser]
   );
+
+  const clearSignInError = useCallback(() => {
+    clearError();
+  }, [clearError]);
 
   const { loading, error, success, user } = useTypedSelector(
     (state) => state.auth
@@ -75,6 +79,14 @@ const SignIn: React.FC<
       signIn({ username: values.username, password: values.password });
     },
   });
+
+  useEffect(() => {
+    return () => {
+      clearSignInError();
+    };
+    // eslint-disable-next-line
+  }, []);
+
   return (
     <>
       {redirect}

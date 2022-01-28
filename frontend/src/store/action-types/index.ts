@@ -2,6 +2,7 @@ export enum ActionType {
   AUTH_START = "auth_start",
   AUTH_SUCCESS = "auth_success",
   AUTH_ERROR = "auth_error",
+  CLEAR_ERROR = "clear_error",
   SIGNUP_START = "signup_start",
   SIGNUP_SUCCESS = "signup_success",
   SIGNUP_ERROR = "signup_error",
