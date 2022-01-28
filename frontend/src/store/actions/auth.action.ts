@@ -5,6 +5,7 @@ export type AuthAction =
   | AuthStartAction
   | AuthSuccessAction
   | AuthErrorAction
+  | ClearErrorAction
   | SignupStartAction
   | SignupSuccessAction
   | SignupErrorAction
@@ -27,6 +28,10 @@ interface AuthSuccessAction {
 interface AuthErrorAction {
   type: ActionType.AUTH_ERROR;
   payload: string;
+}
+
+interface ClearErrorAction {
+  type: ActionType.CLEAR_ERROR;
 }
 
 interface SignupStartAction {
