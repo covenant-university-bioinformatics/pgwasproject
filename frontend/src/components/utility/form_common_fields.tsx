@@ -114,7 +114,7 @@ export const SelectFieldsElement: React.FC<SelectFieldsElementProps> = ({
   selectName,
 }: SelectFieldsElementProps) => {
   let article = isVowel(selectName) ? "an" : "a";
-
+  // console.log(formik.getFieldProps(selectVariable));
   return (
     <Grid className={classes.grid} item xs={12} sm={4}>
       <Paper variant="outlined" className={classes.paper}>
@@ -277,19 +277,19 @@ export const CommonFileElement: React.FC<CommonFileElementProps> = ({
             {...textErrorHelper(formik, "filename")}
           />
         </FormControl>
-        {!formik.errors.filename && formik.touched.filename && (
-          <Button
-            // className={classes.form_button}
-            startIcon={<DeleteOutlineSharp />}
-            size="small"
-            type={"button"}
-            variant="contained"
-            color="primary"
-            onClick={handleRemove}
-          >
-            remove
-          </Button>
-        )}
+        {/*{!formik.errors.filename && formik.touched.filename && (*/}
+        {/*  <Button*/}
+        {/*    // className={classes.form_button}*/}
+        {/*    startIcon={<DeleteOutlineSharp />}*/}
+        {/*    size="small"*/}
+        {/*    type={"button"}*/}
+        {/*    variant="contained"*/}
+        {/*    color="primary"*/}
+        {/*    onClick={handleRemove}*/}
+        {/*  >*/}
+        {/*    remove*/}
+        {/*  </Button>*/}
+        {/*)}*/}
       </Paper>
     </Grid>
   );

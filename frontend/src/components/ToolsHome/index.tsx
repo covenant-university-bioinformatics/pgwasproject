@@ -13,7 +13,7 @@ const ToolsHome: React.FC<Props> = (props) => {
     { title: "Liftover", linkTo: "/tools/liftover" },
     {
       title: "LD Structure",
-      linkTo: "/tools/ld_structure",
+      linkTo: "/tools/ldstructure",
       icon: <LabelSharp />,
     },
     { title: "Imputation", linkTo: "/tools/imputation" },

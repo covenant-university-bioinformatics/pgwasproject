@@ -273,3 +273,31 @@ export const createScoresObject = (headers: string[], scores: string[][]) => {
   });
   return result;
 };
+
+export const createComponentTableHeaders = (
+  headers: string[],
+  stateUpdateFunction: any
+) => {
+  const dcd = headers.map((ele, i) => {
+    return {
+      id: ele.toLowerCase(),
+      label: ele,
+      disableSorting: true,
+    };
+  });
+  // dcd.unshift({ id: "123", label: "", disableSorting: true });
+  stateUpdateFunction(dcd);
+};
+
+export const createComponentTableBody = (
+  allines: string[],
+  stateUpdateFunction: any
+) => {
+  const ddd = allines
+    .filter((line) => line !== "")
+    .slice(1)
+    .map((list_string: string) => {
+      return list_string.split("\t");
+    });
+  stateUpdateFunction(ddd);
+};

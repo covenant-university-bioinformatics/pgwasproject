@@ -138,7 +138,7 @@ const Routes: React.FC<Props> = (props) => {
           )}
         />
         <Route
-          path="/tools/ld_structure"
+          path="/tools/ldstructure"
           // component={AuthGuard(LDStructure)}
           render={(props) => (
             <Suspense

@@ -6,6 +6,9 @@ import {
   FormHelperText,
   Grid,
   Paper,
+  TableBody,
+  TableCell,
+  TableRow,
   TextField,
 } from "@material-ui/core";
 import { textErrorHelper } from "./general_utils";
@@ -345,4 +348,92 @@ export const createJobFailedReason = (data: any, classes: any) => {
   } else {
     return null;
   }
+};
+
+type Props = {
+  resultObj: any;
+  params: string;
+  classes: any;
+};
+
+export const CreateInfoSection: React.FC<Props> = ({
+  resultObj,
+  params,
+  classes,
+}: Props) => {
+  const toRemove = ["_id", "job", "createdAt", "updatedAt", "version", "id"];
+
+  if (resultObj) {
+    const list = Object.keys(resultObj[params]).filter(
+      (x) => !toRemove.includes(x)
+    );
+
+    const paramsList = (
+      <div className={classes.params_list}>
+        <h3>Selected Parameters</h3>
+        <ul>
+          {list.map((element) => (
+            <li key={element}>
+              <span>{element}</span>
+              <span>{String(resultObj[params][element])}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+    return (
+      <div className={classes.info_section}>
+        <h3 className={classes.sub_heading}>Job Information</h3>
+        <div className={classes.info}>
+          {getInfoSection(resultObj, classes)}
+          {paramsList}
+        </div>
+      </div>
+    );
+  }
+
+  return null;
+};
+
+export const createTableSection = (
+  TblContainer: React.FC,
+  TblHead: React.FC,
+  TblPagination: any,
+  recordsAfterPaging: () => any[],
+  resultsObjLength: number,
+  resultStatusObj: any,
+  classes: any
+) => {
+  if (
+    resultStatusObj &&
+    resultStatusObj.status === "completed" &&
+    resultsObjLength > 0
+  ) {
+    return (
+      <div className={classes.table_section}>
+        {/*<Paper className={mclasses.pageContent}>*/}
+        <TblContainer>
+          <TblHead />
+          <TableBody>
+            {recordsAfterPaging().map((item, index) => (
+              <TableRow key={`row${index}`}>
+                {item.map((element: string, idx: number) => (
+                  <TableCell key={`idx${idx}`}>
+                    {element === "."
+                      ? "NA"
+                      : element.length > 30
+                      ? `${element.substr(0, 31)} ...`
+                      : element}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </TblContainer>
+        <TblPagination />
+        {/*</Paper>*/}
+      </div>
+    );
+  }
+  return <p>No results for your data. Check if you used correct parameters.</p>;
 };
