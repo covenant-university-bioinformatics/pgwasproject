@@ -7,9 +7,9 @@ import pgwasAxios from "../../../axios-fetches";
 import classes from "../../utility/result_view.module.scss";
 import { CircularProgress } from "@material-ui/core";
 import {
+  CreateInfoSection,
   createJobFailedReason,
   createJobStatus,
-  getInfoSection,
 } from "../../utility/general";
 import { useTypedSelector } from "../../../hooks/useTypedSelector";
 import TableTabs from "./TableTabs";
@@ -102,39 +102,39 @@ const EqtlResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
 
   const timeout = useRef<any>(null);
 
-  const createTheInfoSection = () => {
-    const toRemove = ["_id", "job", "createdAt", "updatedAt", "version", "id"];
-    if (eqtlRes) {
-      const list = Object.keys(eqtlRes.eqtl_params).filter(
-        (x) => !toRemove.includes(x)
-      );
-
-      const paramsList = (
-        <div className={classes.params_list}>
-          <h3>Selected Parameters</h3>
-          <ul>
-            {list.map((element) => (
-              <li key={element}>
-                <span>{element}</span>
-                <span>{String(eqtlRes.eqtl_params[element])}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      );
-      return (
-        <div className={classes.info_section}>
-          <h3 className={classes.sub_heading}>Job Information</h3>
-          <div className={classes.info}>
-            {getInfoSection(eqtlRes, classes)}
-            {paramsList}
-          </div>
-        </div>
-      );
-    }
-
-    return false;
-  };
+  // const createTheInfoSection = () => {
+  //   const toRemove = ["_id", "job", "createdAt", "updatedAt", "version", "id"];
+  //   if (eqtlRes) {
+  //     const list = Object.keys(eqtlRes.eqtl_params).filter(
+  //       (x) => !toRemove.includes(x)
+  //     );
+  //
+  //     const paramsList = (
+  //       <div className={classes.params_list}>
+  //         <h3>Selected Parameters</h3>
+  //         <ul>
+  //           {list.map((element) => (
+  //             <li key={element}>
+  //               <span>{element}</span>
+  //               <span>{String(eqtlRes.eqtl_params[element])}</span>
+  //             </li>
+  //           ))}
+  //         </ul>
+  //       </div>
+  //     );
+  //     return (
+  //       <div className={classes.info_section}>
+  //         <h3 className={classes.sub_heading}>Job Information</h3>
+  //         <div className={classes.info}>
+  //           {getInfoSection(eqtlRes, classes)}
+  //           {paramsList}
+  //         </div>
+  //       </div>
+  //     );
+  //   }
+  //
+  //   return false;
+  // };
 
   //Get status object
   useEffect(() => {
@@ -200,7 +200,12 @@ const EqtlResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
       <h2 style={{ marginBottom: "2rem" }}>
         Results for Job: {eqtlRes ? eqtlRes.job_name : id}
       </h2>
-      {createTheInfoSection()}
+      {/*{createTheInfoSection()}*/}
+      <CreateInfoSection
+        resultObj={eqtlRes}
+        params={"eqtl_params"}
+        classes={classes}
+      />
       {createJobFailedReason(eqtlRes, classes)}
       {eqtlRes?.eqtl_params?.GTEx_v8_tissue && (
         <TableTabs

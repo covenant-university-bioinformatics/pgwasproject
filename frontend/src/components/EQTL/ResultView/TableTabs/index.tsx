@@ -2,18 +2,14 @@ import React, { useEffect, useState } from "react";
 import useTable from "../../../../hooks/useTable";
 import pgwasAxios from "../../../../axios-fetches";
 import { EqtlResult } from "../index";
-import {
-  AppBar,
-  Button,
-  CircularProgress,
-  Tab,
-  TableBody,
-  TableCell,
-  TableRow,
-  Tabs,
-} from "@material-ui/core";
+import { AppBar, Button, CircularProgress, Tab, Tabs } from "@material-ui/core";
 import TabPanel from "../../../Annotation/ResultView/TabPanel";
 import { GetAppRounded } from "@material-ui/icons";
+import { createTableSection } from "../../../utility/general";
+import {
+  createComponentTableHeaders,
+  createComponentTableBody,
+} from "../../../utility/general_utils";
 
 type Props = {
   eqtlRes: EqtlResult | undefined;
@@ -84,33 +80,33 @@ const TableTabs: React.FC<Props> = ({
     recordsAfterPaging: MultiRecordsAfterPaging,
   } = useTable(MultiResults, MultiHeader, [10, 15, 20], MultiResults.length);
 
-  const createComponentTableHeaders = (
-    headers: string[],
-    stateUpdateFunction: any
-  ) => {
-    const dcd = headers.map((ele, i) => {
-      return {
-        id: ele.toLowerCase(),
-        label: ele,
-        disableSorting: true,
-      };
-    });
-    // dcd.unshift({ id: "123", label: "", disableSorting: true });
-    stateUpdateFunction(dcd);
-  };
-
-  const createComponentTableBody = (
-    allines: string[],
-    stateUpdateFunction: any
-  ) => {
-    const ddd = allines
-      .filter((line) => line !== "")
-      .slice(1)
-      .map((list_string: string) => {
-        return list_string.split("\t");
-      });
-    stateUpdateFunction(ddd);
-  };
+  // const createComponentTableHeaders = (
+  //   headers: string[],
+  //   stateUpdateFunction: any
+  // ) => {
+  //   const dcd = headers.map((ele, i) => {
+  //     return {
+  //       id: ele.toLowerCase(),
+  //       label: ele,
+  //       disableSorting: true,
+  //     };
+  //   });
+  //   // dcd.unshift({ id: "123", label: "", disableSorting: true });
+  //   stateUpdateFunction(dcd);
+  // };
+  //
+  // const createComponentTableBody = (
+  //   allines: string[],
+  //   stateUpdateFunction: any
+  // ) => {
+  //   const ddd = allines
+  //     .filter((line) => line !== "")
+  //     .slice(1)
+  //     .map((list_string: string) => {
+  //       return list_string.split("\t");
+  //     });
+  //   stateUpdateFunction(ddd);
+  // };
 
   const showDownloadButton = (dataset: string) => {
     if (eqtlRes && eqtlRes.status === "completed") {
@@ -207,44 +203,44 @@ const TableTabs: React.FC<Props> = ({
     return false;
   };
 
-  const createTableSection = (
-    TblContainer: React.FC,
-    TblHead: React.FC,
-    TblPagination: any,
-    recordsAfterPaging: () => any[],
-    resultsObjLength: number
-  ) => {
-    if (eqtlRes && eqtlRes.status === "completed" && resultsObjLength > 0) {
-      return (
-        <div className={classes.table_section}>
-          {/*<Paper className={mclasses.pageContent}>*/}
-          <TblContainer>
-            <TblHead />
-            <TableBody>
-              {recordsAfterPaging().map((item, index) => (
-                <TableRow key={`row${index}`}>
-                  {item.map((element: string, idx: number) => (
-                    <TableCell key={`idx${idx}`}>
-                      {element === "."
-                        ? "NA"
-                        : element.length > 30
-                        ? `${element.substr(0, 31)} ...`
-                        : element}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
-            </TableBody>
-          </TblContainer>
-          <TblPagination />
-          {/*</Paper>*/}
-        </div>
-      );
-    }
-    return (
-      <p>No results for your data. Check if you used correct parameters.</p>
-    );
-  };
+  // const createTableSection = (
+  //   TblContainer: React.FC,
+  //   TblHead: React.FC,
+  //   TblPagination: any,
+  //   recordsAfterPaging: () => any[],
+  //   resultsObjLength: number
+  // ) => {
+  //   if (eqtlRes && eqtlRes.status === "completed" && resultsObjLength > 0) {
+  //     return (
+  //       <div className={classes.table_section}>
+  //         {/*<Paper className={mclasses.pageContent}>*/}
+  //         <TblContainer>
+  //           <TblHead />
+  //           <TableBody>
+  //             {recordsAfterPaging().map((item, index) => (
+  //               <TableRow key={`row${index}`}>
+  //                 {item.map((element: string, idx: number) => (
+  //                   <TableCell key={`idx${idx}`}>
+  //                     {element === "."
+  //                       ? "NA"
+  //                       : element.length > 30
+  //                       ? `${element.substr(0, 31)} ...`
+  //                       : element}
+  //                   </TableCell>
+  //                 ))}
+  //               </TableRow>
+  //             ))}
+  //           </TableBody>
+  //         </TblContainer>
+  //         <TblPagination />
+  //         {/*</Paper>*/}
+  //       </div>
+  //     );
+  //   }
+  //   return (
+  //     <p>No results for your data. Check if you used correct parameters.</p>
+  //   );
+  // };
 
   const showTableTabs = (dataset: string) => {
     if (
@@ -289,7 +285,9 @@ const TableTabs: React.FC<Props> = ({
                     SMRTblHead,
                     SMRTblPagination,
                     SMRRecordsAfterPaging,
-                    SMRResults.length
+                    SMRResults.length,
+                    eqtlRes,
+                    classes
                   )
                 )}
               </TabPanel>
@@ -303,7 +301,9 @@ const TableTabs: React.FC<Props> = ({
                       TransTblHead,
                       TransTblPagination,
                       TransRecordsAfterPaging,
-                      TransResults.length
+                      TransResults.length,
+                      eqtlRes,
+                      classes
                     )
                   )}
                 </TabPanel>
@@ -318,7 +318,9 @@ const TableTabs: React.FC<Props> = ({
                       MultiTblHead,
                       MultiTblPagination,
                       MultiRecordsAfterPaging,
-                      MultiResults.length
+                      MultiResults.length,
+                      eqtlRes,
+                      classes
                     )
                   )}
                 </TabPanel>

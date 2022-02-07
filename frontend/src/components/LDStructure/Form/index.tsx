@@ -1,134 +1,224 @@
 import React, { useRef, useState } from "react";
 import { FormikValues, useFormik } from "formik";
 import * as Yup from "yup";
-import classes from "./index.module.scss";
-import {
-  generalFormValidationObject,
-  selectIsError,
-  textErrorHelper,
-} from "../../utility/general_utils";
+import classes from "../../utility/form_styles.module.scss";
+// import mainClasses from "./index.module.scss";
+import { selectIsError } from "../../utility/general_utils";
 import {
   Button,
+  CircularProgress,
   FormControl,
   Grid,
   Hidden,
   InputLabel,
   NativeSelect,
   Paper,
-  TextField,
 } from "@material-ui/core";
 import { generalFileForm, selectErrorHelper } from "../../utility/general";
-import { PlayArrow, DeleteOutlineSharp } from "@material-ui/icons";
+import { PlayArrow } from "@material-ui/icons";
+import { useTypedSelector } from "../../../hooks/useTypedSelector";
+import {
+  handleFileUploadChangedCommon,
+  submitToServer,
+} from "../../utility/form_common";
+import {
+  CommonFileElement,
+  CommonTextElement,
+  LoadTestData,
+  SelectFieldsElement,
+} from "../../utility/form_common_fields";
 type Props = {};
 
 type UserFormData = {
   filename: string;
-  marker_name: string | undefined;
-  chromosome: string | undefined;
-  position: string | undefined;
-  pvalue: string | undefined;
-  effect_allele: string | undefined;
-  alternate_allele: string | undefined;
-  beta: string | undefined;
-  or: string | undefined;
-  se: string | undefined;
-  population: string | undefined;
-  r_squared: string | undefined;
-  d_prime: string | undefined;
-  window_size: string | undefined;
+  job_name: string;
+  email?: string;
+  useTest: boolean;
+  marker_name?: string;
+  p_value?: string;
+  population: string;
+  ld_analysis: string;
+  pairwise_snp1?: string;
+  pairwise_snp2?: string;
+  allLDValues_snp1?: string;
+  allLDValues_ld_window_kb?: string;
+  allLDValues_ld_window?: string;
+  allLDValues_ld_window_r2?: string;
+  clumping_clump_p1?: string;
+  clumping_clump_p2?: string;
+  clumping_clump_r2?: string;
+  clumping_clump_kb?: string;
+  clumping_allow_overlap?: string;
+  clumping_use_gene_region_file?: string;
+  clumping_clump_range?: string;
+  clumping_range_border?: string;
 };
 
+type LDAnalysis = "pairwise" | "all_LD_values" | "clumping";
+
 const LdStructureForm: React.FC<Props> = (props) => {
-  // const [loading, setLoading] = useState(false);
+  const { user } = useTypedSelector((state) => state.auth);
   const [uploadFile, setUploadFile] = useState<any>(null);
+  const [useTest, setUseTest] = useState<boolean>(false);
+  const [formValues, setFormValues] = useState<UserFormData>();
   const fileInput = useRef<any>(null);
-  const genomesPopulation = [
-    "CHB",
-    "JPT",
-    "CHS",
-    "CDX",
-    "KHV",
-    "CEU",
-    "TSI",
-    "FIN",
-    "GBR",
-    "IBS",
-    "YRI",
-    "LWK",
-    "MAG",
-    "MSL",
-    "ESN",
-    "ASW",
-    "ACB",
-    "MXL",
-    "PUR",
-    "CLM",
-    "PEL",
-    "BEB",
-    "STU",
-    "ITU",
-  ];
+  const [loading, setLoading] = useState(false);
+  const [ldAnalysisType, setLDAnalysisType] = useState<LDAnalysis>("pairwise");
+
+  const initialValues = {
+    filename: "",
+    job_name: "",
+    ...(!user?.username && { email: "" }),
+    // email: undefined,
+    useTest: false,
+    marker_name: "",
+    p_value: "",
+    population: "",
+    ld_analysis: "pairwise",
+    pairwise_snp1: "",
+    pairwise_snp2: "",
+    allLDValues_snp1: "",
+    allLDValues_ld_window_kb: "",
+    allLDValues_ld_window: "",
+    allLDValues_ld_window_r2: "",
+    clumping_clump_p1: "",
+    clumping_clump_p2: "",
+    clumping_clump_r2: "",
+    clumping_clump_kb: "",
+    clumping_allow_overlap: "",
+    clumping_use_gene_region_file: "",
+    clumping_clump_range: "",
+    clumping_range_border: "",
+  };
+
+  const testValues = {
+    filename: "test.txt",
+    job_name: "LD Values",
+    ...(!user?.username && { email: "" }),
+    useTest: true,
+    // marker_name: "1",
+    // p_value: "2",
+    population: "afr",
+    ld_analysis: "all_LD_values",
+    // pairwise_snp1: "rs2840528",
+    // pairwise_snp2: "rs123",
+    allLDValues_snp1: "rs2840528",
+    allLDValues_ld_window_kb: "50",
+    allLDValues_ld_window: "1000",
+    allLDValues_ld_window_r2: "0.5",
+    // clumping_clump_p1: "0.1",
+    // clumping_clump_p2: "0.05",
+    // clumping_clump_r2: "0.8",
+    // clumping_clump_kb: "50",
+    // clumping_allow_overlap: "No",
+    // clumping_use_gene_region_file: "Yes",
+    // clumping_clump_range: "glist-hg19",
+    // clumping_range_border: "0",
+  };
+
   const formik = useFormik<UserFormData>({
-    initialValues: {
-      filename: "",
-      marker_name: "",
-      chromosome: "",
-      position: "",
-      pvalue: "",
-      effect_allele: "",
-      alternate_allele: "",
-      beta: "",
-      or: "",
-      se: "",
-      population: "",
-      r_squared: "",
-      d_prime: "",
-      window_size: "",
-    },
+    initialValues: formValues || initialValues,
+    enableReinitialize: true,
+
     validationSchema: Yup.object({
-      filename: Yup.string().required("Please upload a file"),
-      ...generalFormValidationObject,
+      job_name: Yup.string().required("Job name is required"),
+      ...(!user?.username && {
+        email: Yup.string().email().required("Email field is required"),
+      }),
       population: Yup.string().required("This input is required"),
-      r_squared: Yup.number()
-        .required("R squared is required")
-        .min(0, "The minimum is zero")
-        .max(1, "the max is 10"),
-      d_prime: Yup.number()
-        .required("D prime is required")
-        .min(0, "The minimum is zero")
-        .max(1, "the max is 1"),
-      window_size: Yup.number()
-        .required("Window size is required")
-        .min(10, "The minimum is zero")
-        .max(1000, "the max is 1"),
+      ld_analysis: Yup.string().required("Please select a value"),
+      ...(ldAnalysisType === "pairwise" && {
+        pairwise_snp1: Yup.string().required("This input is required"),
+        pairwise_snp2: Yup.string().required("This input is required"),
+      }),
+      ...(ldAnalysisType === "all_LD_values" && {
+        allLDValues_snp1: Yup.string().required("This input is required"),
+        allLDValues_ld_window_kb: Yup.number().required(
+          "This value is required and must be a number value"
+        ),
+        allLDValues_ld_window: Yup.number().required(
+          "This value is required and must be a number value"
+        ),
+        allLDValues_ld_window_r2: Yup.number().required(
+          "This value is required and must be a number value"
+        ),
+      }),
+      ...(ldAnalysisType === "clumping" && {
+        filename: Yup.string().required("Please upload a file"),
+        marker_name: Yup.number()
+          .required("Marker name column number is required")
+          .min(1, "The minimum is one")
+          .max(15, "the max is fifteen"),
+        p_value: Yup.number()
+          .required("P-Value column number is required")
+          .min(1, "The minimum is one")
+          .max(15, "the max is fifteen"),
+        clumping_clump_p1: Yup.number().required(
+          "This value is required and must be a number value"
+        ),
+        clumping_clump_p2: Yup.number().required(
+          "This value is required and must be a number value"
+        ),
+        clumping_clump_r2: Yup.number().required(
+          "This value is required and must be a number value"
+        ),
+        clumping_clump_kb: Yup.number().required(
+          "This value is required and must be a number value"
+        ),
+        clumping_allow_overlap: Yup.string().required("Please select a value"),
+        clumping_use_gene_region_file: Yup.string().required(
+          "Please select a value"
+        ),
+        clumping_clump_range: Yup.string().required("This input is required"),
+        clumping_range_border: Yup.string().required("This input is required"),
+      }),
     }),
     onSubmit: (values: FormikValues) => {
-      alert(JSON.stringify(values));
-      const data = new FormData();
-      data.append("file", uploadFile);
-      for (const element in values) {
-        if (values.hasOwnProperty(element)) {
-          data.append(element, values[element]);
-        }
+      // console.log(values);
+      if (user?.username) {
+        submitToServer(
+          values,
+          uploadFile,
+          setLoading,
+          "ldstructure",
+          "ldstructure",
+          user.username,
+          props
+        );
+      } else {
+        submitToServer(
+          values,
+          uploadFile,
+          setLoading,
+          "ldstructure/noauth",
+          "ldstructure",
+          undefined,
+          props
+        );
       }
     },
   });
 
+  const handleUseTest = (event: any) => {
+    formik.resetForm();
+    setUseTest(true);
+    setLDAnalysisType("all_LD_values");
+    setFormValues(testValues);
+    // fileInput.current.querySelector("input").disabled = true;
+  };
+
+  const handleRemoveUseTest = (event: any) => {
+    setUseTest(false);
+    setFormValues(undefined);
+    setLDAnalysisType("pairwise");
+    formik.setFieldValue("filename", "");
+    // fileInput.current.querySelector("input").value = "";
+    // fileInput.current.querySelector("input").disabled = false;
+    formik.resetForm();
+  };
+
   const handleFileUploadChange = (event: any) => {
-    let reader = new FileReader();
-    let file = event.target.files[0];
-
-    if (file) {
-      reader.onloadend = () => {
-        formik.setFieldValue("filename", event.target.files[0].name);
-        setUploadFile(event.target.files[0]);
-
-        formik.setFieldError("filename", undefined);
-      };
-      reader.readAsDataURL(file);
-    } else {
-      formik.setFieldError("filename", "Please upload a file");
-    }
+    handleFileUploadChangedCommon(event, formik, setUploadFile);
   };
 
   const handleFileBlur = (event: any) => {
@@ -145,144 +235,242 @@ const LdStructureForm: React.FC<Props> = (props) => {
     fileInput.current.querySelector("input").value = "";
   };
 
+  const handleLDAnalysisChange = (event: any) => {
+    const { onChange } = formik.getFieldProps("ld_analysis");
+    onChange(event);
+    setLDAnalysisType(event.target.value);
+  };
+
+  const populations = [
+    { variable: "afr", name: "AFR" },
+    { variable: "eur", name: "EUR" },
+    { variable: "amr", name: "AMR" },
+    { variable: "eas", name: "EAS" },
+    { variable: "sas", name: "SAS" },
+  ];
+
+  const yesNoOptions = [
+    { variable: "Yes", name: "YES" },
+    { variable: "No", name: "NO" },
+  ];
+
+  const LDAnalysisOptions = [
+    { variable: "pairwise", name: "Pairwise" },
+    { variable: "all_LD_values", name: "ALL LD Values" },
+    { variable: "clumping", name: "Clumping" },
+  ];
+
+  const clumpRangeOptions = [
+    { variable: "glist-hg19", name: "glist-hg19" },
+    { variable: "glist-hg38", name: "glist-hg38" },
+  ];
+
   return (
-    <div className={classes.LDForm}>
+    <div className={classes.job_form}>
       <form onSubmit={formik.handleSubmit}>
         <Grid container spacing={3}>
+          <LoadTestData
+            classes={classes}
+            useTest={useTest}
+            handleUseTest={handleUseTest}
+            handleRemoveUseTest={handleRemoveUseTest}
+          />
           <div className={classes.header_div}>
-            <h2>Upload a file</h2>
+            <h2>Enter a Job Name</h2>
           </div>
-          <Grid item xs={12}>
-            <Paper elevation={0} className={classes.paper}>
-              <FormControl
-                error={selectIsError(formik, "filename")}
-                className={classes.formControl}
-              >
-                <TextField
-                  id={"filename"}
-                  variant="outlined"
-                  size={"medium"}
-                  type={"file"}
-                  ref={fileInput}
-                  onChange={handleFileUploadChange}
-                  onBlur={handleFileBlur}
-                  {...textErrorHelper(formik, "filename")}
-                />
-              </FormControl>
-              {!formik.errors.filename && formik.touched.filename && (
-                <Button
-                  // className={classes.form_button}
-                  startIcon={<DeleteOutlineSharp />}
-                  size="small"
-                  type={"button"}
-                  variant="contained"
-                  color="primary"
-                  onClick={handleRemove}
-                >
-                  remove
-                </Button>
-              )}
-            </Paper>
-          </Grid>
+          <CommonTextElement
+            classes={classes}
+            formik={formik}
+            label={"Job Name"}
+            textVariable={"job_name"}
+          />
+          {user?.username ? null : (
+            <>
+              <div className={classes.header_div}>
+                <h2>Enter your email</h2>
+              </div>
+              <CommonTextElement
+                classes={classes}
+                formik={formik}
+                label={"Email"}
+                textVariable={"email"}
+              />
+            </>
+          )}
           <div className={classes.header_div}>
-            <h2>Summary statistics column positions</h2>
+            <h2>Tool Parameters</h2>
           </div>
-          {generalFileForm(classes, formik, [
-            "marker_name",
-            "chromosome",
-            "position",
-            "pvalue",
-            "effect_allele",
-            "alternate_allele",
-            "se",
-            "or",
-            "beta",
-          ])}
-
-          <div className={classes.header_div}>
-            <h2>LD structure parameters</h2>
-          </div>
-          <Grid className={classes.grid} item xs={12} sm={6}>
+          <SelectFieldsElement
+            classes={classes}
+            formik={formik}
+            selectElement={populations}
+            selectVariable={"population"}
+            selectName={"Population"}
+          />
+          <Grid className={classes.grid} item xs={12} sm={4}>
             <Paper variant="outlined" className={classes.paper}>
               <FormControl
                 className={classes.formControl}
-                error={selectIsError(formik, "population")}
+                error={selectIsError(formik, "ld_analysis")}
               >
-                <InputLabel htmlFor="population">
-                  Reference Population
+                <InputLabel htmlFor={"ld_analysis"}>
+                  Select type of LD analysis
                 </InputLabel>
-                {/*  Reference Population*/}
                 <NativeSelect
-                  id="population"
-                  {...formik.getFieldProps("population")}
+                  id={"ld_analysis"}
+                  name={"ld_analysis"}
+                  onBlur={formik.handleBlur}
+                  onChange={handleLDAnalysisChange}
+                  value={formik.values.ld_analysis}
                 >
                   <option aria-label="None" value="" />
-                  {/*  Select a reference population*/}
-                  {/*</option>*/}
-                  {genomesPopulation.map((pop, i) => (
-                    <option key={i} value={pop}>
-                      {pop}
+                  {LDAnalysisOptions.map((db, i) => (
+                    <option key={i} value={db.variable}>
+                      {db.name}
                     </option>
                   ))}
                 </NativeSelect>
-                {selectErrorHelper(formik, "population")}
+                {selectErrorHelper(formik, "ld_analysis")}
               </FormControl>
             </Paper>
           </Grid>
-          <Grid className={classes.grid} item xs={12} sm={6}>
-            <Paper variant="outlined" className={classes.paper}>
-              <FormControl className={classes.formControl}>
-                <TextField
-                  id={"r_squared"}
-                  variant="outlined"
-                  label={"R Squared"}
-                  size={"medium"}
-                  {...formik.getFieldProps("r_squared")}
-                  {...textErrorHelper(formik, "r_squared")}
-                />
-              </FormControl>
-            </Paper>
-          </Grid>
-          <Grid className={classes.grid} item xs={12} sm={6}>
-            <Paper variant="outlined" className={classes.paper}>
-              <FormControl className={classes.formControl}>
-                <TextField
-                  id={"d_prime"}
-                  variant="outlined"
-                  size={"medium"}
-                  label={"D Prime"}
-                  {...formik.getFieldProps("d_prime")}
-                  {...textErrorHelper(formik, "d_prime")}
-                />
-              </FormControl>
-            </Paper>
-          </Grid>
-          <Grid className={classes.grid} item xs={12} sm={6}>
-            <Paper variant="outlined" className={classes.paper}>
-              <FormControl className={classes.formControl}>
-                <TextField
-                  id={"window_size"}
-                  variant="outlined"
-                  size={"medium"}
-                  label={"Window Size"}
-                  {...formik.getFieldProps("window_size")}
-                  {...textErrorHelper(formik, "window_size")}
-                />
-              </FormControl>
-            </Paper>
-          </Grid>
+          <div className={classes.header_div}>
+            <h2>Other Tool Parameters</h2>
+          </div>
+          {ldAnalysisType === "pairwise" && (
+            <>
+              <CommonTextElement
+                classes={classes}
+                formik={formik}
+                label={"SNP One"}
+                textVariable={"pairwise_snp1"}
+              />
+
+              <CommonTextElement
+                classes={classes}
+                formik={formik}
+                label={"SNP Two"}
+                textVariable={"pairwise_snp2"}
+              />
+            </>
+          )}
+          {ldAnalysisType === "all_LD_values" && (
+            <>
+              <CommonTextElement
+                classes={classes}
+                formik={formik}
+                label={"SNP ID"}
+                textVariable={"allLDValues_snp1"}
+              />
+              <CommonTextElement
+                classes={classes}
+                formik={formik}
+                label={"LD Window(KB)"}
+                textVariable={"allLDValues_ld_window_kb"}
+              />
+              <CommonTextElement
+                classes={classes}
+                formik={formik}
+                label={"LD Window"}
+                textVariable={"allLDValues_ld_window"}
+              />
+              <CommonTextElement
+                classes={classes}
+                formik={formik}
+                label={"R-squared threshold"}
+                textVariable={"allLDValues_ld_window_r2"}
+              />
+            </>
+          )}
+          {ldAnalysisType === "clumping" && (
+            <>
+              {/*<div className={classes.header_div}>*/}
+              {/*  <h2>Upload a file</h2>*/}
+              {/*</div>*/}
+              <CommonFileElement
+                classes={classes}
+                formik={formik}
+                fileInput={fileInput}
+                handleFileUploadChange={handleFileUploadChange}
+                handleFileBlur={handleFileBlur}
+                handleRemove={handleRemove}
+              />
+              <div className={classes.header_div}>
+                <h2>Summary statistics column positions</h2>
+              </div>
+              {generalFileForm(classes, formik, ["marker_name", "p_value"])}
+              <div className={classes.header_div}>
+                <h2>More Parameters</h2>
+              </div>
+              <CommonTextElement
+                classes={classes}
+                formik={formik}
+                label={"Clump P1"}
+                textVariable={"clumping_clump_p1"}
+              />
+              <CommonTextElement
+                classes={classes}
+                formik={formik}
+                label={"Clump P2"}
+                textVariable={"clumping_clump_p2"}
+              />
+              <CommonTextElement
+                classes={classes}
+                formik={formik}
+                label={"Clump R squared"}
+                textVariable={"clumping_clump_r2"}
+              />
+              <CommonTextElement
+                classes={classes}
+                formik={formik}
+                label={"Clump KB"}
+                textVariable={"clumping_clump_kb"}
+              />
+              <SelectFieldsElement
+                classes={classes}
+                formik={formik}
+                selectElement={yesNoOptions}
+                selectVariable={"clumping_allow_overlap"}
+                selectName={"Clump Allow Overlap"}
+              />
+              <SelectFieldsElement
+                classes={classes}
+                formik={formik}
+                selectElement={yesNoOptions}
+                selectVariable={"clumping_use_gene_region_file"}
+                selectName={"Clump Use Gene Region File"}
+              />
+              <SelectFieldsElement
+                classes={classes}
+                formik={formik}
+                selectElement={clumpRangeOptions}
+                selectVariable={"clumping_clump_range"}
+                selectName={"Clump Range"}
+              />
+              <CommonTextElement
+                classes={classes}
+                formik={formik}
+                label={"Clump Range Border"}
+                textVariable={"clumping_range_border"}
+              />
+            </>
+          )}
         </Grid>
         <div className={classes.button_container}>
-          <Button
-            className={classes.form_button}
-            startIcon={<PlayArrow />}
-            size="large"
-            type={"submit"}
-            variant="contained"
-            color="primary"
-          >
-            Execute <Hidden xsDown> Analysis</Hidden>
-          </Button>
+          {loading ? (
+            <CircularProgress color="secondary" className="progress" />
+          ) : (
+            <Button
+              className={classes.form_button}
+              startIcon={<PlayArrow />}
+              size="large"
+              type={"submit"}
+              variant="contained"
+              color="primary"
+            >
+              Execute <Hidden xsDown> Analysis</Hidden>
+            </Button>
+          )}
         </div>
       </form>
     </div>
