@@ -11,7 +11,7 @@ type Props = {};
 
 const EQTLPlot: React.FC<Props & RouteComponentProps> = (props) => {
   return (
-    <ToolsLayout title={"EQTL SMR Plots"} path={props.match.url}>
+    <ToolsLayout title={"EQTL SMR/Heidi Plots"} path={props.match.url}>
       <div className={classes.genebased}>
         <Switch>
           <Route exact path={props.match.url} component={EqtlPlotHome} />
