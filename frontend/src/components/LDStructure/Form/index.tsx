@@ -175,9 +175,50 @@ const LdStructureForm: React.FC<Props> = (props) => {
     }),
     onSubmit: (values: FormikValues) => {
       // console.log(values);
+      let results;
+      if (values.ld_analysis === "pairwise") {
+        results = {
+          job_name: values.job_name,
+          useTest: values.useTest,
+          population: values.population,
+          ld_analysis: values.ld_analysis,
+          pairwise_snp1: values.pairwise_snp1,
+          pairwise_snp2: values.pairwise_snp2,
+        };
+      } else if (values.ld_analysis === "all_LD_values") {
+        results = {
+          job_name: values.job_name,
+          useTest: values.useTest,
+          population: values.population,
+          ld_analysis: values.ld_analysis,
+          allLDValues_snp1: values.allLDValues_snp1,
+          allLDValues_ld_window_kb: values.allLDValues_ld_window_kb,
+          allLDValues_ld_window: values.allLDValues_ld_window,
+          allLDValues_ld_window_r2: values.allLDValues_ld_window_r2,
+        };
+      } else if (values.ld_analysis === "clumping") {
+        results = {
+          job_name: values.job_name,
+          useTest: values.useTest,
+          population: values.population,
+          ld_analysis: values.ld_analysis,
+          filename: values.filename,
+          marker_name: values.marker_name,
+          p_value: values.p_value,
+          clumping_clump_p1: values.clumping_clump_p1,
+          clumping_clump_p2: values.clumping_clump_p2,
+          clumping_clump_r2: values.clumping_clump_r2,
+          clumping_clump_kb: values.clumping_clump_kb,
+          clumping_allow_overlap: values.clumping_allow_overlap,
+          clumping_use_gene_region_file: values.clumping_use_gene_region_file,
+          clumping_clump_range: values.clumping_clump_range,
+          clumping_range_border: values.clumping_range_border,
+        };
+      }
+      // console.log(results);
       if (user?.username) {
         submitToServer(
-          values,
+          results,
           uploadFile,
           setLoading,
           "ldstructure",
@@ -187,7 +228,7 @@ const LdStructureForm: React.FC<Props> = (props) => {
         );
       } else {
         submitToServer(
-          values,
+          results,
           uploadFile,
           setLoading,
           "ldstructure/noauth",
