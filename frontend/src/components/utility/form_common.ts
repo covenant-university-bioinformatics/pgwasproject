@@ -4,10 +4,10 @@ import {
   showToastError,
   showToastMessage,
 } from "./general_utils";
-import { FormikValues } from "formik";
+// import { FormikValues } from "formik";
 
 export const submitToServer = (
-  values: FormikValues,
+  values: any,
   uploadFile: any,
   setLoading: any,
   apiPath: string,
