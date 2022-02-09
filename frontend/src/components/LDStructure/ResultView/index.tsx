@@ -326,6 +326,7 @@ const LDStructureResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
       {createInfoSection()}
       {createJobFailedReason(ldStructureRes, classes)}
       {ldStructureRes &&
+        ldStructureRes.status === "completed" &&
         ldStructureRes.ldplink_params.ld_analysis ===
           LDAnalysisOptions.PAIRWISE && (
           <LDPairwise
@@ -335,6 +336,7 @@ const LDStructureResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
           />
         )}
       {ldStructureRes &&
+        ldStructureRes.status === "completed" &&
         ldStructureRes.ldplink_params.ld_analysis ===
           LDAnalysisOptions.ALLLDVALUES && (
           <LDAll
@@ -345,6 +347,7 @@ const LDStructureResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
           />
         )}
       {ldStructureRes &&
+        ldStructureRes.status === "completed" &&
         ldStructureRes.ldplink_params.ld_analysis ===
           LDAnalysisOptions.CLUMPING && (
           <LDClump
