@@ -175,7 +175,30 @@ const LdStructureForm: React.FC<Props> = (props) => {
     }),
     onSubmit: (values: FormikValues) => {
       // console.log(values);
-      let results;
+      let results: Partial<{
+        job_name: string;
+        useTest: boolean;
+        population: string;
+        ld_analysis: string;
+        pairwise_snp1: string;
+        pairwise_snp2: string;
+        allLDValues_snp1: string;
+        allLDValues_ld_window_kb: string;
+        allLDValues_ld_window: string;
+        allLDValues_ld_window_r2: string;
+        filename: string;
+        marker_name: string;
+        p_value: string;
+        clumping_clump_p1: string;
+        clumping_clump_p2: string;
+        clumping_clump_r2: string;
+        clumping_clump_kb: string;
+        clumping_allow_overlap: string;
+        clumping_use_gene_region_file: string;
+        clumping_clump_range: string;
+        clumping_range_border: string;
+        email?: string;
+      }> = {};
       if (values.ld_analysis === "pairwise") {
         results = {
           job_name: values.job_name,
@@ -215,7 +238,7 @@ const LdStructureForm: React.FC<Props> = (props) => {
           clumping_range_border: values.clumping_range_border,
         };
       }
-      // console.log(results);
+
       if (user?.username) {
         submitToServer(
           results,
@@ -227,6 +250,7 @@ const LdStructureForm: React.FC<Props> = (props) => {
           props
         );
       } else {
+        results.email = values.email;
         submitToServer(
           results,
           uploadFile,
@@ -237,6 +261,8 @@ const LdStructureForm: React.FC<Props> = (props) => {
           props
         );
       }
+
+      console.log(results);
     },
   });
 
