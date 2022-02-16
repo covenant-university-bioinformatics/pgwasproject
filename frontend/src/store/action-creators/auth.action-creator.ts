@@ -78,7 +78,7 @@ export const signinUser = (user: { username: string; password: string }) => {
 
 //Auto sign in on reload
 export const authCheckState = () => {
-  return async (dispacth: Dispatch<AuthAction>) => {
+  return async (dispatch: Dispatch<AuthAction>) => {
     // Get token userId, and exp date from local storage
     //to update to indexed db later
     let authuser = localStorage.getItem("user");
@@ -93,7 +93,7 @@ export const authCheckState = () => {
       if (expirationDate < new Date()) {
         signOut();
       } else {
-        dispacth({
+        dispatch({
           type: ActionType.AUTH_SUCCESS,
           payload: {
             emailConfirmed,
