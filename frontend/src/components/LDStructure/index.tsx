@@ -15,7 +15,11 @@ const LDStructure: React.FC<Props & RouteComponentProps> = (props) => {
       <div className={classes.ldstructure}>
         <Switch>
           <Route exact path={props.match.url} component={LDStructureHome} />
-          <Route path={props.match.url + "/form"} component={LdStructureForm} />
+          <Route
+            exact
+            path={props.match.url + "/form"}
+            component={LdStructureForm}
+          />
           <Route
             exact
             path={props.match.url + "/all_results"}

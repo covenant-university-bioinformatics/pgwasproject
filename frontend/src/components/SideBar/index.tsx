@@ -77,8 +77,13 @@ const SideBar: React.FC<Props> = (props) => {
       linkTo: "/tools/deleteriousness",
       icon: <LabelSharp />,
     },
-    { title: "EQTL", linkTo: "/tools/eqtl", icon: <LabelSharp /> },
-    { title: "EQTL Plot", linkTo: "/tools/eqtlplot", icon: <LabelSharp /> },
+    { title: "EQTL(SMR/HEIDI)", linkTo: "/tools/eqtl", icon: <LabelSharp /> },
+    {
+      title: "EQTL Plot(SMR/HEIDI)",
+      linkTo: "/tools/eqtlplot",
+      icon: <LabelSharp />,
+    },
+    { title: "EQTL-Coloc", linkTo: "/tools/eqtlcoloc", icon: <LabelSharp /> },
     {
       title: "Gene-Based Analysis",
       linkTo: "/tools/genebased",
@@ -89,7 +94,11 @@ const SideBar: React.FC<Props> = (props) => {
       linkTo: "/tools/pathwaybased",
       icon: <LabelSharp />,
     },
-    { title: "Regulation", linkTo: "/tools/regulation", icon: <LabelSharp /> },
+    {
+      title: "Regulation",
+      linkTo: "/tools/regulationhaplor",
+      icon: <LabelSharp />,
+    },
   ];
 
   const renderItems = () => {

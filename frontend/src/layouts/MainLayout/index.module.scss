@@ -56,6 +56,11 @@
       padding: 1rem;
       min-height: 35rem;
       overflow: hidden;
+
+      hr{
+        background-color: rgba(0,0,0,0.2);
+      }
+
       .main_title {
         font-size: 2.6rem;
         margin-bottom: 1rem;

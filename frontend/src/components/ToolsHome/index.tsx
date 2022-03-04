@@ -1,8 +1,7 @@
 import React from "react";
 // import MainLayout from "../../layouts/MainLayout";
-import { LabelImportant, LabelSharp } from "@material-ui/icons";
+import { LabelSharp } from "@material-ui/icons";
 import { Link } from "react-router-dom";
-import { Grid } from "@material-ui/core";
 import classes from "./index.module.scss";
 import HomeLayout from "../../layouts/HomeLayout";
 
@@ -25,39 +24,29 @@ const ToolsHome: React.FC<Props> = (props) => {
       title: "FineMap",
       linkTo: "/tools/bayes_finemap",
     },
-    {
-      title: "Paintor",
-      linkTo: "/tools/bayes_paintor",
-      icon: <LabelImportant />,
-    },
     { title: "Annotation", linkTo: "/tools/annotation" },
     {
       title: "Deleteriousness",
       linkTo: "/tools/deleteriousness",
       icon: <LabelSharp />,
     },
-    { title: "EQTL", linkTo: "/tools/eqtl" },
-    { title: "EQTL Plot", linkTo: "/tools/eqtlplot" },
+    { title: "EQTL-SMR/HEIDI", linkTo: "/tools/eqtl" },
+    { title: "EQTL Plot-SMR/HEIDI", linkTo: "/tools/eqtlplot" },
+    { title: "EQTL-Colocalization", linkTo: "/tools/eqtlcoloc" },
     { title: "Gene-Based Analysis", linkTo: "/tools/genebased" },
     { title: "Pathway-Based Analysis", linkTo: "/tools/pathwaybased" },
-    { title: "Regulation", linkTo: "/tools/regulation" },
+    { title: "Regulation", linkTo: "/tools/regulationhaplor" },
   ];
 
   const constructTabs = () => {
     return links.map((link, i) => {
       return (
-        <Grid
-          className={classes.grid_element}
-          key={`link${i}`}
-          item
-          xs={12}
-          sm={4}
-          md={3}
-        >
-          <Link to={link.linkTo}>
-            <div className={classes.paper}>{link.title}</div>
-          </Link>
-        </Grid>
+        // <div className={classes.tab}>
+        <Link key={i} className={classes.tab} to={link.linkTo}>
+          {link.title}
+          {/*<div className={classes.paper}></div>*/}
+        </Link>
+        // </div>
       );
     });
   };
@@ -71,9 +60,7 @@ const ToolsHome: React.FC<Props> = (props) => {
         <span className={classes.line_bar}>&nbsp;</span>
         {/*<p>We provide the following individual postGWAS tools for analysis</p>*/}
         <div className={classes.main_container}>
-          <Grid container spacing={3} className={classes.grid_container}>
-            {constructTabs()}
-          </Grid>
+          <div className={classes.grid_container}>{constructTabs()}</div>
         </div>
       </div>
     </HomeLayout>

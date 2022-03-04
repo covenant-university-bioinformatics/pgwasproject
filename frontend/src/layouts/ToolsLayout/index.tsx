@@ -65,50 +65,46 @@ const ToolsLayout: React.FC<Props> = ({ title, path, children }) => {
         </div>
       )}
       <div className={classes.tool_appbar}>
-        <AppBar position="static" className={classes.appBar}>
-          <Toolbar variant="dense" className={classes.toolBar}>
-            <NavLink
-              to={path}
-              className={classes.links}
-              activeClassName={classes.selected}
-              exact
-            >
-              <Button startIcon={<HomeRounded />} size="medium" color="inherit">
-                <Hidden xsDown>Index</Hidden>
-              </Button>
-            </NavLink>
-            <NavLink
-              activeClassName={classes.selected}
-              to={path + "/form"}
-              className={classes.links}
-              exact
-            >
-              <Button
-                startIcon={<AddBoxRounded />}
-                size="medium"
-                color="inherit"
-              >
-                <Hidden xsDown>New Analysis</Hidden>
-              </Button>
-            </NavLink>
-            <NavLink
-              activeClassName={classes.selected}
-              to={path + "/all_results"}
-              className={classes.links}
-              exact
-            >
-              <Button
-                startIcon={<TableChartRounded />}
-                size="medium"
-                color="inherit"
-              >
-                <Hidden xsDown>Results (History)</Hidden>
-              </Button>
-            </NavLink>
-          </Toolbar>
-        </AppBar>
-        {children}
+        {/*<AppBar color={"primary"} position="static" className={classes.appBar}>*/}
+        {/*  <Toolbar variant="dense" className={classes.toolBar}>*/}
+        <NavLink
+          to={path}
+          className={classes.links}
+          activeClassName={classes.selected}
+          exact
+        >
+          <Button startIcon={<HomeRounded />} size="medium" color="inherit">
+            <Hidden xsDown>Index</Hidden>
+          </Button>
+        </NavLink>
+        <NavLink
+          activeClassName={classes.selected}
+          to={path + "/form"}
+          className={classes.links}
+          exact
+        >
+          <Button startIcon={<AddBoxRounded />} size="medium" color="inherit">
+            <Hidden xsDown>New Analysis</Hidden>
+          </Button>
+        </NavLink>
+        <NavLink
+          activeClassName={classes.selected}
+          to={path + "/all_results"}
+          className={classes.links}
+          exact
+        >
+          <Button
+            startIcon={<TableChartRounded />}
+            size="medium"
+            color="inherit"
+          >
+            <Hidden xsDown>Results (History)</Hidden>
+          </Button>
+        </NavLink>
+        {/*</Toolbar>*/}
+        {/*</AppBar>*/}
       </div>
+      {children}
     </MainLayout>
   );
 };

@@ -422,8 +422,8 @@ export const createTableSection = (
                     {element === "."
                       ? "NA"
                       : element.length > 30
-                      ? `${element.substr(0, 31)} ...`
-                      : element}
+                      ? `${element.replace(/['"]+/g, "").substr(0, 31)} ...`
+                      : element.replace(/['"]+/g, "")}
                   </TableCell>
                 ))}
               </TableRow>
