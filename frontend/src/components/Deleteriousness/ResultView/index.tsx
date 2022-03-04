@@ -75,6 +75,8 @@ const DeleteriousnessResultView: React.FC<
     )[]
   >([]);
 
+  // console.log(deletScores);
+
   const { TblContainer, TblHead, TblPagination, recordsAfterPaging } = useTable(
     snpResults,
     snpHeader,

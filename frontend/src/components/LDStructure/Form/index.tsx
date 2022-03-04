@@ -262,7 +262,7 @@ const LdStructureForm: React.FC<Props> = (props) => {
         );
       }
 
-      console.log(results);
+      // console.log(results);
     },
   });
 

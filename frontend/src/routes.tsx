@@ -26,9 +26,10 @@ const LDStructure = React.lazy(() => import("./components/LDStructure"));
 const Deleteriousness = React.lazy(
   () => import("./components/Deleteriousness")
 );
-const Regulation = React.lazy(() => import("./components/Regulation"));
+const RegHaploR = React.lazy(() => import("./components/Regulation"));
 const Liftover = React.lazy(() => import("./components/Liftover"));
 const Susie = React.lazy(() => import("./components/Susie"));
+const Coloc = React.lazy(() => import("./components/EQTLColoc"));
 const Paintor = React.lazy(() => import("./components/Paintor"));
 const EQTL = React.lazy(() => import("./components/EQTL"));
 const EQTLPlot = React.lazy(() => import("./components/EQTLPlot"));
@@ -45,7 +46,6 @@ const Routes: React.FC<Props> = (props) => {
       <Switch>
         <Route
           path="/tools/imputation"
-          exact
           render={(props) => (
             <Suspense
               fallback={<div className={"suspense_center"}>Loading...</div>}
@@ -69,7 +69,6 @@ const Routes: React.FC<Props> = (props) => {
         />
         <Route
           path="/tools/bayes_finemap"
-          exact
           render={(props) => (
             <Suspense
               fallback={<div className={"suspense_center"}>Loading...</div>}
@@ -81,7 +80,6 @@ const Routes: React.FC<Props> = (props) => {
         />
         <Route
           path="/tools/bayes_paintor"
-          exact
           render={(props) => (
             <Suspense
               fallback={<div className={"suspense_center"}>Loading...</div>}
@@ -89,11 +87,9 @@ const Routes: React.FC<Props> = (props) => {
               <AuthenticatedRoute Component={Paintor} {...props} />
             </Suspense>
           )}
-          // component={AuthGuard(Paintor)}
         />
         <Route
           path="/tools/bayes_susie"
-          exact
           render={(props) => (
             <Suspense
               fallback={<div className={"suspense_center"}>Loading...</div>}
@@ -101,7 +97,16 @@ const Routes: React.FC<Props> = (props) => {
               <AuthenticatedRoute Component={Susie} {...props} />
             </Suspense>
           )}
-          // component={AuthGuard(Paintor)}
+        />
+        <Route
+          path="/tools/eqtlcoloc"
+          render={(props) => (
+            <Suspense
+              fallback={<div className={"suspense_center"}>Loading...</div>}
+            >
+              <AuthenticatedRoute Component={Coloc} {...props} />
+            </Suspense>
+          )}
         />
         <Route
           path="/tools/deleteriousness"
@@ -115,13 +120,12 @@ const Routes: React.FC<Props> = (props) => {
           // component={AuthGuard(Deleteriousness)}
         />
         <Route
-          path="/tools/Regulation"
-          exact
+          path="/tools/regulationhaplor"
           render={(props) => (
             <Suspense
               fallback={<div className={"suspense_center"}>Loading...</div>}
             >
-              <AuthenticatedRoute Component={Regulation} {...props} />
+              <AuthenticatedRoute Component={RegHaploR} {...props} />
             </Suspense>
           )}
           // component={AuthGuard(Regulation)}

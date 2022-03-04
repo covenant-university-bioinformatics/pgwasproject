@@ -280,8 +280,8 @@ export const createComponentTableHeaders = (
 ) => {
   const dcd = headers.map((ele, i) => {
     return {
-      id: ele.toLowerCase(),
-      label: ele,
+      id: ele.toLowerCase().replace(/['"]+/g, ""),
+      label: ele.replace(/['"]+/g, ""),
       disableSorting: true,
     };
   });
