@@ -188,7 +188,7 @@ const RegHaploRForm: React.FC<Props> = (props) => {
     setUseTest(true);
     setAnalysisTypeState("HaploReg");
     setFormValues(testValues);
-    // fileInput.current.querySelector("input").disabled = true;
+    fileInput.current.querySelector("input").disabled = true;
   };
 
   const handleRemoveUseTest = (event: any) => {
@@ -196,8 +196,8 @@ const RegHaploRForm: React.FC<Props> = (props) => {
     setFormValues(undefined);
     setAnalysisTypeState("HaploReg");
     formik.setFieldValue("filename", "");
-    // fileInput.current.querySelector("input").value = "";
-    // fileInput.current.querySelector("input").disabled = false;
+    fileInput.current.querySelector("input").value = "";
+    fileInput.current.querySelector("input").disabled = false;
     formik.resetForm();
   };
 
