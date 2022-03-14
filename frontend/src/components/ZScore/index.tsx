@@ -4,9 +4,9 @@ import MainLayout from "../../layouts/MainLayout";
 
 type Props = {};
 
-const Paintor: React.FC<Props> = (props) => {
+const ZScore: React.FC<Props> = (props) => {
   return (
-    <MainLayout title={"Bayesian Finemapping - Paintor"}>
+    <MainLayout title={"ZScore"}>
       <div>
         <ComingSoon />
       </div>
@@ -14,4 +14,4 @@ const Paintor: React.FC<Props> = (props) => {
   );
 };
 
-export default Paintor;
+export default ZScore;

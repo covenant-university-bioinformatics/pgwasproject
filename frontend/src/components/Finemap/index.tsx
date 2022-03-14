@@ -6,7 +6,7 @@ type Props = {};
 
 const Finemap: React.FC<Props> = (props) => {
   return (
-    <MainLayout title={"Bayesian Finemapping - FineMap"}>
+    <MainLayout title={"Bayesian Finemapping (Susie & FineMap)"}>
       <div>
         <ComingSoon />
       </div>

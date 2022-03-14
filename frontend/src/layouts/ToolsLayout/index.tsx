@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import pgwasAxios from "../../axios-fetches";
 import MainLayout from "../MainLayout";
 import classes from "./index.module.scss";
-import { AppBar, Button, Hidden, Toolbar } from "@material-ui/core";
+import { Button, Hidden } from "@material-ui/core";
 import { NavLink } from "react-router-dom";
 import {
   AddBoxRounded,

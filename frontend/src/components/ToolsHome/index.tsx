@@ -16,12 +16,9 @@ const ToolsHome: React.FC<Props> = (props) => {
       icon: <LabelSharp />,
     },
     { title: "Imputation", linkTo: "/tools/imputation" },
+    { title: "ZScore", linkTo: "/tools/zscore" },
     {
-      title: "SuSie",
-      linkTo: "/tools/bayes_susie",
-    },
-    {
-      title: "FineMap",
+      title: "Bayes FineMap",
       linkTo: "/tools/bayes_finemap",
     },
     { title: "Annotation", linkTo: "/tools/annotation" },

@@ -18,6 +18,8 @@ import ForgotPassword from "./components/ForgotPassword";
 import ChangePassword from "./components/ChangePassword";
 import Home from "./Pages/Home/Home";
 import AuthenticatedRoute from "./hoc/AuthenticatedRoute";
+import MainLayout from "./layouts/MainLayout";
+
 //Lazy imports
 const Annotation = React.lazy(() => import("./components/Annotation"));
 const Imputation = React.lazy(() => import("./components/Imputation"));
@@ -30,7 +32,7 @@ const RegHaploR = React.lazy(() => import("./components/Regulation"));
 const Liftover = React.lazy(() => import("./components/Liftover"));
 const Susie = React.lazy(() => import("./components/Susie"));
 const Coloc = React.lazy(() => import("./components/EQTLColoc"));
-const Paintor = React.lazy(() => import("./components/Paintor"));
+const ZScore = React.lazy(() => import("./components/ZScore"));
 const EQTL = React.lazy(() => import("./components/EQTL"));
 const EQTLPlot = React.lazy(() => import("./components/EQTLPlot"));
 const PathwayBased = React.lazy(() => import("./components/PathwayBased"));
@@ -48,7 +50,11 @@ const Routes: React.FC<Props> = (props) => {
           path="/tools/imputation"
           render={(props) => (
             <Suspense
-              fallback={<div className={"suspense_center"}>Loading...</div>}
+              fallback={
+                <MainLayout title={"Imputation from Summary Statistics"}>
+                  <div className={"suspense_center"}>Loading...</div>
+                </MainLayout>
+              }
             >
               <AuthenticatedRoute Component={Imputation} {...props} />
             </Suspense>
@@ -59,7 +65,11 @@ const Routes: React.FC<Props> = (props) => {
           path="/tools/annotation"
           render={(props) => (
             <Suspense
-              fallback={<div className={"suspense_center"}>Loading...</div>}
+              fallback={
+                <MainLayout title={"Annotation"}>
+                  <div className={"suspense_center"}>Loading...</div>
+                </MainLayout>
+              }
             >
               {/*{AuthGuard(Annotation)}*/}
               <AuthenticatedRoute Component={Annotation} {...props} />
@@ -71,7 +81,11 @@ const Routes: React.FC<Props> = (props) => {
           path="/tools/bayes_finemap"
           render={(props) => (
             <Suspense
-              fallback={<div className={"suspense_center"}>Loading...</div>}
+              fallback={
+                <MainLayout title={"Bayesian Finemapping (Susie & FineMap)"}>
+                  <div className={"suspense_center"}>Loading...</div>
+                </MainLayout>
+              }
             >
               <AuthenticatedRoute Component={Finemap} {...props} />
             </Suspense>
@@ -79,22 +93,16 @@ const Routes: React.FC<Props> = (props) => {
           // component={AuthGuard(Finemap)}
         />
         <Route
-          path="/tools/bayes_paintor"
+          path="/tools/zscore"
           render={(props) => (
             <Suspense
-              fallback={<div className={"suspense_center"}>Loading...</div>}
+              fallback={
+                <MainLayout title={"Z Score"}>
+                  <div className={"suspense_center"}>Loading...</div>
+                </MainLayout>
+              }
             >
-              <AuthenticatedRoute Component={Paintor} {...props} />
-            </Suspense>
-          )}
-        />
-        <Route
-          path="/tools/bayes_susie"
-          render={(props) => (
-            <Suspense
-              fallback={<div className={"suspense_center"}>Loading...</div>}
-            >
-              <AuthenticatedRoute Component={Susie} {...props} />
+              <AuthenticatedRoute Component={ZScore} {...props} />
             </Suspense>
           )}
         />
@@ -102,7 +110,11 @@ const Routes: React.FC<Props> = (props) => {
           path="/tools/eqtlcoloc"
           render={(props) => (
             <Suspense
-              fallback={<div className={"suspense_center"}>Loading...</div>}
+              fallback={
+                <MainLayout title={"EQTL - Colocalization"}>
+                  <div className={"suspense_center"}>Loading...</div>
+                </MainLayout>
+              }
             >
               <AuthenticatedRoute Component={Coloc} {...props} />
             </Suspense>
@@ -112,7 +124,11 @@ const Routes: React.FC<Props> = (props) => {
           path="/tools/deleteriousness"
           render={(props) => (
             <Suspense
-              fallback={<div className={"suspense_center"}>Loading...</div>}
+              fallback={
+                <MainLayout title={"Deleteriousness"}>
+                  <div className={"suspense_center"}>Loading...</div>
+                </MainLayout>
+              }
             >
               <AuthenticatedRoute Component={Deleteriousness} {...props} />
             </Suspense>
@@ -123,7 +139,11 @@ const Routes: React.FC<Props> = (props) => {
           path="/tools/regulationhaplor"
           render={(props) => (
             <Suspense
-              fallback={<div className={"suspense_center"}>Loading...</div>}
+              fallback={
+                <MainLayout title={"Regulation (HaploR)"}>
+                  <div className={"suspense_center"}>Loading...</div>
+                </MainLayout>
+              }
             >
               <AuthenticatedRoute Component={RegHaploR} {...props} />
             </Suspense>
@@ -135,7 +155,11 @@ const Routes: React.FC<Props> = (props) => {
           // component={AuthGuard(Liftover)}
           render={(props) => (
             <Suspense
-              fallback={<div className={"suspense_center"}>Loading...</div>}
+              fallback={
+                <MainLayout title={"Liftover"}>
+                  <div className={"suspense_center"}>Loading...</div>
+                </MainLayout>
+              }
             >
               <AuthenticatedRoute Component={Liftover} {...props} />
             </Suspense>
@@ -146,7 +170,11 @@ const Routes: React.FC<Props> = (props) => {
           // component={AuthGuard(LDStructure)}
           render={(props) => (
             <Suspense
-              fallback={<div className={"suspense_center"}>Loading...</div>}
+              fallback={
+                <MainLayout title={"LD Structure"}>
+                  <div className={"suspense_center"}>Loading...</div>
+                </MainLayout>
+              }
             >
               <AuthenticatedRoute Component={LDStructure} {...props} />
             </Suspense>
@@ -157,7 +185,11 @@ const Routes: React.FC<Props> = (props) => {
           // component={AuthGuard(EQTL)}
           render={(props) => (
             <Suspense
-              fallback={<div className={"suspense_center"}>Loading...</div>}
+              fallback={
+                <MainLayout title={"EQTL - SMR/HEIDI"}>
+                  <div className={"suspense_center"}>Loading...</div>
+                </MainLayout>
+              }
             >
               <AuthenticatedRoute Component={EQTL} {...props} />
             </Suspense>
@@ -168,7 +200,11 @@ const Routes: React.FC<Props> = (props) => {
           // component={AuthGuard(EQTL)}
           render={(props) => (
             <Suspense
-              fallback={<div className={"suspense_center"}>Loading...</div>}
+              fallback={
+                <MainLayout title={"EQTL SMR/Heidi Plots"}>
+                  <div className={"suspense_center"}>Loading...</div>
+                </MainLayout>
+              }
             >
               <AuthenticatedRoute Component={EQTLPlot} {...props} />
             </Suspense>
@@ -179,7 +215,11 @@ const Routes: React.FC<Props> = (props) => {
           // component={AuthGuard(GeneBased)}
           render={(props) => (
             <Suspense
-              fallback={<div className={"suspense_center"}>Loading...</div>}
+              fallback={
+                <MainLayout title={"Gene Based Analysis"}>
+                  <div className={"suspense_center"}>Loading...</div>
+                </MainLayout>
+              }
             >
               <AuthenticatedRoute Component={GeneBased} {...props} />
             </Suspense>
@@ -190,7 +230,11 @@ const Routes: React.FC<Props> = (props) => {
           // component={AuthGuard(PathwayBased)}
           render={(props) => (
             <Suspense
-              fallback={<div className={"suspense_center"}>Loading...</div>}
+              fallback={
+                <MainLayout title={"Pathway Based Analysis"}>
+                  <div className={"suspense_center"}>Loading...</div>
+                </MainLayout>
+              }
             >
               <AuthenticatedRoute Component={PathwayBased} {...props} />
             </Suspense>
@@ -231,6 +275,8 @@ const Routes: React.FC<Props> = (props) => {
                 alignItems: "center",
                 minHeight: "100vh",
                 backgroundColor: "rgba(0,0,0,0.5)",
+                color: "#fff",
+                fontSize: "2.5rem",
               }}
             >
               404 Not Found! &nbsp; <Link to={props.match.url}> Go Home</Link>

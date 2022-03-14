@@ -40,15 +40,32 @@
   .selected {
     //border-bottom: 2px solid #fff;
     color: #ffff00 !important;
-    background-color: rgb(0, 0, 0);
+    //color: #f8ff98 !important;
+    //background-color: rgb(0, 0, 0);
+    //box-shadow: 0 0 10px 2px rgba(0,0,0,0.8) !important;
+    box-shadow: 5px 3px 5px rgba(0,0,0,0.5) !important;
     //border-radius: 5px;
   }
 
   .links {
     margin: 0 1.25rem;
     padding: 10px;
+
     @include respondMax(ipad-port) {
       margin: 0 0.5rem;
+      button{
+        span{
+          margin: 0 auto;
+        }
+      }
+    }
+
+    @include respondMax(phone-port) {
+      button{
+        span{
+          margin: 0 0 0 -5px;
+        }
+      }
     }
     //color: #fff;
     text-decoration: none;
@@ -58,6 +75,9 @@
       box-shadow: 0px 12px 26px rgba(16, 30, 115, 0.06);
       border-radius: 8px;
       color: #fff;
+      @include respondMax(phone-port) {
+        width: 75px;
+      }
     }
 
     &:nth-of-type(2) {
@@ -65,6 +85,9 @@
       box-shadow: 0px 12px 26px rgba(16, 30, 115, 0.06);
       border-radius: 8px;
       color: #fff;
+      @include respondMax(phone-port) {
+        width: 75px;
+      }
     }
 
     &:nth-of-type(3) {
@@ -72,6 +95,9 @@
       box-shadow: 0px 12px 26px rgba(16, 30, 115, 0.06);
       border-radius: 8px;
       color: #fff;
+      @include respondMax(phone-port) {
+        width: 75px;
+      }
     }
   }
 }

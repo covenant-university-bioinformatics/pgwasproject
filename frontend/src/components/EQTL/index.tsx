@@ -11,10 +11,7 @@ type Props = {};
 
 const EQTL: React.FC<Props & RouteComponentProps> = (props) => {
   return (
-    <ToolsLayout
-      title={"Expression Qualitative Trait Loci Analysis"}
-      path={props.match.url}
-    >
+    <ToolsLayout title={"EQTL - SMR/HEIDI"} path={props.match.url}>
       <div className={classes.eqtl_home}>
         <Switch>
           <Route exact path={props.match.url} component={EqtlHome} />
