@@ -1,17 +1,35 @@
 import React from "react";
-import ComingSoon from "../utility/ComingSoon";
-import MainLayout from "../../layouts/MainLayout";
+import ToolsLayout from "../../layouts/ToolsLayout";
+import classes from "./index.module.scss";
+import { Route, RouteComponentProps, Switch } from "react-router-dom";
+import EqtlColocHome from "./Home";
+import EqtlColocForm from "./Form";
+import EqtlColocResultList from "./ResultList";
+import EqtlColocResultView from "./ResultView";
 
 type Props = {};
 
-const Coloc: React.FC<Props> = (props) => {
+const EQTLColoc: React.FC<Props & RouteComponentProps> = (props) => {
   return (
-    <MainLayout title={"EQTL Colocalization"}>
-      <div>
-        <ComingSoon />
+    <ToolsLayout title={"EQTL - Colocalization"} path={props.match.url}>
+      <div className={classes.eqtlcoloc_home}>
+        <Switch>
+          <Route exact path={props.match.url} component={EqtlColocHome} />
+          <Route path={props.match.url + "/form"} component={EqtlColocForm} />
+          <Route
+            exact
+            path={props.match.url + "/all_results"}
+            component={EqtlColocResultList}
+          />
+          <Route
+            exact
+            path={props.match.url + "/result_view/:jobId"}
+            component={EqtlColocResultView}
+          />
+        </Switch>
       </div>
-    </MainLayout>
+    </ToolsLayout>
   );
 };
 
-export default Coloc;
+export default EQTLColoc;

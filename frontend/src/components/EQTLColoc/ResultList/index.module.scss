@@ -1,0 +1,19 @@
+.result_list{
+   position: relative;
+  .paper{
+    overflow-x: auto;
+    margin-right: auto;
+    margin-left: auto;
+  }
+  .loading{
+    position: absolute;
+    left: 50%;
+  }
+  .error{
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    color: red;
+    font-weight: bold;
+  }
+}
