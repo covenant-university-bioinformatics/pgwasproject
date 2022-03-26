@@ -65,6 +65,7 @@ const ResultList: React.FC<Props & RouteComponentProps> = ({
           setTotal(response.data.total);
         })
         .catch((error) => {
+          console.dir(error);
           setLoading(false);
           setError(getErrorMessage(error));
         });

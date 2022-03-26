@@ -23,46 +23,43 @@ type JobParam = {
   jobId: string;
 };
 
-export type EqtlColocResult = {
+type ZscoreResult = {
   _id: string;
   jobUID: string;
   job_name: string;
   inputFile: string;
   status: string;
-  colocSummaryFile: string;
-  colocResultsFile: string;
+  zscoreFile: string;
   failed_reason: string;
   longJob: boolean;
   version: number;
   completionTime: string;
-  eqtlcoloc_params: {
-    GTEX8tissue: string;
-    p_one: string;
-    p_two: string;
-    p_twelve: string;
-    type: string;
-    s_prop: number;
+  zscore_params: {
+    useTest: boolean;
+    beta: number;
+    se: number;
+    pvalue: number;
     [key: string]: any;
   };
   [key: string]: any;
 };
 
-const EqtlColocResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
+const ZscoreResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
   props
 ) => {
   const { user } = useTypedSelector((state) => state.auth);
 
   let apiPath = "";
   if (user?.username) {
-    apiPath = "eqtlcoloc";
+    apiPath = "zscore";
   } else {
-    apiPath = "eqtlcoloc/noauth";
+    apiPath = "zscore/noauth";
   }
 
   const reloadLimit = 60;
   const { jobId: id } = props.match.params;
 
-  const [eqtlColocRes, setEqtlColocRes] = useState<EqtlColocResult | undefined>(
+  const [zscoreRes, setZscoreRes] = useState<ZscoreResult | undefined>(
     undefined
   );
 
@@ -72,31 +69,23 @@ const EqtlColocResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
   const [reload, setReload] = useState(0);
   const [seconds, setSeconds] = useState(reloadLimit);
 
-  const [colocResults, setColocResults] = useState<string[][]>([]);
-  const [colocResultHeader, setColocResultHeader] = useState<
+  const [zscoreResults, setZscoreResults] = useState<string[][]>([]);
+  const [zscoreResultHeader, setZscoreResultHeader] = useState<
     { id: string; label: string; disableSorting: boolean }[]
   >([]);
   const [loadingResults, setLoadingResults] = useState(false);
 
   const { TblContainer, TblHead, TblPagination, recordsAfterPaging } = useTable(
-    colocResults,
-    colocResultHeader,
+    zscoreResults,
+    zscoreResultHeader,
     [10, 15, 20],
-    colocResults.length
+    zscoreResults.length
   );
-
-  const [summaryResults, setSummaryResults] = useState<string[]>([]);
-  const [summaryHeader, setSummaryHeader] = useState<string[]>([]);
-  const [loadingSummary, setLoadingSummary] = useState(false);
 
   const timeout = useRef<any>(null);
 
   const showDownloadButton = (download: string, title: string) => {
-    if (
-      eqtlColocRes &&
-      eqtlColocRes.status === "completed" &&
-      eqtlColocRes[download]
-    ) {
+    if (zscoreRes && zscoreRes.status === "completed" && zscoreRes[download]) {
       return (
         <div className={classes.download}>
           <p>
@@ -109,7 +98,8 @@ const EqtlColocResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
               color="primary"
               className={classes.button}
               endIcon={<GetAppRounded />}
-              href={`/results${eqtlColocRes[download]}`}
+              href={`/results${zscoreRes[download]}`}
+              target={"_blank"}
             >
               Download {title} Results
             </Button>
@@ -124,9 +114,9 @@ const EqtlColocResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
   useEffect(() => {
     setLoading(true);
     pgwasAxios
-      .get<EqtlColocResult>(`/${apiPath}/jobs/${id}`)
+      .get<ZscoreResult>(`/${apiPath}/jobs/${id}`)
       .then((result) => {
-        setEqtlColocRes(result.data);
+        setZscoreRes(result.data);
         setLoading(false);
         setError(false);
         if (
@@ -138,7 +128,7 @@ const EqtlColocResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
       })
       .catch((e) => {
         console.dir(e);
-        setEqtlColocRes(undefined);
+        setZscoreRes(undefined);
         setLoading(false);
         setError(true);
         setErrorInfo(e.response.data.message);
@@ -149,9 +139,9 @@ const EqtlColocResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
   //controls timer
   useEffect(() => {
     if (
-      eqtlColocRes &&
-      !eqtlColocRes.longJob &&
-      (eqtlColocRes.status === "running" || eqtlColocRes.status === "queued")
+      zscoreRes &&
+      !zscoreRes.longJob &&
+      (zscoreRes.status === "running" || zscoreRes.status === "queued")
     ) {
       if (seconds > 0) {
         timeout.current = setTimeout(() => setSeconds(seconds - 1), 1000);
@@ -160,7 +150,7 @@ const EqtlColocResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
         setReload((prev) => prev + 1);
       }
     }
-  }, [eqtlColocRes, seconds]);
+  }, [zscoreRes, seconds]);
 
   useEffect(() => {
     return () => {
@@ -168,17 +158,18 @@ const EqtlColocResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
     };
   }, []);
 
+  //Gets file
   useEffect(() => {
-    if (eqtlColocRes && eqtlColocRes.status === "completed") {
-      if (eqtlColocRes.colocResultsFile) {
+    if (zscoreRes && zscoreRes.status === "completed") {
+      if (zscoreRes.zscoreFile) {
         setLoadingResults(true);
         pgwasAxios
-          .get(`/${apiPath}/jobs/output/${id}/colocResultsFile`)
+          .get(`/${apiPath}/jobs/output/${id}/zscoreFile`)
           .then((response) => {
             const alllines = response.data.split("\n");
             const header: string[] = alllines[0].split("\t");
-            createComponentTableHeaders(header, setColocResultHeader);
-            createComponentTableBody(alllines, setColocResults);
+            createComponentTableHeaders(header, setZscoreResultHeader);
+            createComponentTableBody(alllines, setZscoreResults);
             setLoadingResults(false);
           })
           .catch((error) => {
@@ -188,28 +179,7 @@ const EqtlColocResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
       }
     }
     // eslint-disable-next-line
-  }, [eqtlColocRes, id]);
-
-  useEffect(() => {
-    if (eqtlColocRes && eqtlColocRes.status === "completed") {
-      if (eqtlColocRes.colocSummaryFile) {
-        setLoadingSummary(true);
-        pgwasAxios
-          .get(`/${apiPath}/jobs/output/${id}/colocSummaryFile`)
-          .then((response) => {
-            const alllines = response.data.split("\n");
-            setSummaryHeader(alllines[0].split("\t"));
-            setSummaryResults(alllines[1].split("\t"));
-            setLoadingSummary(false);
-          })
-          .catch((error) => {
-            console.dir(error);
-            setLoadingSummary(false);
-          });
-      }
-    }
-    // eslint-disable-next-line
-  }, [eqtlColocRes, id]);
+  }, [zscoreRes, id]);
 
   return (
     <div className={classes.result_view}>
@@ -220,52 +190,22 @@ const EqtlColocResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
           <p>Message from server: {errorInfo}</p>
         </div>
       )}
-      {createJobStatus(eqtlColocRes, seconds, classes)}
+      {createJobStatus(zscoreRes, seconds, classes)}
       <h2 style={{ marginBottom: "2rem" }}>
-        Results for Job: {eqtlColocRes ? eqtlColocRes.job_name : id}
+        Results for Job: {zscoreRes ? zscoreRes.job_name : id}
       </h2>
       <CreateInfoSection
-        resultObj={eqtlColocRes}
-        params={"eqtlcoloc_params"}
+        resultObj={zscoreRes}
+        params={"zscore_params"}
         classes={classes}
       />
-      {createJobFailedReason(eqtlColocRes, classes)}
-      {eqtlColocRes && eqtlColocRes.status === "completed" && (
+      {createJobFailedReason(zscoreRes, classes)}
+      {zscoreRes && zscoreRes.status === "completed" && (
         <>
-          {eqtlColocRes.colocSummaryFile && (
-            <div className={mainClasses.summary}>
-              <h2>Colocalization Summary</h2>
-              <div className={mainClasses.buttons}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  className={mainClasses.button}
-                  endIcon={<GetAppRounded />}
-                  href={`/results${eqtlColocRes["colocSummaryFile"]}`}
-                >
-                  Download Colocalization Summary Results
-                </Button>
-              </div>
-              {loadingSummary ? (
-                <CircularProgress />
-              ) : (
-                <ul className={mainClasses.list}>
-                  {summaryResults.map((ele, index) => (
-                    <li key={`idx${index}`} className={mainClasses.element}>
-                      <span>{summaryHeader[index].replace(/['"]+/g, "")}</span>
-                      <span>{ele.replace(/['"]+/g, "")}</span>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          )}
-          {eqtlColocRes.colocResultsFile && (
+          {zscoreRes.zscoreFile && (
             <div className={classes.tables}>
-              <h3 className={classes.sub_heading}>
-                Colocalization Result Table
-              </h3>
-              {showDownloadButton("colocResultsFile", "Colocalization Results")}
+              <h3 className={classes.sub_heading}>Zscore Result Table</h3>
+              {showDownloadButton("zscoreFile", "Zscore Results")}
               <div
                 className={[classes.table_wrapper, mainClasses.overflow].join(
                   " "
@@ -279,8 +219,8 @@ const EqtlColocResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
                     TblHead,
                     TblPagination,
                     recordsAfterPaging,
-                    colocResults.length,
-                    eqtlColocRes,
+                    zscoreResults.length,
+                    zscoreRes,
                     classes
                   )
                 )}
@@ -293,4 +233,4 @@ const EqtlColocResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
   );
 };
 
-export default EqtlColocResultView;
+export default ZscoreResultView;
