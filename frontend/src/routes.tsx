@@ -30,7 +30,7 @@ const Deleteriousness = React.lazy(
 );
 const RegHaploR = React.lazy(() => import("./components/Regulation"));
 const Liftover = React.lazy(() => import("./components/Liftover"));
-const Susie = React.lazy(() => import("./components/Susie"));
+// const Susie = React.lazy(() => import("./components/Susie"));
 const Coloc = React.lazy(() => import("./components/EQTLColoc"));
 const ZScore = React.lazy(() => import("./components/ZScore"));
 const EQTL = React.lazy(() => import("./components/EQTL"));
@@ -97,7 +97,7 @@ const Routes: React.FC<Props> = (props) => {
           render={(props) => (
             <Suspense
               fallback={
-                <MainLayout title={"Z Score"}>
+                <MainLayout title={"ZScore Analysis"}>
                   <div className={"suspense_center"}>Loading...</div>
                 </MainLayout>
               }
