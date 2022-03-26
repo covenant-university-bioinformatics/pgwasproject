@@ -85,6 +85,14 @@ const ZscoreResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
   const timeout = useRef<any>(null);
 
   const showDownloadButton = (download: string, title: string) => {
+    const fileList = zscoreRes ? zscoreRes[download].split(/(\\|\/)/g) : [];
+    let downloadName = "Zscore.txt";
+
+    if (fileList.length > 0) {
+      // downloadName = fileList[fileList.length - 1].replace(/\.[^/.]+$/, "");
+      downloadName = fileList[fileList.length - 1];
+    }
+
     if (zscoreRes && zscoreRes.status === "completed" && zscoreRes[download]) {
       return (
         <div className={classes.download}>
@@ -100,6 +108,7 @@ const ZscoreResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
               endIcon={<GetAppRounded />}
               href={`/results${zscoreRes[download]}`}
               target={"_blank"}
+              download={downloadName}
             >
               Download {title} Results
             </Button>
