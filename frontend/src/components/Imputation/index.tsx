@@ -1,16 +1,41 @@
 import React from "react";
-import ComingSoon from "../utility/ComingSoon";
-import MainLayout from "../../layouts/MainLayout";
+import classes from "./index.module.scss";
+import { Route, RouteComponentProps, Switch } from "react-router-dom";
+import ImputationHome from "./Home";
+import ImputationForm from "./Form";
+import ToolsLayout from "../../layouts/ToolsLayout";
+import ImputationResultList from "./ResultList";
+import ImputationResultView from "./ResultView";
 
 type Props = {};
 
-const Imputation: React.FC<Props> = (props) => {
+const Imputation: React.FC<Props & RouteComponentProps> = (props) => {
   return (
-    <MainLayout title={"Imputation from Summary Statistics"}>
-      <div>
-        <ComingSoon />
+    <ToolsLayout
+      title={"Imputation from Summary Statistics"}
+      path={props.match.url}
+    >
+      <div className={classes.imputation}>
+        <Switch>
+          <Route exact path={props.match.url} component={ImputationHome} />
+          <Route
+            exact
+            path={props.match.url + "/form"}
+            component={ImputationForm}
+          />
+          <Route
+            exact
+            path={props.match.url + "/all_results"}
+            component={ImputationResultList}
+          />
+          <Route
+            exact
+            path={props.match.url + "/result_view/:jobId"}
+            component={ImputationResultView}
+          />
+        </Switch>
       </div>
-    </MainLayout>
+    </ToolsLayout>
   );
 };
 

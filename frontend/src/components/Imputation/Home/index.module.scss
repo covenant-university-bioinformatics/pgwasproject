@@ -1,0 +1,49 @@
+.impute {
+  .paper {
+    padding: 1rem;
+    h3 {
+      margin: 1rem 0;
+    }
+
+    p {
+      line-height: 1.6;
+      font-size: 1rem;
+      text-align: justify;
+      margin: 10px 0 1.6rem 0;
+    }
+    ul {
+      padding-left: 2rem;
+      list-style-type: square;
+    }
+    ol {
+      padding-left: 2rem;
+    }
+    li {
+      line-height: 1.7;
+    }
+  }
+  .info_table {
+    table {
+      table-layout: fixed;
+      //width: 50%;
+      border-collapse: collapse;
+      border: 3px solid #999;
+    }
+    thead{
+      background-color: #b8c0cb;
+    }
+    td, th {
+      border: 1px solid #737373;
+      padding: 0.5rem;
+    }
+    th{
+      font-weight: bold;
+      font-size: 1.4rem;
+    }
+    tr{
+      &:nth-of-type(even){
+        background-color: #cfcfcf;
+      }
+    }
+  }
+}
