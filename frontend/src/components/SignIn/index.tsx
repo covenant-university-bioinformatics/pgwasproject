@@ -18,7 +18,7 @@ import { useTypedSelector } from "../../hooks/useTypedSelector";
 type Props = {};
 
 type SignInFormData = {
-  username: string | undefined;
+  credential: string | undefined;
   password: string | undefined;
   [key: string]: any;
 };
@@ -29,7 +29,7 @@ const SignIn: React.FC<
   const { signinUser, clearError } = useActions();
 
   const signIn = useCallback(
-    (user: { username: string; password: string }) => {
+    (user: { credential: string; password: string }) => {
       signinUser(user);
     },
     [signinUser]
@@ -61,22 +61,22 @@ const SignIn: React.FC<
 
   const formik = useFormik<SignInFormData>({
     initialValues: {
-      username: "",
+      credential: "",
       password: "",
     },
 
     validationSchema: Yup.object({
-      username: Yup.string()
+      credential: Yup.string()
         .min(5, "Minimum length of five")
-        .max(20, "Max length of 20")
-        .required("Username is required"),
+        .max(40, "Max length of 20")
+        .required("Username/Email is required"),
       password: Yup.string()
         .min(5, "Minimum length of five")
         .max(20, "Max length of 20")
         .required("Password is required"),
     }),
     onSubmit: (values: FormikValues) => {
-      signIn({ username: values.username, password: values.password });
+      signIn({ credential: values.credential, password: values.password });
     },
   });
 
@@ -99,10 +99,10 @@ const SignIn: React.FC<
               <TextField
                 id={"username"}
                 variant={"outlined"}
-                label={"Username"}
+                label={"Username/Email"}
                 size={"medium"}
-                {...formik.getFieldProps("username")}
-                {...textErrorHelper(formik, "username")}
+                {...formik.getFieldProps("credential")}
+                {...textErrorHelper(formik, "credential")}
               />
             </FormControl>
             <FormControl className={classes.formControl}>

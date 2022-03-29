@@ -36,7 +36,7 @@ export const signupUser = (user: {
   };
 };
 
-export const signinUser = (user: { username: string; password: string }) => {
+export const signinUser = (user: { credential: string; password: string }) => {
   return async (dispacth: Dispatch<AuthAction>) => {
     dispacth({
       type: ActionType.AUTH_START,
