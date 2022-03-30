@@ -41,7 +41,7 @@ type UserFormData = {
   alt: string;
   zscore: string;
   af: string;
-  af_available: boolean;
+  af_available: string;
   ASW?: string;
   CEU?: string;
   CHB?: string;
@@ -82,7 +82,7 @@ const ImputationForm: React.FC<Props> = (props) => {
     alt: "",
     zscore: "",
     af: "",
-    af_available: true,
+    af_available: "true",
     ASW: "",
     CEU: "",
     CHB: "",
@@ -114,7 +114,7 @@ const ImputationForm: React.FC<Props> = (props) => {
     alt: "5",
     zscore: "6",
     af: "7",
-    af_available: true,
+    af_available: "true",
     chromosome: "22",
     windowSize: "1",
     wingSize: "0.5",
@@ -154,7 +154,7 @@ const ImputationForm: React.FC<Props> = (props) => {
         .required("Zscore column number is required")
         .min(1, "The minimum is one")
         .max(15, "the max is fifteen"),
-      af_available: Yup.boolean().required("Please select a value"),
+      af_available: Yup.string().required("Please select a value"),
       chromosome: Yup.string().required("Please select a value"),
       windowSize: Yup.string().required("This input is required"),
       wingSize: Yup.string().required("This input is required"),
@@ -223,7 +223,7 @@ const ImputationForm: React.FC<Props> = (props) => {
         ref: values.ref,
         alt: values.alt,
         zscore: values.zscore,
-        af_available: values.af_available === "true",
+        af_available: values.af_available,
         chromosome: values.chromosome,
         windowSize: values.windowSize,
         wingSize: values.wingSize,
