@@ -28,6 +28,10 @@ const SignIn: React.FC<
 > = (props) => {
   const { signinUser, clearError } = useActions();
 
+  const { loading, error, success, user } = useTypedSelector(
+    (state) => state.auth
+  );
+
   const signIn = useCallback(
     (user: { credential: string; password: string }) => {
       signinUser(user);
@@ -38,10 +42,6 @@ const SignIn: React.FC<
   const clearSignInError = useCallback(() => {
     clearError();
   }, [clearError]);
-
-  const { loading, error, success, user } = useTypedSelector(
-    (state) => state.auth
-  );
 
   let redirect: JSX.Element | null = null;
   if (success && user.username) {
