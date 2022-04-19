@@ -9,13 +9,13 @@ const BoxImage: React.FC<Props> = (props: Props) => {
   return (
     <div className={classes.BoxImages}>
       <div className={[classes.Image, classes.ImageOne].join(" ")}>
-        <img src={boxImage1} alt="" />
+        <img src={boxImage1} alt="banner1" />
       </div>
       <div className={[classes.Image, classes.ImageTwo].join(" ")}>
-        <img src={boxImage2} alt="" />
+        <img src={boxImage2} alt="metabolism" />
       </div>
       <div className={[classes.Image, classes.ImageThree].join(" ")}>
-        <img src={boxImage3} alt="" />
+        <img src={boxImage3} alt="banner2" />
       </div>
     </div>
   );

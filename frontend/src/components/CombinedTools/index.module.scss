@@ -1,0 +1,94 @@
+@import "../../partials/mixins";
+
+.section_combined{
+  padding: 7rem 0;
+  margin-top: -5rem;
+  background-color: #eae9e9;
+  width: 100%;
+
+  .container{
+    padding: 1rem;
+    width: 75rem;
+    margin: 0 auto;
+    @include respondMax(tab-land) {
+      width: 100%;
+      padding: 1rem;
+    }
+  }
+
+  .center_text{
+    text-align: center;
+    margin-bottom: 3rem;
+    h2 {
+      font-size: 2rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      display: inline-block;
+      //background-image: linear-gradient(to right, #050505, #f35959);
+      //-webkit-background-clip: text;
+      //color: transparent;
+      letter-spacing: 2px;
+      margin: 0 auto;
+    }
+  }
+
+  .section{
+    display: flex;
+    column-gap: 4rem;
+    @include respondMax(tab-port) {
+      flex-direction: column;
+      row-gap: 2rem;
+    }
+
+    .side_right{
+      flex: 1;
+      position: relative;
+      p{
+        margin-bottom: 2rem;
+        line-height: 1.7;
+        text-align: justify;
+      }
+      .analysis_link{
+        width: 170px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        @include respondMax(tab-port) {
+          bottom: -65px;
+          left: 50%;
+          transform: translateX(-50%);
+        }
+        margin: 1rem;
+        padding: 1rem;
+        border-radius: 5px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        //background-color: #f18888;
+        background: rgb(181,193,250);
+        //background: linear-gradient(152deg, rgba(181,193,250,1) 41%, rgba(245,72,72,1) 100%);
+        color: black;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: all .2s;
+        &:hover{
+          transform: translateY(-3px);
+        }
+      }
+    }
+
+    .side_left{
+      flex: 1;
+      .image_container{
+        .image{
+          width: 100%;
+          height: auto;
+          //box-shadow: 5px 5px 2.5rem rgba(0,0,0,0.4);
+        }
+      }
+    }
+  }
+}
