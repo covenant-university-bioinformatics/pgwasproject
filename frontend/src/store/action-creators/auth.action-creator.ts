@@ -60,14 +60,21 @@ export const signinUser = (user: { credential: string; password: string }) => {
       });
     } catch (error) {
       console.dir(error);
-      let message = "User Sign In Failed";
+      let message = "Sign In Failed";
       if (error?.response) {
         if (Array.isArray(error.response.data?.message)) {
           message = error.response.data.message.join("\n");
-        } else {
+        } else if (error?.response.data?.message) {
           message = error?.response.data?.message;
-        }
+        } // else {
+        //   message = error.response?.data;
+        // }
       }
+
+      if (!message) {
+        message = "Sign In Failed";
+      }
+
       dispacth({
         type: ActionType.AUTH_ERROR,
         payload: message,
@@ -86,8 +93,9 @@ export const authCheckState = () => {
     if (!authuser) {
       signOut();
     } else {
-      const { expiresIn, emailConfirmed, username, role, email } =
-        JSON.parse(authuser);
+      const { expiresIn, emailConfirmed, username, role, email } = JSON.parse(
+        authuser
+      );
 
       const expirationDate = new Date(expiresIn);
       if (expirationDate < new Date()) {
