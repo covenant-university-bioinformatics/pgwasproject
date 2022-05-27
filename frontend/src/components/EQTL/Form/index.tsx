@@ -413,20 +413,87 @@ const EqtlForm: React.FC<Props & RouteComponentProps> = (props) => {
   ];
 
   const eqtlVariables = [
-    { variable: "maf", name: "MAF" },
-    { variable: "diff_freq", name: "diff freq" },
-    { variable: "diff_freq_prop", name: "diff freq prop" },
-    { variable: "cis_wind", name: "cis wind" },
-    { variable: "peqtl_smr", name: "peqtl smr" },
-    { variable: "ld_upper_limit", name: "ld upper limit" },
-    { variable: "ld_lower_limit", name: "ld lower limit" },
-    { variable: "peqtl_heidi", name: "peqtl heidi" },
-    { variable: "heidi_mtd", name: "heidi mtd" },
-    { variable: "heidi_min_m", name: "heidi min m" },
-    { variable: "heidi_max_m", name: "heidi max m" },
-    { variable: "trans_wind", name: "trans wind" },
-    { variable: "set_wind", name: "set wind" },
-    { variable: "ld_multi_snp", name: "ld multi snp" },
+    {
+      variable: "maf",
+      name: "MAF",
+      text:
+        "The minor allele frequency (maf) cutoff value. The default value of this parameter is 0.05",
+    },
+    {
+      variable: "diff_freq",
+      name: "diff freq",
+      text:
+        "A threshold value for allele frequency quality control. The default value is 0.2.",
+    },
+    {
+      variable: "diff_freq_prop",
+      name: "diff freq prop",
+      text:
+        "A threshold value for the maximum proportion of variants that can vary in the population. The default value is 0.05.",
+    },
+    {
+      variable: "cis_wind",
+      name: "cis wind",
+      text:
+        "A value of a window arround cis-eQTLs signal (cis_wind). The default value is 2000 Kb.",
+    },
+    {
+      variable: "peqtl_smr",
+      name: "peqtl smr",
+      text: "A cutoff for SMR test pvalue. The default value is 5.0e-8.",
+    },
+    {
+      variable: "ld_upper_limit",
+      name: "ld upper limit",
+      text:
+        "The upper limit value for R-square value to prune SNPs. The default value is 0.9",
+    },
+    {
+      variable: "ld_lower_limit",
+      name: "ld lower limit",
+      text:
+        "The lower limit value for R-square value to prune SNPs. The default value is 0.05.",
+    },
+    {
+      variable: "peqtl_heidi",
+      name: "peqtl heidi",
+      text: "A cutoff for Heidi test pvalue. The default value is 1.57e-3.",
+    },
+    {
+      variable: "heidi_mtd",
+      name: "heidi mtd",
+      text:
+        "HEIDI test method where 0 indicates the original HEIDI method and the value of 1 indicates the new HEIDI method.The default value is 1.",
+    },
+    {
+      variable: "heidi_min_m",
+      name: "heidi min m",
+      text:
+        "The minimum of f cis-SNPs to perfom Heidi test. The default value is 3",
+    },
+    {
+      variable: "heidi_max_m",
+      name: "heidi max m",
+      text:
+        "The maximum number of eQTLs to be used for Heidi test. The default value is 20.",
+    },
+    {
+      variable: "trans_wind",
+      name: "trans wind",
+      text: "trans window size (trans_wind). The default value is 1000 Kb.",
+    },
+    {
+      variable: "set_wind",
+      name: "set wind",
+      text:
+        "A value for a window size in Kb to select SNPs in the cis-region. The defulat value is -9 which resulting in selecting SNPs in the whole cis-region.",
+    },
+    {
+      variable: "ld_multi_snp",
+      name: "ld multi snp",
+      text:
+        "A cutoff value for R-square value to prune SNPs. The default value is 0.1.",
+    },
   ];
 
   return (
@@ -461,6 +528,7 @@ const EqtlForm: React.FC<Props & RouteComponentProps> = (props) => {
             formik={formik}
             label={"Job Name"}
             textVariable={"job_name"}
+            tooltip={"Enter a name for your job"}
           />
           {user?.username ? null : (
             <>
@@ -472,6 +540,7 @@ const EqtlForm: React.FC<Props & RouteComponentProps> = (props) => {
                 formik={formik}
                 label={"Email"}
                 textVariable={"email"}
+                tooltip={"Enter your email address"}
               />
             </>
           )}
@@ -490,14 +559,46 @@ const EqtlForm: React.FC<Props & RouteComponentProps> = (props) => {
             <h2>Summary statistics column positions</h2>
           </div>
           {generalFileForm(classes, formik, [
-            "marker_name",
-            "effect_allele",
-            "alternate_allele",
-            "effect_allele_freq",
-            "beta",
-            "se",
-            "p_value",
-            "sample_size",
+            {
+              title: "marker_name",
+              text:
+                "the column number of the marker name in the summary statistic file. It can be marker_name, rsid, snpid etc",
+            },
+            {
+              title: "effect_allele",
+              text:
+                "the column number of the reference or effect allele in the summary statistic file",
+            },
+            {
+              title: "alternate_allele",
+              text:
+                "the column number of the alternate allele in the summary statistic file",
+            },
+            {
+              title: "effect_allele_freq",
+              text:
+                "the column number of the reference or effect allele frequency in the summary statistic file",
+            },
+            {
+              title: "beta",
+              text:
+                "the column number of the beta in the summary statistic file. It can be beta, slope etc.",
+            },
+            {
+              title: "se",
+              text:
+                "the column number of the standard error in the summary statistic file. It can be se, standard_error etc.",
+            },
+            {
+              title: "p_value",
+              text:
+                "the column number of the pvalue in the summary statistic file. It can be p, pvalue, pval_nominal etc.",
+            },
+            {
+              title: "sample_size",
+              text:
+                "the column number of the sample size in the summary statistic file. It can be also be n.",
+            },
           ])}
           <div className={classes.header_div}>
             <h2>Tool Parameters</h2>
@@ -508,6 +609,9 @@ const EqtlForm: React.FC<Props & RouteComponentProps> = (props) => {
             selectElement={populations}
             selectVariable={"population"}
             selectName={"Population"}
+            tooltip={
+              "the population from which the GWAS summary has been generated. This parameter is crucial as using a different population group can result in misleading results."
+            }
           />
 
           <SelectFieldsElement
@@ -541,6 +645,7 @@ const EqtlForm: React.FC<Props & RouteComponentProps> = (props) => {
               formik={formik}
               label={element.name}
               textVariable={element.variable}
+              tooltip={element.text}
             />
           ))}
 
@@ -554,6 +659,7 @@ const EqtlForm: React.FC<Props & RouteComponentProps> = (props) => {
             selectElement={trueFalseOptions}
             selectVariable={"Westra_eqtl"}
             selectName={"option (Westra)"}
+            tooltip={"Use Westra dataset for eQTL analysis"}
           />
 
           <SelectFieldsElement
@@ -562,6 +668,7 @@ const EqtlForm: React.FC<Props & RouteComponentProps> = (props) => {
             selectElement={trueFalseOptions}
             selectVariable={"CAGE_eqtl"}
             selectName={"option (CAGE)"}
+            tooltip={"Use CAGE dataset for eQTL analysis"}
           />
 
           <SelectFieldsElement
@@ -570,6 +677,7 @@ const EqtlForm: React.FC<Props & RouteComponentProps> = (props) => {
             selectElement={tissues}
             selectVariable={"GTEx_v8_tissue"}
             selectName={"GTEX V8 Tissue"}
+            tooltip={"Select GTEX v8 tissue"}
           />
         </Grid>
         <div className={classes.button_container}>

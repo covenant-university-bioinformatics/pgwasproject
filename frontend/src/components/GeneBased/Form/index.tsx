@@ -113,8 +113,9 @@ const GeneBasedForm: React.FC<Props & RouteComponentProps> = (props) => {
       synonym: Yup.string().required(
         "Please select how to handle similar SNPs"
       ),
-      up_window: Yup.number(),
-      down_window: Yup.number(),
+      up_window: Yup.number().required("Please enter in a number value"),
+      down_window: Yup.number().required("Please enter in a number value"),
+      tissue: Yup.string().required("Please select a tissue"),
     }),
 
     onSubmit: (values: FormikValues) => {
@@ -307,6 +308,7 @@ const GeneBasedForm: React.FC<Props & RouteComponentProps> = (props) => {
             formik={formik}
             label={"Job Name"}
             textVariable={"job_name"}
+            tooltip={"Enter the name of the job"}
           />
           {user?.username ? null : (
             <>
@@ -318,6 +320,7 @@ const GeneBasedForm: React.FC<Props & RouteComponentProps> = (props) => {
                 formik={formik}
                 label={"Email"}
                 textVariable={"email"}
+                tooltip={"Enter your email"}
               />
             </>
           )}
@@ -338,11 +341,31 @@ const GeneBasedForm: React.FC<Props & RouteComponentProps> = (props) => {
           </div>
 
           {generalFileForm(classes, formik, [
-            "marker_name",
-            "chromosome",
-            "position",
-            "p_value",
-            "sample_size",
+            {
+              title: "marker_name",
+              text:
+                "the column number of the marker name in the summary statistic file. It can be marker_name, rsid, snpid etc",
+            },
+            {
+              title: "chromosome",
+              text:
+                "the column number of the chromosome in the summary statistic file. It can be also be chr",
+            },
+            {
+              title: "position",
+              text:
+                "the column number of the  base pair positions in the summary statistic file. It can be bp",
+            },
+            {
+              title: "p_value",
+              text:
+                "the column number of the pvalue in the summary statistic file. It can be p, pvalue, pval_nominal etc.",
+            },
+            {
+              title: "sample_size",
+              text:
+                "the column number of the sample size in the summary statistic file. It can be also be n.",
+            },
           ])}
 
           <div className={classes.header_div}>
@@ -355,6 +378,9 @@ const GeneBasedForm: React.FC<Props & RouteComponentProps> = (props) => {
             selectElement={populations}
             selectVariable={"population"}
             selectName={"Populations"}
+            tooltip={
+              "The population from which the GWAS summary file has been generated. We supported the five super populations of 1000 genomes."
+            }
           />
 
           <SelectFieldsElement
@@ -363,6 +389,9 @@ const GeneBasedForm: React.FC<Props & RouteComponentProps> = (props) => {
             selectElement={synonyms}
             selectVariable={"synonym"}
             selectName={"Synonyms"}
+            tooltip={
+              "The option that indicates how to deal with synonymous SNP IDs."
+            }
           />
 
           <SelectFieldsElement
@@ -371,6 +400,9 @@ const GeneBasedForm: React.FC<Props & RouteComponentProps> = (props) => {
             selectElement={tissues}
             selectVariable={"tissue"}
             selectName={"Tissue"}
+            tooltip={
+              "The tissue to calculate tissue-specific gene set analysis"
+            }
           />
 
           <CommonTextElement
@@ -378,6 +410,9 @@ const GeneBasedForm: React.FC<Props & RouteComponentProps> = (props) => {
             formik={formik}
             label={"Up Window Size(KB)"}
             textVariable={"up_window"}
+            tooltip={
+              "A value upstream annotation window around genes in kb. The default value is 0"
+            }
           />
 
           <CommonTextElement
@@ -385,6 +420,9 @@ const GeneBasedForm: React.FC<Props & RouteComponentProps> = (props) => {
             formik={formik}
             label={"Down Window Size(KB)"}
             textVariable={"down_window"}
+            tooltip={
+              "A value downstream annotation window around genes in kb. The default value is 0."
+            }
           />
         </Grid>
         <div className={classes.button_container}>

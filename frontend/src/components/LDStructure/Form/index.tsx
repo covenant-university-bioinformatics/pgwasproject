@@ -27,6 +27,8 @@ import {
   LoadTestData,
   SelectFieldsElement,
 } from "../../utility/form_common_fields";
+import { RouteComponentProps } from "react-router-dom";
+
 type Props = {};
 
 type UserFormData = {
@@ -56,7 +58,7 @@ type UserFormData = {
 
 type LDAnalysis = "pairwise" | "all_LD_values" | "clumping";
 
-const LdStructureForm: React.FC<Props> = (props) => {
+const LdStructureForm: React.FC<Props & RouteComponentProps> = (props) => {
   const { user } = useTypedSelector((state) => state.auth);
   const [uploadFile, setUploadFile] = useState<any>(null);
   const [useTest, setUseTest] = useState<boolean>(false);
@@ -350,6 +352,7 @@ const LdStructureForm: React.FC<Props> = (props) => {
             formik={formik}
             label={"Job Name"}
             textVariable={"job_name"}
+            tooltip={"Enter a name for your job"}
           />
           {user?.username ? null : (
             <>
@@ -361,6 +364,7 @@ const LdStructureForm: React.FC<Props> = (props) => {
                 formik={formik}
                 label={"Email"}
                 textVariable={"email"}
+                tooltip={"Enter your email address"}
               />
             </>
           )}
@@ -390,7 +394,6 @@ const LdStructureForm: React.FC<Props> = (props) => {
                   onChange={handleLDAnalysisChange}
                   value={formik.values.ld_analysis}
                 >
-                  <option aria-label="None" value="" />
                   {LDAnalysisOptions.map((db, i) => (
                     <option key={i} value={db.variable}>
                       {db.name}
@@ -411,6 +414,7 @@ const LdStructureForm: React.FC<Props> = (props) => {
                 formik={formik}
                 label={"SNP One"}
                 textVariable={"pairwise_snp1"}
+                tooltip={"first snp for the pairwise calculation"}
               />
 
               <CommonTextElement
@@ -418,6 +422,7 @@ const LdStructureForm: React.FC<Props> = (props) => {
                 formik={formik}
                 label={"SNP Two"}
                 textVariable={"pairwise_snp2"}
+                tooltip={"second snp for the pairwise calculation"}
               />
             </>
           )}
@@ -428,24 +433,32 @@ const LdStructureForm: React.FC<Props> = (props) => {
                 formik={formik}
                 label={"SNP ID"}
                 textVariable={"allLDValues_snp1"}
+                tooltip={"query snp to find all other snps in LD"}
               />
               <CommonTextElement
                 classes={classes}
                 formik={formik}
                 label={"LD Window(KB)"}
                 textVariable={"allLDValues_ld_window_kb"}
+                tooltip={
+                  "Maximum kilobase distance between reported SNP which specifies the window in which to compare snps"
+                }
               />
               <CommonTextElement
                 classes={classes}
                 formik={formik}
                 label={"LD Window"}
                 textVariable={"allLDValues_ld_window"}
+                tooltip={
+                  "Maximum site count between reported variant pairs. We recommend a value higher than 999."
+                }
               />
               <CommonTextElement
                 classes={classes}
                 formik={formik}
                 label={"R-squared threshold"}
                 textVariable={"allLDValues_ld_window_r2"}
+                tooltip={"Minimum r-squared value to report a pair"}
               />
             </>
           )}
@@ -465,7 +478,18 @@ const LdStructureForm: React.FC<Props> = (props) => {
               <div className={classes.header_div}>
                 <h2>Summary statistics column positions</h2>
               </div>
-              {generalFileForm(classes, formik, ["marker_name", "p_value"])}
+              {generalFileForm(classes, formik, [
+                {
+                  title: "marker_name",
+                  text:
+                    "the column number of the marker name in the summary statistic file. It can be marker_name, rsid, snpid etc",
+                },
+                {
+                  title: "p_value",
+                  text:
+                    "the column number of the pvalue in the summary statistic file. It can be p, pvalue, pval_nominal etc.",
+                },
+              ])}
               <div className={classes.header_div}>
                 <h2>More Parameters</h2>
               </div>
@@ -474,24 +498,30 @@ const LdStructureForm: React.FC<Props> = (props) => {
                 formik={formik}
                 label={"Clump P1"}
                 textVariable={"clumping_clump_p1"}
+                tooltip={
+                  "A pvalue threshold for a SNP to be included as an index and its value should be less than or equal to 0.0001. "
+                }
               />
               <CommonTextElement
                 classes={classes}
                 formik={formik}
                 label={"Clump P2"}
                 textVariable={"clumping_clump_p2"}
+                tooltip={"Secondary significance threshold for clumped SNPs"}
               />
               <CommonTextElement
                 classes={classes}
                 formik={formik}
                 label={"Clump R squared"}
                 textVariable={"clumping_clump_r2"}
+                tooltip={"LD threshold for clumping"}
               />
               <CommonTextElement
                 classes={classes}
                 formik={formik}
                 label={"Clump KB"}
                 textVariable={"clumping_clump_kb"}
+                tooltip={"Physical distance threshold for clumping"}
               />
               <SelectFieldsElement
                 classes={classes}
@@ -519,6 +549,9 @@ const LdStructureForm: React.FC<Props> = (props) => {
                 formik={formik}
                 label={"Clump Range Border"}
                 textVariable={"clumping_range_border"}
+                tooltip={
+                  "A window around gene bounds in kilobases. The default value is 0"
+                }
               />
             </>
           )}

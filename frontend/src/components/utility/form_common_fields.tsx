@@ -7,6 +7,7 @@ import {
   Paper,
   TextField,
 } from "@material-ui/core";
+import Tooltip from "@mui/material/Tooltip";
 import { selectIsError, textErrorHelper } from "./general_utils";
 import { selectErrorHelper } from "./general";
 import React from "react";
@@ -99,6 +100,7 @@ type SelectFieldsElementProps = {
   selectElement: { variable: string; name: string }[];
   selectVariable: string;
   selectName: string;
+  tooltip?: string;
 };
 
 const isVowel = (word: string) => {
@@ -112,6 +114,7 @@ export const SelectFieldsElement: React.FC<SelectFieldsElementProps> = ({
   selectElement,
   selectVariable,
   selectName,
+  tooltip,
 }: SelectFieldsElementProps) => {
   let article = isVowel(selectName) ? "an" : "a";
   // console.log(formik.getFieldProps(selectVariable));
@@ -125,17 +128,33 @@ export const SelectFieldsElement: React.FC<SelectFieldsElementProps> = ({
           <InputLabel htmlFor={selectVariable}>
             Select {article} {selectName}
           </InputLabel>
-          <NativeSelect
-            id={selectVariable}
-            {...formik.getFieldProps(selectVariable)}
-          >
-            <option aria-label="None" value="" />
-            {selectElement.map((db, i) => (
-              <option key={i} value={db.variable}>
-                {db.name}
-              </option>
-            ))}
-          </NativeSelect>
+          {tooltip ? (
+            <Tooltip title={tooltip} arrow>
+              <NativeSelect
+                id={selectVariable}
+                {...formik.getFieldProps(selectVariable)}
+              >
+                <option aria-label="None" value="" />
+                {selectElement.map((db, i) => (
+                  <option key={i} value={db.variable}>
+                    {db.name}
+                  </option>
+                ))}
+              </NativeSelect>
+            </Tooltip>
+          ) : (
+            <NativeSelect
+              id={selectVariable}
+              {...formik.getFieldProps(selectVariable)}
+            >
+              <option aria-label="None" value="" />
+              {selectElement.map((db, i) => (
+                <option key={i} value={db.variable}>
+                  {db.name}
+                </option>
+              ))}
+            </NativeSelect>
+          )}
           {selectErrorHelper(formik, selectVariable)}
         </FormControl>
       </Paper>
@@ -147,20 +166,23 @@ export const commonTextElement = (
   classes: any,
   formik: any,
   label: string,
-  textVariable: string
+  textVariable: string,
+  tooltip: string
 ) => {
   return (
     <Grid className={classes.grid} item={true} xs={12} sm={6} md={4}>
       <Paper elevation={0} className={classes.paper}>
         <FormControl className={classes.formControl}>
-          <TextField
-            id={textVariable}
-            variant={"outlined"}
-            label={label}
-            size={"medium"}
-            {...formik.getFieldProps(textVariable)}
-            {...textErrorHelper(formik, textVariable)}
-          />
+          <Tooltip title={tooltip} arrow>
+            <TextField
+              id={textVariable}
+              variant={"outlined"}
+              label={label}
+              size={"medium"}
+              {...formik.getFieldProps(textVariable)}
+              {...textErrorHelper(formik, textVariable)}
+            />
+          </Tooltip>
         </FormControl>
       </Paper>
     </Grid>
@@ -172,6 +194,7 @@ type CommonTextElementProps = {
   formik: any;
   label: string;
   textVariable: string;
+  tooltip?: string;
 };
 
 export const CommonTextElement: React.FC<CommonTextElementProps> = ({
@@ -179,19 +202,33 @@ export const CommonTextElement: React.FC<CommonTextElementProps> = ({
   formik,
   label,
   textVariable,
+  tooltip,
 }: CommonTextElementProps) => {
   return (
     <Grid className={classes.grid} item={true} xs={12} sm={6} md={4}>
       <Paper elevation={0} className={classes.paper}>
         <FormControl className={classes.formControl}>
-          <TextField
-            id={textVariable}
-            variant={"outlined"}
-            label={label}
-            size={"medium"}
-            {...formik.getFieldProps(textVariable)}
-            {...textErrorHelper(formik, textVariable)}
-          />
+          {tooltip ? (
+            <Tooltip title={tooltip} arrow>
+              <TextField
+                id={textVariable}
+                variant={"outlined"}
+                label={label}
+                size={"medium"}
+                {...formik.getFieldProps(textVariable)}
+                {...textErrorHelper(formik, textVariable)}
+              />
+            </Tooltip>
+          ) : (
+            <TextField
+              id={textVariable}
+              variant={"outlined"}
+              label={label}
+              size={"medium"}
+              {...formik.getFieldProps(textVariable)}
+              {...textErrorHelper(formik, textVariable)}
+            />
+          )}
         </FormControl>
       </Paper>
     </Grid>

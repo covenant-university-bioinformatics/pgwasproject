@@ -482,14 +482,46 @@ const EQTLPlotForm: React.FC<Props & RouteComponentProps> = (props) => {
           </div>
 
           {generalFileForm(classes, formik, [
-            "marker_name",
-            "effect_allele",
-            "alternate_allele",
-            "effect_allele_freq",
-            "beta",
-            "se",
-            "p_value",
-            "sample_size",
+            {
+              title: "marker_name",
+              text:
+                "the column number of the marker name in the summary statistic file. It can be marker_name, rsid, snpid etc",
+            },
+            {
+              title: "effect_allele",
+              text:
+                "the column number of the reference or effect allele in the summary statistic file",
+            },
+            {
+              title: "alternate_allele",
+              text:
+                "the column number of the alternate allele in the summary statistic file",
+            },
+            {
+              title: "effect_allele_freq",
+              text:
+                "the column number of the reference or effect allele frequency in the summary statistic file",
+            },
+            {
+              title: "beta",
+              text:
+                "the column number of the beta in the summary statistic file. It can be beta, slope etc.",
+            },
+            {
+              title: "se",
+              text:
+                "the column number of the standard error in the summary statistic file. It can be se, standard_error etc.",
+            },
+            {
+              title: "p_value",
+              text:
+                "the column number of the pvalue in the summary statistic file. It can be p, pvalue, pval_nominal etc.",
+            },
+            {
+              title: "sample_size",
+              text:
+                "the column number of the sample size in the summary statistic file. It can be also be n.",
+            },
           ])}
 
           <div className={classes.header_div}>
