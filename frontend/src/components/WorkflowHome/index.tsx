@@ -133,8 +133,7 @@ const WorkflowHome: React.FC<Props> = (props: Props) => {
           </li>
           <li>
             Geneset file where users can choose the database for the pathway
-            analysis either as msigdb.v4.0.entrez or msigBIOCARTA_KEGG_REACTOME
-            data set.
+            analysis either as msigdb.v4.0.entrez or KEGG_REACTOME data set.
           </li>
         </ol>
         <h3>Parameters for Geneset-based pGWAS analysis</h3>
@@ -181,10 +180,10 @@ const WorkflowHome: React.FC<Props> = (props: Props) => {
         </ol>
         <h3>Parameters for eQTL analysis</h3>
         <p>
-          The customized pipeline uses SMR tool
-          (https://yanglab.westlake.edu.cn/software/smr/) to perform eQTL
-          analysis based on two methods: SMR or HEIDI analysis. There are three
-          types of analysis, which are:{" "}
+          The customized pipeline uses{" "}
+          <a href="https://yanglab.westlake.edu.cn/software/smr/">SMR tool</a>{" "}
+          to perform eQTL analysis based on two methods: SMR or HEIDI analysis.
+          There are three types of analysis, which are:{" "}
         </p>
         <ol type={"1"}>
           <li>
@@ -302,7 +301,7 @@ const WorkflowHome: React.FC<Props> = (props: Props) => {
             <ol type={"1"}>
               <li>
                 A value for a window size in Kb to select SNPs in the cis-region
-                (set_wind). The defulat value is -9 which resulting in selecting
+                (set_wind). The default value is -9 which resulting in selecting
                 SNPs in the whole cis-region.
               </li>
               <li>
@@ -370,10 +369,12 @@ const WorkflowHome: React.FC<Props> = (props: Props) => {
         <h3>Parameters for regulatory SNPs annotations analysis</h3>
         <p>
           The customized pipeline uses HaploR R package to perform regulatory
-          SNPs annotations using the lead SNPs. HaploReg
-          (https://pubs.broadinstitute.org/mammals/haploreg/haploreg.php) can be
-          used to annotate variants on noncoding regions on the genome. Users
-          can set values for the following parameters:
+          SNPs annotations using the lead SNPs.{" "}
+          <a href="https://pubs.broadinstitute.org/mammals/haploreg/haploreg.php">
+            HaploReg
+          </a>{" "}
+          can be used to annotate variants on noncoding regions on the genome.
+          Users can set values for the following parameters:
         </p>
         <ol type={"1"}>
           <li>LD threshold (ldThresh)</li>

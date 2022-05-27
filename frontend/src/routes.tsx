@@ -19,7 +19,7 @@ import ChangePassword from "./components/ChangePassword";
 import Home from "./Pages/Home/Home";
 import AuthenticatedRoute from "./hoc/AuthenticatedRoute";
 import MainLayout from "./layouts/MainLayout";
-import Workflows from "./Pages/Workflows";
+// import Workflows from "./Pages/Workflows";
 
 //Lazy imports
 const Annotation = React.lazy(() => import("./components/Annotation"));
@@ -39,6 +39,7 @@ const EQTLPlot = React.lazy(() => import("./components/EQTLPlot"));
 const PathwayBased = React.lazy(() => import("./components/PathwayBased"));
 const GeneBased = React.lazy(() => import("./components/GeneBased"));
 const Tutorials = React.lazy(() => import("./components/Tutorials"));
+const Workflows = React.lazy(() => import("./Pages/Workflows"));
 
 type Props = {};
 
@@ -257,7 +258,18 @@ const Routes: React.FC<Props> = (props) => {
           )}
         />
         <Route path="/documentation" exact component={HomeComingSoon} />
-        <Route path="/workflows" component={Workflows} />
+        <Route
+          path="/workflows"
+          // component={AuthGuard(PathwayBased)}
+          render={(props) => (
+            <Suspense
+              fallback={<div className={"suspense_center"}>Loading...</div>}
+            >
+              <AuthenticatedRoute Component={Workflows} {...props} />
+            </Suspense>
+          )}
+        />
+        {/*<Route path="/workflows" component={Workflows} />*/}
         <Route path="/sign_in" exact component={SignIn} />
         <Route path="/sign_up" exact component={SignUp} />
         <Route path="/forgotpassword" exact component={ForgotPassword} />
