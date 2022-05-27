@@ -280,6 +280,7 @@ const GeneBasedForm: React.FC<Props & RouteComponentProps> = (props) => {
             formik={formik}
             label={"Job Name"}
             textVariable={"job_name"}
+            tooltip={"Enter a name for your job"}
           />
           {user?.username ? null : (
             <>
@@ -291,6 +292,7 @@ const GeneBasedForm: React.FC<Props & RouteComponentProps> = (props) => {
                 formik={formik}
                 label={"Email"}
                 textVariable={"email"}
+                tooltip={"Enter your email address"}
               />
             </>
           )}
@@ -308,7 +310,18 @@ const GeneBasedForm: React.FC<Props & RouteComponentProps> = (props) => {
           <div className={classes.header_div}>
             <h2>Summary statistics column positions</h2>
           </div>
-          {generalFileForm(classes, formik, ["marker_name", "p_value"])}
+          {generalFileForm(classes, formik, [
+            {
+              title: "marker_name",
+              text:
+                "the column number of the marker name in the summary statistic file. It can be marker_name, rsid, snpid etc",
+            },
+            {
+              title: "p_value",
+              text:
+                "the column number of the pvalue in the summary statistic file. It can be p, pvalue, pval_nominal etc.",
+            },
+          ])}
           <div className={classes.header_div}>
             <h2>Tool Parameters</h2>
           </div>
@@ -349,6 +362,9 @@ const GeneBasedForm: React.FC<Props & RouteComponentProps> = (props) => {
             formik={formik}
             label={"Pvalue Cut off"}
             textVariable={"pvalue_cutoff"}
+            tooltip={
+              "p-value cutoff to report the statistically significant genes and pathways. The default value is 0.05."
+            }
           />
 
           <CommonTextElement
@@ -356,6 +372,9 @@ const GeneBasedForm: React.FC<Props & RouteComponentProps> = (props) => {
             formik={formik}
             label={"Up Window Size(bp)"}
             textVariable={"up_window"}
+            tooltip={
+              "Upstream window size around genes. The default values are 50000 base-pairs upstream of transcription start site and 50000 base-pairs downstream of transcription termination site."
+            }
           />
 
           <CommonTextElement
@@ -363,6 +382,9 @@ const GeneBasedForm: React.FC<Props & RouteComponentProps> = (props) => {
             formik={formik}
             label={"Down Window Size(bp)"}
             textVariable={"down_window"}
+            tooltip={
+              "downstream window size around genes. The default values are 50000 base-pairs upstream of transcription start site and 50000 base-pairs downstream of transcription termination site."
+            }
           />
 
           <CommonTextElement
@@ -370,6 +392,9 @@ const GeneBasedForm: React.FC<Props & RouteComponentProps> = (props) => {
             formik={formik}
             label={"Max SNPs"}
             textVariable={"max_snp"}
+            tooltip={
+              "Maximum number of SNPs per gene. The default value is 3000 SNPs."
+            }
           />
           <SelectFieldsElement
             classes={classes}
@@ -383,12 +408,16 @@ const GeneBasedForm: React.FC<Props & RouteComponentProps> = (props) => {
             formik={formik}
             label={"Merge Distance"}
             textVariable={"merge_distance"}
+            tooltip={""}
           />
           <CommonTextElement
             classes={classes}
             formik={formik}
             label={"MAF Cut off"}
             textVariable={"maf_cutoff"}
+            tooltip={
+              "The minor allele frequency cutoff value (between 0 and 1). The default value is 0.05"
+            }
           />
         </Grid>
         <div className={classes.button_container}>

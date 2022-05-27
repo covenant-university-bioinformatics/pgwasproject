@@ -201,7 +201,23 @@ const ZscoreForm: React.FC<Props & RouteComponentProps> = (props) => {
           <div className={classes.header_div}>
             <h2>Summary statistics column positions</h2>
           </div>
-          {generalFileForm(classes, formik, ["beta", "se", "pvalue"])}
+          {generalFileForm(classes, formik, [
+            {
+              title: "beta",
+              text:
+                "the column number of the beta in the summary statistic file. It can be beta, slope etc.",
+            },
+            {
+              title: "se",
+              text:
+                "the column number of the standard error in the summary statistic file. It can be se, standard_error etc.",
+            },
+            {
+              title: "pvalue",
+              text:
+                "the column number of the pvalue in the summary statistic file. It can be p, pvalue, pval_nominal etc.",
+            },
+          ])}
         </Grid>
         <div className={classes.button_container}>
           {loading ? (

@@ -1,5 +1,8 @@
+@import  "../../../partials/mixins";
+
 .result_list{
   position: relative;
+
   .paper{
     overflow-x: auto;
     margin-right: auto;
@@ -15,5 +18,19 @@
     transform: translateX(-50%);
     color: red;
     font-weight: bold;
+    padding-top: 10px;
+  }
+
+  .error_long{
+    @include respondMax(ipad-land) {
+      display: none;
+    }
+  }
+
+  .error_short{
+    display: none;
+    @include respondMax(ipad-land) {
+      display: block;
+    }
   }
 }

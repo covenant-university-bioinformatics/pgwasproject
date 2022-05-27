@@ -194,9 +194,21 @@ const LiftoverForm: React.FC<Props & RouteComponentProps> = (props) => {
             <h2>Summary statistics column positions</h2>
           </div>
           {generalFileForm(classes, formik, [
-            "marker_name",
-            "chromosome",
-            "position",
+            {
+              title: "marker_name",
+              text:
+                "the column number of the marker name in the summary statistic file. It can be marker_name, rsid, snpid etc",
+            },
+            {
+              title: "chromosome",
+              text:
+                "the column number of the chromosome in the summary statistic file. It can be also be chr",
+            },
+            {
+              title: "position",
+              text:
+                "the column number of the  base pair positions in the summary statistic file. It can be bp",
+            },
           ])}
           <div className={classes.header_div}>
             <h2>Liftover parameters</h2>

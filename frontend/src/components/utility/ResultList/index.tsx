@@ -87,9 +87,14 @@ const ResultList: React.FC<Props & RouteComponentProps> = ({
         </div>
       ) : null}
       {user.username ? null : (
-        <p className={classes.error}>
-          Please sign in to see history of jobs submitted
-        </p>
+        <>
+          <p className={[classes.error, classes.error_long].join(" ")}>
+            Please sign in to see history of jobs submitted
+          </p>
+          <p className={[classes.error, classes.error_short].join(" ")}>
+            Please Sign In
+          </p>
+        </>
       )}
       {error ? <div className={classes.error}>{error}</div> : null}
       <Paper className={[mclasses.pageContent, classes.paper].join(" ")}>
@@ -102,9 +107,13 @@ const ResultList: React.FC<Props & RouteComponentProps> = ({
                 <Row
                   key={item._id}
                   item={item}
-                  link={`/${
-                    match.url.split("/")[1]
-                  }/${frontendPath}/result_view/${item._id}`}
+                  link={
+                    frontendPath
+                      ? `/${
+                          match.url.split("/")[1]
+                        }/${frontendPath}/result_view/${item._id}`
+                      : `/${match.url.split("/")[1]}/result_view/${item._id}`
+                  }
                   page={page}
                   route={apiPath}
                   rowsPerPage={rowsPerPage}

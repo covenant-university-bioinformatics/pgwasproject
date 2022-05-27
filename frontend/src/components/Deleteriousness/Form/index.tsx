@@ -225,6 +225,7 @@ const DeleteriousnessForm: React.FC<Props & RouteComponentProps> = (props) => {
             formik={formik}
             label={"Job Name"}
             textVariable={"job_name"}
+            tooltip={"Enter a name for your job"}
           />
           {user?.username ? null : (
             <>
@@ -236,6 +237,7 @@ const DeleteriousnessForm: React.FC<Props & RouteComponentProps> = (props) => {
                 formik={formik}
                 label={"Email"}
                 textVariable={"email"}
+                tooltip={"Enter your email address"}
               />
             </>
           )}
@@ -254,11 +256,31 @@ const DeleteriousnessForm: React.FC<Props & RouteComponentProps> = (props) => {
             <h2>Summary statistics column positions</h2>
           </div>
           {generalFileForm(classes, formik, [
-            "marker_name",
-            "chromosome",
-            "position",
-            "effect_allele",
-            "alternate_allele",
+            {
+              title: "marker_name",
+              text:
+                "the column number of the marker name in the summary statistic file. It can be marker_name, rsid, snpid etc",
+            },
+            {
+              title: "chromosome",
+              text:
+                "the column number of the chromosome in the summary statistic file. It can be also be chr",
+            },
+            {
+              title: "position",
+              text:
+                "the column number of the  base pair positions in the summary statistic file. It can be bp",
+            },
+            {
+              title: "effect_allele",
+              text:
+                "the column number of the reference or effect allele in the summary statistic file",
+            },
+            {
+              title: "alternate_allele",
+              text:
+                "the column number of the alternate allele in the summary statistic file",
+            },
           ])}
           <div className={classes.header_div}>
             <h2>Gene Annotation Database</h2>

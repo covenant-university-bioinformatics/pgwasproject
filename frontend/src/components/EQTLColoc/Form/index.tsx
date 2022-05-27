@@ -304,6 +304,7 @@ const EqtlColocForm: React.FC<Props & RouteComponentProps> = (props) => {
             formik={formik}
             label={"Job Name"}
             textVariable={"job_name"}
+            tooltip={"Enter a name for your job"}
           />
           {user?.username ? null : (
             <>
@@ -315,6 +316,7 @@ const EqtlColocForm: React.FC<Props & RouteComponentProps> = (props) => {
                 formik={formik}
                 label={"Email"}
                 textVariable={"email"}
+                tooltip={"Enter your email"}
               />
             </>
           )}
@@ -332,11 +334,33 @@ const EqtlColocForm: React.FC<Props & RouteComponentProps> = (props) => {
           <div className={classes.header_div}>
             <h2>Summary statistics column positions</h2>
           </div>
-          {generalFileForm(classes, formik, ["marker_name", "p_value"])}
+          {generalFileForm(classes, formik, [
+            {
+              title: "marker_name",
+              text:
+                "the column number of the marker name in the summary statistic file. It can be marker_name, rsid, snpid etc",
+            },
+            {
+              title: "p_value",
+              text:
+                "the column number of the pvalue in the summary statistic file. It can be p, pvalue, pval_nominal etc.",
+            },
+          ])}
           <div className={classes.header_div}>
             <h2>Summary statistics optional column positions</h2>
           </div>
-          {generalFileForm(classes, formik, ["beta", "slope_se"])}
+          {generalFileForm(classes, formik, [
+            {
+              title: "beta",
+              text:
+                "the column number of the beta in the summary statistic file. It can be beta, slope etc.",
+            },
+            {
+              title: "slope_se",
+              text:
+                "the column number of the standard error in the summary statistic file. It can be se, standard_error etc.",
+            },
+          ])}
           <div className={classes.header_div}>
             <h2>Tool Parameters</h2>
           </div>
@@ -353,6 +377,9 @@ const EqtlColocForm: React.FC<Props & RouteComponentProps> = (props) => {
             formik={formik}
             label={"P One"}
             textVariable={"p_one"}
+            tooltip={
+              "this parameter specifies the prior probability a SNP is associated with trait 1, i.e, the GWAS summary"
+            }
           />
 
           <CommonTextElement
@@ -360,6 +387,9 @@ const EqtlColocForm: React.FC<Props & RouteComponentProps> = (props) => {
             formik={formik}
             label={"P Two"}
             textVariable={"p_two"}
+            tooltip={
+              "this parameter specifies the prior probability a SNP is associated with trait 2, i.e, the eqtl tissue."
+            }
           />
 
           <CommonTextElement
@@ -367,6 +397,9 @@ const EqtlColocForm: React.FC<Props & RouteComponentProps> = (props) => {
             formik={formik}
             label={"P Twelve"}
             textVariable={"p_twelve"}
+            tooltip={
+              "this parameter specifies the prior probability a SNP is associated with both traits, i.e, the GWAS summary and the eqtl tissue."
+            }
           />
 
           <SelectFieldsElement
@@ -382,6 +415,9 @@ const EqtlColocForm: React.FC<Props & RouteComponentProps> = (props) => {
             formik={formik}
             label={"S property"}
             textVariable={"s_prop"}
+            tooltip={
+              "this parameter is required for a case-control GWAS summary dataset and it indicates the proportion of samples in the GWAS summary that are cases."
+            }
           />
         </Grid>
         <div className={classes.button_container}>

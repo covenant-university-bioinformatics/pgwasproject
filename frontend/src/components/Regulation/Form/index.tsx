@@ -27,6 +27,7 @@ import {
   LoadTestData,
   SelectFieldsElement,
 } from "../../utility/form_common_fields";
+
 type Props = {};
 
 type UserFormData = {
@@ -54,8 +55,9 @@ const RegHaploRForm: React.FC<Props> = (props) => {
   const [formValues, setFormValues] = useState<UserFormData>();
   const fileInput = useRef<any>(null);
   const [loading, setLoading] = useState(false);
-  const [analysisTypeState, setAnalysisTypeState] =
-    useState<AnalysisType>("HaploReg");
+  const [analysisTypeState, setAnalysisTypeState] = useState<AnalysisType>(
+    "HaploReg"
+  );
 
   const initialValues = {
     filename: "",
@@ -362,7 +364,13 @@ const RegHaploRForm: React.FC<Props> = (props) => {
               <div className={classes.header_div}>
                 <h2>Summary statistics column positions</h2>
               </div>
-              {generalFileForm(classes, formik, ["marker_name"])}
+              {generalFileForm(classes, formik, [
+                {
+                  title: "marker_name",
+                  text:
+                    "the column number of the marker name in the summary statistic file. It can be marker_name, rsid, snpid etc",
+                },
+              ])}
               <div className={classes.header_div}>
                 <h2>More Parameters</h2>
               </div>
@@ -371,6 +379,7 @@ const RegHaploRForm: React.FC<Props> = (props) => {
                 formik={formik}
                 label={"LD Threshold"}
                 textVariable={"ldThresh"}
+                tooltip={"Linkage disequilibrium threshold"}
               />
               <SelectFieldsElement
                 classes={classes}
@@ -378,6 +387,9 @@ const RegHaploRForm: React.FC<Props> = (props) => {
                 selectElement={populations}
                 selectVariable={"ldPop"}
                 selectName={"Population"}
+                tooltip={
+                  "The population from which the variants were obtained to be used for LD calculation."
+                }
               />
               <SelectFieldsElement
                 classes={classes}
@@ -385,6 +397,9 @@ const RegHaploRForm: React.FC<Props> = (props) => {
                 selectElement={epiOptions}
                 selectVariable={"epi"}
                 selectName={"EPI Options"}
+                tooltip={
+                  "Source of the epigenome. There four possible values for this parameter which are vanilla for querying ChromHMM (Core 15-state model), imputed for querying ChromHMM (25-state model using 12 imputed marks), amd methyl for querying H3K4me1/H3K4me3 peaks and acetyl for querying H3K27ac/H3K9ac peaks."
+                }
               />
               <SelectFieldsElement
                 classes={classes}
@@ -392,6 +407,9 @@ const RegHaploRForm: React.FC<Props> = (props) => {
                 selectElement={consOptions}
                 selectVariable={"cons"}
                 selectName={"CONS Options"}
+                tooltip={
+                  "Mammalian conservation algorithm to be used. There are three possible values for this parameter which are: gerp for GERP algorithm, siphy for SiPhy-omega algorithm, and both to use both algorithms."
+                }
               />
               <SelectFieldsElement
                 classes={classes}
@@ -399,6 +417,9 @@ const RegHaploRForm: React.FC<Props> = (props) => {
                 selectElement={genetypesOptions}
                 selectVariable={"genetypes"}
                 selectName={"Genetype Options"}
+                tooltip={
+                  "The genomic coordinates for querying. There are possible values for this parameter, which are gencode for using Gencode genes coordinates and refseq for using RefSeq genes coordinates."
+                }
               />
             </>
           )}

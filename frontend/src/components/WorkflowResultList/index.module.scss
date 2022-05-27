@@ -1,0 +1,26 @@
+@import  "../../partials/mixins";
+
+.result_list {
+  width: 100%;
+  padding: 3rem 4rem;
+  margin-top: 1rem;
+
+  @include specialMax(959px) {
+    padding: 2rem 1rem;
+  }
+
+  .container {
+    width: 95%;
+    margin: 0 auto;
+    padding: 1rem;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    @include respondMax(phone-land) {
+      padding-left: 15px;
+    }
+  }
+
+  .main_header {
+    text-align: center;
+    //margin-bottom: 2rem;
+  }
+}

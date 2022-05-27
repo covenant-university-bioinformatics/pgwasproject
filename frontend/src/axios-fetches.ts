@@ -25,7 +25,7 @@ instance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 // Logging responses
 // Global handling of errors
 // Executed for every request in any component leaving the app and every
-//response returned
+// response returned
 
 instance.interceptors.request.use(
   (request) => {

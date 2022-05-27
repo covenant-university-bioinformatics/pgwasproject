@@ -1,4 +1,5 @@
 import React from "react";
+import Tooltip from "@mui/material/Tooltip";
 import { Link } from "react-router-dom";
 import classes from "./general.module.scss";
 import {
@@ -44,33 +45,23 @@ export const Logo: React.FC<LogoProps> = (props) => {
 export const generalFileForm = (
   classes: any,
   formik: any,
-  formList: string[]
+  formList: { title: string; text: string }[]
 ) => {
-  // const formList = [
-  //   "marker_name",
-  //   "chromosome",
-  //   "position",
-  //   "pvalue",
-  //   "effect_allele",
-  //   "alternate_allele",
-  //   "se",
-  //   "or",
-  //   "beta",
-  // ];
-  //variant="outlined" elevation={1}
   return formList.map((element, i) => {
     return (
-      <Grid key={i} className={classes.grid} item xs={12} sm={6} md={4}>
+      <Grid key={i} className={classes.grid} item xs={12} sm={6} md={3}>
         <Paper elevation={0} className={classes.paper}>
           <FormControl className={classes.formControl}>
-            <TextField
-              id={element}
-              variant="outlined"
-              label={element}
-              size={"medium"}
-              {...formik.getFieldProps(element)}
-              {...textErrorHelper(formik, element)}
-            />
+            <Tooltip title={element.text} arrow>
+              <TextField
+                id={element.title}
+                variant="outlined"
+                label={element.title}
+                size={"medium"}
+                {...formik.getFieldProps(element.title)}
+                {...textErrorHelper(formik, element.title)}
+              />
+            </Tooltip>
           </FormControl>
         </Paper>
       </Grid>

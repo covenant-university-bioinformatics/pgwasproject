@@ -19,6 +19,7 @@ import ChangePassword from "./components/ChangePassword";
 import Home from "./Pages/Home/Home";
 import AuthenticatedRoute from "./hoc/AuthenticatedRoute";
 import MainLayout from "./layouts/MainLayout";
+import Workflows from "./Pages/Workflows";
 
 //Lazy imports
 const Annotation = React.lazy(() => import("./components/Annotation"));
@@ -241,6 +242,7 @@ const Routes: React.FC<Props> = (props) => {
           )}
         />
         <Route path="/tools" exact component={ToolsHome} />
+
         <Route path="/dashboard" exact component={HomeComingSoon} />
         <Route
           path="/tutorials"
@@ -255,7 +257,7 @@ const Routes: React.FC<Props> = (props) => {
           )}
         />
         <Route path="/documentation" exact component={HomeComingSoon} />
-        <Route path="/workflows" exact component={HomeComingSoon} />
+        <Route path="/workflows" component={Workflows} />
         <Route path="/sign_in" exact component={SignIn} />
         <Route path="/sign_up" exact component={SignUp} />
         <Route path="/forgotpassword" exact component={ForgotPassword} />

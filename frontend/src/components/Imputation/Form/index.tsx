@@ -27,6 +27,7 @@ import {
   LoadTestData,
   SelectFieldsElement,
 } from "../../utility/form_common_fields";
+
 type Props = {};
 
 type UserFormData = {
@@ -459,12 +460,36 @@ const ImputationForm: React.FC<Props> = (props) => {
             <h2>Summary statistics column positions</h2>
           </div>
           {generalFileForm(classes, formik, [
-            "marker_name",
-            "chr",
-            "pos",
-            "ref",
-            "alt",
-            "zscore",
+            {
+              title: "marker_name",
+              text:
+                "the column number of the marker name in the summary statistic file. It can be marker_name, rsid, snpid etc",
+            },
+            {
+              title: "chr",
+              text:
+                "the column number of the chromosome in the summary statistic file. It can be also be chr",
+            },
+            {
+              title: "pos",
+              text:
+                "the column number of the  base pair positions in the summary statistic file. It can be bp",
+            },
+            {
+              title: "ref",
+              text:
+                "the column number of the reference or effect allele in the summary statistic file",
+            },
+            {
+              title: "alt",
+              text:
+                "the column number of the alternate allele in the summary statistic file",
+            },
+            {
+              title: "zscore",
+              text:
+                "the column number of the zscore in the summary statistic file. It can be zscore, z, etc.",
+            },
           ])}
           {afAvailable && (
             <CommonTextElement
