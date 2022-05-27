@@ -2,6 +2,8 @@
 
 .sidebar_open{
   display: block !important;
+  z-index: 800;
+  position: fixed !important;
   //transform: translateX(500px);
 }
 
@@ -13,11 +15,12 @@
 
   .sidebar{
     width: 300px;
+    z-index: 800;
     @include respondMax(ipad-land) {
       width: 45%;
       flex-grow: 1;
       flex-shrink: 0;
-      z-index: 800;
+      overflow: hidden;
     }
 
     @include respondMax(phone-land) {
@@ -25,13 +28,18 @@
     }
 
     //background-color: antiquewhite;
-    background: rgb(247,247,251);
+    //background: pink;
+    background: #060b26;
+    //background: rgb(247,247,251);
     //background: linear-gradient(152deg, rgba(247,247,251,1) 0%, rgba(246,138,138,1) 100%);
-    background: linear-gradient(179.45deg, rgba(255, 255, 255, 0) -0.88%, rgba(202, 13, 172, 0.19) 86.97%);
+    //background: linear-gradient(179.45deg, rgba(255, 255, 255, 0) -0.88%, rgba(202, 13, 172, 0.19) 86.97%);
     position: sticky;
     top: 5.2rem;
+    left: 0;
     height: calc(100vh - 5.2rem);
-    overflow-y: auto;
+    //height: 100%;
+    overflow: hidden;
+    //overflow-y: auto;
     //box-shadow: 2px 0 5px rgba(0,0,0,0.5);
     //z-index: 200;
     transition: all 1s ease-in-out;
@@ -47,6 +55,8 @@
         li{
           width: 100%;
           height: 100%;
+          cursor: pointer;
+
         }
       }
     }
@@ -56,19 +66,24 @@
       align-items: center;
       //justify-content: space-between;
       text-decoration: none;
-      color: #000;
+      color: #fff;
       padding: 1rem 2rem;
       width: 100%;
       height: 100%;
       font-size: 1.1rem;
       p{
         margin-left: 10px;
+        &:hover{
+          //background-color: #fff;
+          //color: #000;
+          color: deeppink;
+        }
       }
     }
 
     .selected {
-      color: #fff;
-      background-color: #969595;
+      color: #000;
+      background-color: #fdc9c9;
       //padding: 5px;
       //border-radius: 5px;
       font-weight: bold;
@@ -89,9 +104,9 @@
       @include specialMax(959px) {
         display: block;
       }
-      position: absolute;
-      top: 5px;
-      right: 30px;
+      position: fixed;
+      top: 87px;
+      right: 18px;
       z-index: 1000;
       .donut_icon{
         color: #000;

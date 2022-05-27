@@ -8,6 +8,11 @@
   @include specialMax(959px) {
     padding: 2rem 1rem;
   }
+
+  @include respondMax(phone-land) {
+    padding: 2rem 5px;
+  }
+
   .container{
     width: 95%;
     margin: 0 auto;
@@ -38,6 +43,9 @@
     text-align: justify;
     line-height: 1.7;
     margin-bottom: 1rem;
+    @include respondMax(phone-land) {
+      text-align: left;
+    }
   }
 
   h3{
@@ -46,11 +54,17 @@
 
   ul {
     padding-left: 2.5rem;
+    @include respondMax(phone-land) {
+      padding-left: 1rem;
+    }
     margin-bottom: 1.5rem;
   }
 
   ol {
     padding-left: 2.5rem;
+    @include respondMax(phone-land) {
+      padding-left: 1rem;
+    }
     margin-bottom: 1.5rem;
   }
   li {
