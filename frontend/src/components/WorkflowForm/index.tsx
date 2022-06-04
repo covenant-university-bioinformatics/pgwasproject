@@ -863,7 +863,9 @@ const WorkflowForm: React.FC<Props & RouteComponentProps> = (props) => {
         <form onSubmit={formik.handleSubmit}>
           <div className={classes.accordian_container}>
             <Accordion
-              expanded={expanded === "panel1"}
+              defaultExpanded={true}
+              // expanded={expanded === "panel1"}
+              expanded={true}
               onChange={handleChange("panel1")}
             >
               <AccordionSummary

@@ -27,7 +27,7 @@ const Workflows: React.FC<Props & RouteComponentProps> = (props) => {
     setMobileOpen(false);
   };
 
-  const sideBarClass = [classes.sidebar];
+  const sideBarClass = [classes.sidebar_nav];
   if (mobileOpen) {
     sideBarClass.push(classes.sidebar_open);
   }
@@ -93,6 +93,7 @@ const Workflows: React.FC<Props & RouteComponentProps> = (props) => {
 
   return (
     <div className={classes.workflows}>
+      <div className={classes.sidebar}>{drawer}</div>
       <div className={sideBarClass.join(" ")}>{drawer}</div>
       <Backdrop mobileOpen={mobileOpen} closeDrawer={closeDrawer} />
       <div className={classes.main_area}>
