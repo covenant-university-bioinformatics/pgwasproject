@@ -23,8 +23,9 @@ type Props = {
     | null;
 };
 
-const RowExtra: React.FC<Props> = ({ item, scores }: Props) => {
+const RowExtra: React.FC<Props> = ({ item, scores }) => {
   const [open, setOpen] = useState(false);
+  // console.log(scores);
   const findFreq = (
     data:
       | {
@@ -37,6 +38,7 @@ const RowExtra: React.FC<Props> = ({ item, scores }: Props) => {
     element: "rank_score" | "prediction"
   ) => {
     if (data === null) return {};
+    if (data === undefined) return {};
 
     const res = data.map((row) => (row[element] === "." ? "NA" : row[element]));
 
@@ -45,6 +47,7 @@ const RowExtra: React.FC<Props> = ({ item, scores }: Props) => {
       return acc[curr] ? ++acc[curr] : (acc[curr] = 1), acc;
     }, {});
   };
+
   const freqs = findFreq(scores, "prediction");
 
   const optionsBar = {
