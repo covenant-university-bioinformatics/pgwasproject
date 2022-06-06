@@ -176,10 +176,20 @@
     }
 
     .container {
-      width: 95%;
-      margin: 0 auto;
+      width: 1100px;
+      //margin: 0 auto;
+      margin: 0 1rem 0 2rem;
       //box-shadow: 0 0 10px rgba(0,0,0,0.2);
       padding: 2rem 1rem;
+      @include specialMax(1100px) {
+        width: 100%;
+        margin: 0 2rem;
+        padding: 1rem;
+      }
+      @include respondMax(ipad-port) {
+        margin: 0 1rem;
+        padding: 0;
+      }
     }
   }
 }
