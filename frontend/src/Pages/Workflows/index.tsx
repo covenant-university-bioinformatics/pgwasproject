@@ -109,24 +109,26 @@ const Workflows: React.FC<Props & RouteComponentProps> = (props) => {
             <MenuIcon />
           </IconButton>
         </div>
-        <Switch>
-          <Route exact path={props.match.url} component={WorkflowHome} />
-          <Route
-            exact
-            path={props.match.url + "/form"}
-            component={WorkflowForm}
-          />
-          <Route
-            exact
-            path={props.match.url + "/all_results"}
-            component={WorkflowResultList}
-          />
-          <Route
-            exact
-            path={props.match.url + "/result_view/:jobId"}
-            component={WorkflowResultView}
-          />
-        </Switch>
+        <div className={classes.container}>
+          <Switch>
+            <Route exact path={props.match.url} component={WorkflowHome} />
+            <Route
+              exact
+              path={props.match.url + "/form"}
+              component={WorkflowForm}
+            />
+            <Route
+              exact
+              path={props.match.url + "/all_results"}
+              component={WorkflowResultList}
+            />
+            <Route
+              exact
+              path={props.match.url + "/result_view/:jobId"}
+              component={WorkflowResultView}
+            />
+          </Switch>
+        </div>
       </div>
     </div>
   );

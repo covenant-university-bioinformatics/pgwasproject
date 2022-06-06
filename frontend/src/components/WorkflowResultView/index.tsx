@@ -258,97 +258,97 @@ const WorkflowResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
 
   return (
     <div className={[classes.result_view, mainClasses.main_view].join(" ")}>
-      <div className={mainClasses.result_view_container}>
-        {loading ? <CircularProgress /> : null}
-        {error && (
-          <div className={classes.error_message}>
-            <p>Issue with fetching job with id: {id}</p>
-            <p>Message from server: {errorInfo}</p>
-          </div>
-        )}
-        {createJobStatus(customResult, 60, classes)}
-        {customResult && customResult.status === "completed" && (
-          <h2 style={{ marginBottom: "2rem" }}>
-            Results for Job: {customResult ? customResult.job_name : id}
-          </h2>
-        )}
-        <CreateInfoSection
-          resultObj={customResult}
-          params={"spgwas_params"}
-          classes={classes}
-        />
-        {createJobFailedReason(customResult, classes)}
-        {createChartSection()}
-        <LDClumpCustom
+      {/*<div className={mainClasses.result_view_container}>*/}
+      {loading ? <CircularProgress /> : null}
+      {error && (
+        <div className={classes.error_message}>
+          <p>Issue with fetching job with id: {id}</p>
+          <p>Message from server: {errorInfo}</p>
+        </div>
+      )}
+      {createJobStatus(customResult, 60, classes)}
+      {customResult && customResult.status === "completed" && (
+        <h2 style={{ marginBottom: "2rem" }}>
+          Results for Job: {customResult ? customResult.job_name : id}
+        </h2>
+      )}
+      <CreateInfoSection
+        resultObj={customResult}
+        params={"spgwas_params"}
+        classes={classes}
+      />
+      {createJobFailedReason(customResult, classes)}
+      {createChartSection()}
+      <LDClumpCustom
+        customResult={customResult}
+        apiPath={apiPath}
+        jobId={id}
+        classes={classes}
+        showDownloadButton={showDownloadButton}
+      />
+      <ColocResult
+        customResult={customResult}
+        apiPath={apiPath}
+        jobId={id}
+        classes={classes}
+        showDownloadButton={showDownloadButton}
+      />
+      <PathwayBasedResult
+        customResult={customResult}
+        apiPath={apiPath}
+        jobId={id}
+        classes={classes}
+      />
+      <GeneBasedResult
+        customResult={customResult}
+        apiPath={apiPath}
+        jobId={id}
+        classes={classes}
+      />
+      {customResult?.spgwas_params?.smr_cage_eqtl === "true" && (
+        <EqtlSmrResult
           customResult={customResult}
           apiPath={apiPath}
-          jobId={id}
-          classes={classes}
-          showDownloadButton={showDownloadButton}
-        />
-        <ColocResult
-          customResult={customResult}
-          apiPath={apiPath}
-          jobId={id}
-          classes={classes}
-          showDownloadButton={showDownloadButton}
-        />
-        <PathwayBasedResult
-          customResult={customResult}
-          apiPath={apiPath}
-          jobId={id}
-          classes={classes}
-        />
-        <GeneBasedResult
-          customResult={customResult}
-          apiPath={apiPath}
-          jobId={id}
-          classes={classes}
-        />
-        {customResult?.spgwas_params?.smr_cage_eqtl === "true" && (
-          <EqtlSmrResult
-            customResult={customResult}
-            apiPath={apiPath}
-            dataset={"Cage"}
-            jobId={id}
-            classes={classes}
-          />
-        )}
-        {customResult?.spgwas_params?.smr_westra_eqtl === "true" && (
-          <EqtlSmrResult
-            customResult={customResult}
-            apiPath={apiPath}
-            dataset={"Westra"}
-            jobId={id}
-            classes={classes}
-          />
-        )}
-        {customResult?.spgwas_params?.smr_gtex_tissue && (
-          <EqtlSmrResult
-            customResult={customResult}
-            apiPath={apiPath}
-            dataset={"Tissue"}
-            jobId={id}
-            classes={classes}
-            tissueName={customResult?.spgwas_params?.smr_gtex_tissue}
-          />
-        )}
-        <DeletResults
-          customResult={customResult}
-          apiPath={apiPath}
+          dataset={"Cage"}
           jobId={id}
           classes={classes}
         />
-        <AnnotResults
+      )}
+      {customResult?.spgwas_params?.smr_westra_eqtl === "true" && (
+        <EqtlSmrResult
           customResult={customResult}
           apiPath={apiPath}
+          dataset={"Westra"}
           jobId={id}
           classes={classes}
         />
-        {customResult && customResult.status === "completed" && (
-          <RegulationResults />
-        )}
-      </div>
+      )}
+      {customResult?.spgwas_params?.smr_gtex_tissue && (
+        <EqtlSmrResult
+          customResult={customResult}
+          apiPath={apiPath}
+          dataset={"Tissue"}
+          jobId={id}
+          classes={classes}
+          tissueName={customResult?.spgwas_params?.smr_gtex_tissue}
+        />
+      )}
+      <DeletResults
+        customResult={customResult}
+        apiPath={apiPath}
+        jobId={id}
+        classes={classes}
+      />
+      <AnnotResults
+        customResult={customResult}
+        apiPath={apiPath}
+        jobId={id}
+        classes={classes}
+      />
+      {customResult && customResult.status === "completed" && (
+        <RegulationResults />
+      )}
+      {/*</div>*/}
     </div>
   );
 };

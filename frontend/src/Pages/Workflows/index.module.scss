@@ -152,7 +152,8 @@
   .main_area{
     //flex-grow: 2;
     //flex: 3;
-    flex-shrink: 1;
+    //flex-shrink: 1;
+    width: 100%;
     //background-color: #3d8af3;
     //height: calc(300vh - 5.2rem);
     //background-color: #efebeb;
@@ -172,6 +173,13 @@
         color: #000;
         transform: scale(1.4);
       }
+    }
+
+    .container {
+      width: 95%;
+      margin: 0 auto;
+      //box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      padding: 2rem 1rem;
     }
   }
 }
