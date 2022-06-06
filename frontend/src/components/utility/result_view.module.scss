@@ -11,16 +11,29 @@
     padding: 1rem;
     margin-bottom: 1rem;
     color: #fff;
+    @include respondMax(phone-land) {
+      font-size: 10px;
+      padding: 10px;
+      width: 240px;
+      overflow: auto;
+    }
   }
 
   .job_running {
     width: 350px;
+    @include respondMax(phone-land) {
+      width: 240px;
+      padding: 10px;
+    }
     background-color: #3d8af3;
     border-radius: 5px;
     padding: 1rem;
     margin-bottom: 1rem;
     p {
       font-size: 1.4rem;
+      @include respondMax(phone-land) {
+       font-size: 1rem;
+      }
       font-weight: bold;
       margin-bottom: 2rem;
       color: #fff;
@@ -45,7 +58,7 @@
         margin-left: 2rem;
       }
       @include respondMax(ipad-port) {
-        align-items: center;
+        align-items: flex-start;
         margin-left: 0;
       }
 
@@ -146,13 +159,16 @@
       width: 100%;
       display: flex;
       justify-content: space-between;
-      @include respondMax(ipad-port) {
+      @include respondMax(tab-port) {
         flex-direction: column;
       }
       .image_tab {
         //width: 40rem;
         //height: 35rem;
         flex: 1;
+        @include respondMax(tab-port) {
+          flex: 1;
+        }
         &:nth-of-type(1) {
           margin-right: 3rem;
           @include respondMax(ipad-port) {
@@ -164,7 +180,7 @@
         //  height: 30rem;
         //  margin: 0 auto;
         //}
-        @include respondMax(ipad-port) {
+        @include respondMax(ipad-land) {
           margin-bottom: 2rem;
         }
         //@include respondMax(phone-land) {
