@@ -252,7 +252,13 @@ const WorkflowResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
         setCustomResult(undefined);
         setLoading(false);
         setError(true);
-        setErrorInfo(e.response.data.message);
+        if (e.response.status === 503) {
+          setErrorInfo("Service not available");
+        } else if (e.response.data.message) {
+          setErrorInfo(e.response.data.message);
+        } else {
+          setErrorInfo("Service not available");
+        }
       });
   }, [apiPath, id]);
 
