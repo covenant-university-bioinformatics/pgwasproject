@@ -153,6 +153,9 @@
     .sub_heading {
       font-size: 1.4rem;
       margin-bottom: 2rem;
+      @include respondMax(ipad-port) {
+        font-size: 14px;
+      }
     }
 
     .images {
@@ -160,7 +163,9 @@
       display: flex;
       justify-content: space-between;
       @include respondMax(tab-port) {
+        width: 90%;
         flex-direction: column;
+        margin-bottom: 2rem;
       }
       .image_tab {
         //width: 40rem;
@@ -180,9 +185,9 @@
         //  height: 30rem;
         //  margin: 0 auto;
         //}
-        @include respondMax(ipad-land) {
-          margin-bottom: 2rem;
-        }
+        //@include respondMax(ipad-land) {
+        //  margin-bottom: 2rem;
+        //}
         //@include respondMax(phone-land) {
         //  height: 20rem;
         //}
@@ -193,6 +198,11 @@
         border-radius: 10px;
         padding: 0.625rem;
         //background-color: #b8c3c6;
+        h3{
+          @include respondMax(ipad-port) {
+            font-size: 12px;
+          }
+        }
         .image_box {
           //width: 38rem;
           //height: 33rem;
@@ -229,16 +239,24 @@
     .sub_heading {
       font-size: 1.4rem;
       margin-bottom: 2rem;
+      @include respondMax(ipad-port) {
+        font-size: 14px;
+      }
     }
     .download {
       p {
         margin-bottom: 1rem;
+        @include respondMax(ipad-port) {
+          font-size: 9px;
+        }
       }
       .buttons {
         margin-bottom: 1rem;
         .button {
           margin-right: 1rem;
           @include respondMax(ipad-port) {
+            width: 240px;
+            font-size: 10px;
             margin-bottom: 1rem;
             margin-right: 0;
           }
@@ -249,9 +267,12 @@
 
   .table_wrapper {
     width: 100%;
-    //margin: 0 auto;
+    @include respondMax(tab-port) {
+      width: 95%;
+      padding: 10px;
+    }
     padding: 1rem;
-    box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     //overflow-x: auto;
     .panels {
       //background-color: red;

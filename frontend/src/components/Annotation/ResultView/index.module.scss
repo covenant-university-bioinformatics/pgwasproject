@@ -5,6 +5,9 @@
   .sub_heading {
     font-size: 1.4rem;
     margin-bottom: 2rem;
+    @include respondMax(ipad-port) {
+      font-size: 14px;
+    }
   }
 
   .tabs_header {
@@ -18,12 +21,17 @@
   .download {
     p {
       margin-bottom: 1rem;
+      @include respondMax(ipad-port) {
+        font-size: 9px;
+      }
     }
     .buttons {
       margin-bottom: 1rem;
       .button {
         margin-right: 1rem;
         @include respondMax(ipad-port) {
+          width: 240px;
+          font-size: 10px;
           margin-bottom: 1rem;
           margin-right: 0;
         }
