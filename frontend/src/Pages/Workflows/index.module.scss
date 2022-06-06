@@ -21,7 +21,7 @@
     position: sticky;
     top: 5.2rem;
     left: 0;
-    height: calc(100vh - 5.2rem);
+    min-height: calc(100vh - 5.2rem);
     overflow: hidden;
     transition: all 1s ease-in-out;
 
