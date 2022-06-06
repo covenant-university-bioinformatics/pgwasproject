@@ -453,82 +453,84 @@ const AnnotResult: React.FC<Props> = ({
         <div className={mainClasses.table_tabs}>
           <h3 className={mainClasses.sub_heading}>Annotation Result Tables</h3>
           {showDownloadButton()}
-          <AppBar
-            className={mainClasses.tabs_header}
-            color="default"
-            position="static"
-          >
-            <Tabs
-              value={value}
-              onChange={handleChange}
-              variant="scrollable"
-              aria-label="simple tabs example"
+          <div className={mainClasses.table_wrapper}>
+            <AppBar
+              className={mainClasses.tabs_header}
+              color="default"
+              position="static"
             >
-              <Tab label="Annotation" {...a11yProps(0)} />
-              <Tab label="1KGP Allele Frequencies" {...a11yProps(1)} />
-              <Tab label="Exome Frequencies" {...a11yProps(2)} />
-              <Tab label="Clinvar" {...a11yProps(3)} />
-              <Tab label="Disgenet" {...a11yProps(4)} />
-            </Tabs>
-          </AppBar>
-          <div className={mainClasses.panels}>
-            <TabPanel value={value} index={0}>
-              {loadingAnnot ? <CircularProgress /> : null}
-              {createTableSection(
-                TblContainer,
-                TblHead,
-                TblPagination,
-                recordsAfterPaging
-              )}
-            </TabPanel>
-            <TabPanel value={value} index={1}>
-              {loadingAnnot ? <CircularProgress /> : null}
-              {snpPopFreqResult.length > 0 ? (
-                createTableSection(
-                  TblContainerPopFreq,
-                  TblHeadPopFreq,
-                  TblPaginationPopFreq,
-                  recordsAfterPagingPopFreq
-                )
-              ) : (
-                <p>No results found for your SNPs</p>
-              )}
-            </TabPanel>
-            <TabPanel value={value} index={2}>
-              {loadingAnnot ? <CircularProgress /> : null}
-              {snpExacFreqResult.length > 0 ? (
-                createTableSection(
-                  TblContainerExacFreq,
-                  TblHeadExacFreq,
-                  TblPaginationExacFreq,
-                  recordsAfterPagingExacFreq
-                )
-              ) : (
-                <p>No results found for your SNPs</p>
-              )}
-            </TabPanel>
-            <TabPanel value={value} index={3}>
-              {loadingAnnot ? <CircularProgress /> : null}
-              {snpClinvarResult.length > 0 ? (
-                createTableSection(
-                  TblContainerClinvar,
-                  TblHeadClinvar,
-                  TblPaginationClinvar,
-                  recordsAfterPagingClinvar
-                )
-              ) : (
-                <p>No results found for your SNPs</p>
-              )}
-            </TabPanel>
-            <TabPanel value={value} index={4}>
-              {loadingDisgenet ? (
-                <CircularProgress />
-              ) : snpDisgenetResult.length > 0 ? (
-                createTableDisgenetSection()
-              ) : (
-                <p>No Data</p>
-              )}
-            </TabPanel>
+              <Tabs
+                value={value}
+                onChange={handleChange}
+                variant="scrollable"
+                aria-label="simple tabs example"
+              >
+                <Tab label="Annotation" {...a11yProps(0)} />
+                <Tab label="1KGP Allele Frequencies" {...a11yProps(1)} />
+                <Tab label="Exome Frequencies" {...a11yProps(2)} />
+                <Tab label="Clinvar" {...a11yProps(3)} />
+                <Tab label="Disgenet" {...a11yProps(4)} />
+              </Tabs>
+            </AppBar>
+            <div className={mainClasses.panels}>
+              <TabPanel value={value} index={0}>
+                {loadingAnnot ? <CircularProgress /> : null}
+                {createTableSection(
+                  TblContainer,
+                  TblHead,
+                  TblPagination,
+                  recordsAfterPaging
+                )}
+              </TabPanel>
+              <TabPanel value={value} index={1}>
+                {loadingAnnot ? <CircularProgress /> : null}
+                {snpPopFreqResult.length > 0 ? (
+                  createTableSection(
+                    TblContainerPopFreq,
+                    TblHeadPopFreq,
+                    TblPaginationPopFreq,
+                    recordsAfterPagingPopFreq
+                  )
+                ) : (
+                  <p>No results found for your SNPs</p>
+                )}
+              </TabPanel>
+              <TabPanel value={value} index={2}>
+                {loadingAnnot ? <CircularProgress /> : null}
+                {snpExacFreqResult.length > 0 ? (
+                  createTableSection(
+                    TblContainerExacFreq,
+                    TblHeadExacFreq,
+                    TblPaginationExacFreq,
+                    recordsAfterPagingExacFreq
+                  )
+                ) : (
+                  <p>No results found for your SNPs</p>
+                )}
+              </TabPanel>
+              <TabPanel value={value} index={3}>
+                {loadingAnnot ? <CircularProgress /> : null}
+                {snpClinvarResult.length > 0 ? (
+                  createTableSection(
+                    TblContainerClinvar,
+                    TblHeadClinvar,
+                    TblPaginationClinvar,
+                    recordsAfterPagingClinvar
+                  )
+                ) : (
+                  <p>No results found for your SNPs</p>
+                )}
+              </TabPanel>
+              <TabPanel value={value} index={4}>
+                {loadingDisgenet ? (
+                  <CircularProgress />
+                ) : snpDisgenetResult.length > 0 ? (
+                  createTableDisgenetSection()
+                ) : (
+                  <p>No Data</p>
+                )}
+              </TabPanel>
+            </div>
           </div>
         </div>
       );

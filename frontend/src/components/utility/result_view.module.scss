@@ -161,6 +161,7 @@
     .images {
       width: 100%;
       display: flex;
+      gap: 1.5rem;
       justify-content: space-between;
       @include respondMax(tab-port) {
         width: 90%;
@@ -171,15 +172,15 @@
         //width: 40rem;
         //height: 35rem;
         flex: 1;
-        @include respondMax(tab-port) {
-          flex: 1;
-        }
-        &:nth-of-type(1) {
-          margin-right: 3rem;
-          @include respondMax(ipad-port) {
-            margin-right: 0;
-          }
-        }
+        //@include respondMax(tab-port) {
+        //  margin-bottom: 1rem;
+        //}
+        //&:nth-of-type(1) {
+        //  margin-right: 3rem;
+        //  @include respondMax(tab-port) {
+        //    margin-right: 0;
+        //  }
+        //}
         //@include respondMax(ipad-land) {
         //  width: 35rem;
         //  height: 30rem;
