@@ -1,7 +1,15 @@
+@import "../../../partials/mixins";
+
 .regulation{
   width: 100%;
+  @include respondMax(ipad-land) {
+    width: 95%;
+  }
   h1{
     margin-bottom: 2rem;
+    @include respondMax(ipad-port) {
+      font-size: 14px;
+    }
   }
   .content {
     display: flex;
@@ -12,5 +20,9 @@
     width: 100%;
     padding: 5rem;
     font-weight: bold;
+    @include respondMax(ipad-port) {
+      font-size: 12px;
+      padding: 2rem;
+    }
   }
 }
