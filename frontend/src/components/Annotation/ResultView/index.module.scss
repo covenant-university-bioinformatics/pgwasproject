@@ -10,39 +10,40 @@
     }
   }
 
+  .download {
+    p {
+      margin-bottom: 1rem;
+      overflow-wrap: break-word;
+      width: 90%;
+      @include respondMax(ipad-port) {
+        font-size: 9px;
+      }
+    }
+    .buttons {
+      margin-bottom: 1rem;
+      .button {
+        margin-right: 1rem;
+        @include respondMax(ipad-port) {
+          width: 240px;
+          font-size: 10px;
+          margin: 0 10px 1rem 0
+        }
+      }
+    }
+  }
+
   .table_wrapper {
     width: 100%;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
     overflow-x: auto;
     @include respondMax(tab-port) {
-      width: 95%;
+      width: 90%;
       padding: 10px;
     }
     .tabs_header {
       @include respondMax(ipad-land) {
         .MuiTabs-root {
           overflow: scroll !important;
-        }
-      }
-    }
-
-    .download {
-      p {
-        margin-bottom: 1rem;
-        @include respondMax(ipad-port) {
-          font-size: 9px;
-        }
-      }
-      .buttons {
-        margin-bottom: 1rem;
-        .button {
-          margin-right: 1rem;
-          @include respondMax(ipad-port) {
-            width: 240px;
-            font-size: 10px;
-            margin-bottom: 1rem;
-            margin-right: 0;
-          }
         }
       }
     }
