@@ -597,7 +597,11 @@ const AnnotResult: React.FC<Props> = ({
     // eslint-disable-next-line
   }, [customResult, jobId]);
 
-  return <div style={{ marginTop: "3rem" }}>{createTableTabs()}</div>;
+  return (
+    <div style={{ marginTop: "3rem", marginBottom: "3rem" }}>
+      {createTableTabs()}
+    </div>
+  );
 };
 
 export default AnnotResult;
