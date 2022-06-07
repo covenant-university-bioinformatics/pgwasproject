@@ -10,81 +10,67 @@
   min-height: 80vh;
   margin-top: 5.2rem;
   display: flex;
-  //grid-template-columns: 300px 2fr;
 
   .sidebar{
-    //flex: 1 0 300px !important;
     width: 300px;
-    //flex-shrink: 0;
-    //width: 300px;
+    flex-shrink: 0;
     background: #060b26;
     position: sticky;
     top: 5.2rem;
     left: 0;
-    //z-index: 1000;
     height: calc(100vh - 5.2rem);
     //height: 100%;
     overflow: hidden;
-    transition: all 1s ease-in-out;
+    transition: all .6s ease-in-out;
 
-    @include specialMax(959px) {
+    @include specialMax(1125px) {
       display: none;
     }
 
-    @include respondMax(ipad-land) {
-      width: 45%;
-      //flex-grow: 1;
-      //flex-shrink: 0;
-      //overflow: hidden;
-    }
-
-    @include respondMax(phone-land) {
-      width: 80%;
-    }
-
     .drawer{
-      width: 100%;
-      height: 100%;
-      ul{
-        list-style-type: none;
+        width: 100%;
+        height: 100%;
+        ul{
+          list-style-type: none;
 
-        li{
-          width: 100%;
-          height: 100%;
-          cursor: pointer;
+          li{
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
 
+          }
         }
       }
-    }
 
     .link {
-      display: flex;
-      align-items: center;
-      //justify-content: space-between;
-      text-decoration: none;
-      color: #fff;
-      padding: 1rem 2rem;
-      width: 100%;
-      height: 100%;
-      font-size: 1.1rem;
-      p{
-        margin-left: 10px;
-        &:hover{
-          //background-color: #fff;
-          //color: #000;
-          color: deeppink;
+        display: flex;
+        align-items: center;
+        //justify-content: space-between;
+        text-decoration: none;
+        color: #fff;
+        padding: 1rem 2rem;
+        width: 100%;
+        height: 100%;
+        font-size: 1.1rem;
+        p{
+          margin-left: 10px;
+          &:hover{
+            //background-color: #fff;
+            //color: #000;
+            color: deeppink;
+          }
         }
       }
-    }
 
     .selected {
-      color: #000;
-      background-color: #fdc9c9;
-      //padding: 5px;
-      //border-radius: 5px;
-      font-weight: bold;
-      //font-size: 1.1rem !important;
-    }
+        color: #000;
+        background-color: #fdc9c9;
+        //padding: 5px;
+        //border-radius: 5px;
+        font-weight: bold;
+        //font-size: 1.1rem !important;
+      }
+
 
   }
 
@@ -165,7 +151,7 @@
     .donut {
       display: none;
       //background-color: #fff;
-      @include specialMax(959px) {
+      @include specialMax(1125px) {
         display: block;
       }
       position: fixed;
@@ -179,17 +165,17 @@
     }
 
     .container {
-      width: 900px;
-      //margin: 0 auto;
+      //width: 1400px;
+      width: 90%;
       margin: 0 1rem 0 2rem;
-      //box-shadow: 0 0 10px rgba(0,0,0,0.2);
       padding: 2rem 1rem;
-      @include specialMax(1200px) {
+      @include specialMax(1700px) {
         width: 90%;
         margin: 0 2rem;
         padding: 1rem;
       }
       @include respondMax(ipad-port) {
+        width: 90%;
         margin: 0 1rem;
         padding: 10px;
         //padding: 0 10px;
