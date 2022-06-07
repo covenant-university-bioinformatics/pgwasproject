@@ -159,12 +159,12 @@
     }
 
     .images {
-      width: 100%;
+      width: 100%; //change width
       display: flex;
       gap: 1.5rem;
       justify-content: space-between;
       @include respondMax(tab-port) {
-        width: 90%;
+        width: 100%;
         flex-direction: column;
         margin-bottom: 2rem;
       }
@@ -270,7 +270,7 @@
   .table_wrapper {
     width: 100%;
     @include respondMax(tab-port) {
-      width: 90%;
+      width: 100%; //change width
       padding: 10px;
     }
     padding: 1rem;
@@ -284,7 +284,10 @@
       //box-shadow: 0 0 5px rgba(0,0,0,0.4);
 
       .table_section {
-        width: 100vw;
+        width: 100%;
+        @include respondMin(big-desktop) {
+          width: 100vw;
+        }
       }
     }
   }

@@ -37,7 +37,7 @@
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
     overflow-x: auto;
     @include respondMax(tab-port) {
-      width: 90%;
+      width: 100%; //change width
       padding: 10px;
     }
     .tabs_header {
@@ -55,7 +55,10 @@
     }
 
     .table_section {
-      width: 100vw;
+      width: 100%;
+      @include respondMin(big-desktop) {
+        width: 100vw;
+      }
     }
   }
 }
