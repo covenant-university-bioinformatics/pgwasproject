@@ -97,7 +97,7 @@
 .table_wrapper {
   width: 100%;
   @include respondMax(tab-port) {
-    width: 95%;
+    width: 100%; // change width
     padding: 10px;
   }
   //margin: 0 auto;
