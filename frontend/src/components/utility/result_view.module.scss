@@ -63,7 +63,7 @@
       }
 
       .job_list {
-        width: 22rem;
+        width: 20rem;
         height: 22rem;
         @include respondMax(phone-port) {
           width: 15rem;
@@ -104,7 +104,7 @@
       }
 
       .params_list {
-        width: 22rem;
+        width: 20rem;
         height: 22rem;
         overflow-y: auto;
 
