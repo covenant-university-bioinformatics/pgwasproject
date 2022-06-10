@@ -14,18 +14,18 @@ const Tutorials: React.FC<Props> = (props: Props) => {
         <div className={classes.container}>
           <h1>Tutorial on running an analysis on SysBiol PGWAS </h1>
           <div className={classes.files}>
-            <h3>Download Test Files</h3>
-            <p>
-              <a
-                rel="noreferrer"
-                target="_blank"
-                href="https://drive.google.com/file/d/193L8JZ-yEbZUmE2iSckUZSkIqpS4KPXh/view?usp=sharing"
-              >
-                Small file
-              </a>{" "}
-              - This is a small data test in genomic build version hg 19 to test
-              the Annotation and Deleteriousness tools.
-            </p>
+            <h3>Download Test File</h3>
+            {/*<p>*/}
+            {/*  <a*/}
+            {/*    rel="noreferrer"*/}
+            {/*    target="_blank"*/}
+            {/*    href="https://drive.google.com/file/d/193L8JZ-yEbZUmE2iSckUZSkIqpS4KPXh/view?usp=sharing"*/}
+            {/*  >*/}
+            {/*    Small file*/}
+            {/*  </a>{" "}*/}
+            {/*  - This is a small data test in genomic build version hg 19 to test*/}
+            {/*  the Annotation and Deleteriousness tools.*/}
+            {/*</p>*/}
             <p>
               <a
                 rel="noreferrer"
@@ -39,50 +39,50 @@ const Tutorials: React.FC<Props> = (props: Props) => {
               genomic assembly hg38. Convert it to Genomic assembly hg19 with
               Liftover tool and use the resulting output in the other tools.
             </p>
-            <p>
-              <a
-                rel="noreferrer"
-                target="_blank"
-                href="https://drive.google.com/file/d/1-Nz-yrhG5ThdoMDsPbu6HsUztxEVOe4p/view?usp=sharing"
-              >
-                Gene based test(small)
-              </a>{" "}
-              - This is a small file in genomic build version hg 19 to test the
-              Gene based tools (Magma).
-            </p>
-            <p>
-              <a
-                rel="noreferrer"
-                target="_blank"
-                href="https://drive.google.com/file/d/109RByxkR1o8uJGNslrL60oCP5RGSZWVt/view?usp=sharing"
-              >
-                Gene based test (Big)
-              </a>{" "}
-              - This is a big file in genomic build version hg 19 to test the
-              Gene based tools (Magma).
-            </p>
-            <p>
-              <a
-                rel="noreferrer"
-                target="_blank"
-                href="https://drive.google.com/file/d/15dlfyCcn5fAuLjkWbE1E4fSdRMkhHmz3/view?usp=sharing"
-              >
-                Pathway based test (Small)
-              </a>{" "}
-              - This is a small file in genomic build version hg 19 to test the
-              Pathway based analysis. The file is for chromosome one.
-            </p>
-            <p>
-              <a
-                rel="noreferrer"
-                target="_blank"
-                href="https://drive.google.com/file/d/1JHhxVFmHNURD9O6I7RCX71NkbbfInhpF/view?usp=sharing"
-              >
-                Pathway based test (Big)
-              </a>{" "}
-              - This is a big file in genomic build version hg 19 to test the
-              Pathway based analysis.
-            </p>
+            {/*<p>*/}
+            {/*  <a*/}
+            {/*    rel="noreferrer"*/}
+            {/*    target="_blank"*/}
+            {/*    href="https://drive.google.com/file/d/1-Nz-yrhG5ThdoMDsPbu6HsUztxEVOe4p/view?usp=sharing"*/}
+            {/*  >*/}
+            {/*    Gene based test(small)*/}
+            {/*  </a>{" "}*/}
+            {/*  - This is a small file in genomic build version hg 19 to test the*/}
+            {/*  Gene based tools (Magma).*/}
+            {/*</p>*/}
+            {/*<p>*/}
+            {/*  <a*/}
+            {/*    rel="noreferrer"*/}
+            {/*    target="_blank"*/}
+            {/*    href="https://drive.google.com/file/d/109RByxkR1o8uJGNslrL60oCP5RGSZWVt/view?usp=sharing"*/}
+            {/*  >*/}
+            {/*    Gene based test (Big)*/}
+            {/*  </a>{" "}*/}
+            {/*  - This is a big file in genomic build version hg 19 to test the*/}
+            {/*  Gene based tools (Magma).*/}
+            {/*</p>*/}
+            {/*<p>*/}
+            {/*  <a*/}
+            {/*    rel="noreferrer"*/}
+            {/*    target="_blank"*/}
+            {/*    href="https://drive.google.com/file/d/15dlfyCcn5fAuLjkWbE1E4fSdRMkhHmz3/view?usp=sharing"*/}
+            {/*  >*/}
+            {/*    Pathway based test (Small)*/}
+            {/*  </a>{" "}*/}
+            {/*  - This is a small file in genomic build version hg 19 to test the*/}
+            {/*  Pathway based analysis. The file is for chromosome one.*/}
+            {/*</p>*/}
+            {/*<p>*/}
+            {/*  <a*/}
+            {/*    rel="noreferrer"*/}
+            {/*    target="_blank"*/}
+            {/*    href="https://drive.google.com/file/d/1JHhxVFmHNURD9O6I7RCX71NkbbfInhpF/view?usp=sharing"*/}
+            {/*  >*/}
+            {/*    Pathway based test (Big)*/}
+            {/*  </a>{" "}*/}
+            {/*  - This is a big file in genomic build version hg 19 to test the*/}
+            {/*  Pathway based analysis.*/}
+            {/*</p>*/}
           </div>
         </div>
       </div>
@@ -138,10 +138,7 @@ const Tutorials: React.FC<Props> = (props: Props) => {
               header pane, or the yellow 'Run tool' button on the banner or
               'click to start' link on the Execute Individual tools section.
             </li>
-            <li>
-              Select the tool you would like to execute (Liftover, Annotation,
-              Deleteriousness for now).
-            </li>
+            <li>Select the tool you would like to execute.</li>
             <li>
               On the selected tool dashboard, click on new analysis button on
               the tab panel.
@@ -151,7 +148,7 @@ const Tutorials: React.FC<Props> = (props: Props) => {
             <li>
               Upload the files you want to use for the analysis (important! -
               please ensure your filename doesn't have illegal characters like
-              spaces, braces etc!).
+              spaces, braces etc!). Please use only text files.
             </li>
             <li>
               In the next section, fill in the correct column number for the
