@@ -38,15 +38,30 @@ const Header: React.FC<Props> = (props) => {
           </div>
         </div>
         <nav className={classes.links}>
-          <NavLink to="/tutorials">
-            <Button
-              startIcon={<MenuBookRounded />}
-              size="medium"
-              color="inherit"
-            >
-              <Hidden smDown> Tutorials </Hidden>
-            </Button>
-          </NavLink>
+          {/*<NavLink to="/tutorials">*/}
+          <Button
+            startIcon={<MenuBookRounded />}
+            size="medium"
+            color="inherit"
+            className={classes.dropdown}
+          >
+            <Hidden smDown> Tutorials </Hidden>
+            <div className={classes.dropdown_menu}>
+              <ul>
+                <li>
+                  <Link to={"/individual-based-tutorials"}>
+                    Individual Tools
+                  </Link>
+                </li>
+                <li>
+                  <Link to={"/combined-based-tutorials"}>
+                    Combined workflow
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </Button>
+          {/*</NavLink>*/}
           <NavLink to="/tools">
             <Button startIcon={<AppsRounded />} size="medium" color="inherit">
               <Hidden smDown> Tools </Hidden>

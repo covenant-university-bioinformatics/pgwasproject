@@ -24,7 +24,8 @@
 
   &__Logo {
     display: flex;
-    @include respondMax(ipad-land) {
+    flex-wrap: wrap;
+    @include respondMax(phone-land) {
       flex-direction: column;
       justify-content: space-around;
     }

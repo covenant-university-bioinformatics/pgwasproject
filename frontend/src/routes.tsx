@@ -39,6 +39,9 @@ const EQTLPlot = React.lazy(() => import("./components/EQTLPlot"));
 const PathwayBased = React.lazy(() => import("./components/PathwayBased"));
 const GeneBased = React.lazy(() => import("./components/GeneBased"));
 const Tutorials = React.lazy(() => import("./components/Tutorials"));
+const CombinedTutorials = React.lazy(
+  () => import("./components/CombinedTutorials")
+);
 const Workflows = React.lazy(() => import("./Pages/Workflows"));
 
 type Props = {};
@@ -246,7 +249,7 @@ const Routes: React.FC<Props> = (props) => {
 
         <Route path="/dashboard" exact component={HomeComingSoon} />
         <Route
-          path="/tutorials"
+          path="/individual-based-tutorials"
           exact
           // component={Tutorials}
           render={(props) => (
@@ -254,6 +257,18 @@ const Routes: React.FC<Props> = (props) => {
               fallback={<div className={"suspense_center"}>Loading...</div>}
             >
               <Tutorials />
+            </Suspense>
+          )}
+        />
+        <Route
+          path="/combined-based-tutorials"
+          exact
+          // component={Tutorials}
+          render={(props) => (
+            <Suspense
+              fallback={<div className={"suspense_center"}>Loading...</div>}
+            >
+              <CombinedTutorials />
             </Suspense>
           )}
         />
