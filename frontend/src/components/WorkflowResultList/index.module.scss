@@ -2,9 +2,10 @@
 
 .result_list {
   width: 100%;
-  padding: 3rem 4rem;
+  padding: 3rem 2rem;
   margin-top: 1rem;
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  //box-shadow: 0 0 10px rgba(0,0,0,0.2);
+
 
   @include specialMax(959px) {
     padding: 2rem 1rem;
@@ -16,7 +17,7 @@
     padding: 1rem;
     box-shadow: 0 0 10px rgba(0,0,0,0.2);
     @include respondMax(phone-land) {
-      padding-left: 15px;
+      //padding-left: 15px;
     }
   }
 

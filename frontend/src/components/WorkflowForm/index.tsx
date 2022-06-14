@@ -836,853 +836,856 @@ const WorkflowForm: React.FC<Props & RouteComponentProps> = (props) => {
 
   return (
     <div className={classes.workflow_form}>
-      {/*<section className={classes.form_container}>*/}
-      <h1 className={classes.main_header}>Create A New Job</h1>
-      <div className={classes.buttons}>
-        <LoadTestData
-          classes={classes}
-          useTest={useTest}
-          handleUseTest={handleUseTest}
-          handleRemoveUseTest={handleRemoveUseTest}
-        />
-        <Button
-          type={"button"}
-          variant="contained"
-          color="primary"
-          size={"small"}
-          className={classes.button}
-          endIcon={<GetAppRounded />}
-          href={
-            "https://drive.google.com/file/d/1Sw_iseHNFG7gLVd3Fvt0yvFNEXChn6Qk/view?usp=sharing"
-          }
-          target="_blank"
-        >
-          Download Test File
-        </Button>
-      </div>
-      <form onSubmit={formik.handleSubmit}>
-        <div className={classes.accordian_container}>
-          <Accordion
-            defaultExpanded={true}
-            // expanded={expanded === "panel1"}
-            expanded={true}
-            onChange={handleChange("panel1")}
+      <div className={classes.form_container}>
+        <h1 className={classes.main_header}>Create A New Job</h1>
+        <div className={classes.buttons}>
+          <LoadTestData
+            classes={classes}
+            useTest={useTest}
+            handleUseTest={handleUseTest}
+            handleRemoveUseTest={handleRemoveUseTest}
+          />
+          <Button
+            type={"button"}
+            variant="contained"
+            color="primary"
+            size={"small"}
+            className={classes.button}
+            endIcon={<GetAppRounded />}
+            href={
+              "https://drive.google.com/file/d/1Sw_iseHNFG7gLVd3Fvt0yvFNEXChn6Qk/view?usp=sharing"
+            }
+            target="_blank"
           >
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1bh-content"
-              id="panel1bh-header"
-              className={classes.accordian_summary}
+            Download Test File
+          </Button>
+        </div>
+        <form onSubmit={formik.handleSubmit}>
+          <div className={classes.accordian_container}>
+            <Accordion
+              defaultExpanded={true}
+              // expanded={expanded === "panel1"}
+              expanded={true}
+              onChange={handleChange("panel1")}
             >
-              <Typography
-                className={classes.main_text}
-                sx={{
-                  width: "33%",
-                  flexShrink: 0,
-                  // fontWeight: "bold",
-                  // fontSize: "1.2rem",
-                }}
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1bh-content"
+                id="panel1bh-header"
+                className={classes.accordian_summary}
               >
-                General Job Parameters
-              </Typography>
-              <Typography
-                className={classes.sub_text}
-                sx={{
-                  color: "text.secondary",
-                  // fontWeight: "bold",
-                  // fontSize: "1rem",
-                }}
-              >
-                Basic information about the job
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <div className={classes.container}>
-                <Grid container spacing={3}>
-                  <div className={classes.header_div}>
-                    <h2>Enter a Job Name</h2>
-                  </div>
-                  <CommonTextElement
-                    classes={classes}
-                    formik={formik}
-                    label={"Job Name"}
-                    textVariable={"job_name"}
-                    tooltip={"Enter a name for the job"}
-                  />
-                  {user?.username ? null : (
-                    <>
-                      <div className={classes.header_div}>
-                        <h2>Enter your email</h2>
-                      </div>
-                      <CommonTextElement
-                        classes={classes}
-                        formik={formik}
-                        label={"Email"}
-                        textVariable={"email"}
-                        tooltip={"This will be used to send you job details"}
-                      />
-                    </>
-                  )}
-                  <div className={classes.header_div}>
-                    <h2>Upload a file</h2>
-                  </div>
-                  <CommonFileElement
-                    classes={classes}
-                    formik={formik}
-                    fileInput={fileInput}
-                    handleFileUploadChange={handleFileUploadChange}
-                    handleFileBlur={handleFileBlur}
-                    handleRemove={handleRemove}
-                  />
-                  <div className={classes.header_div}>
-                    <h2>Summary statistics column positions</h2>
-                  </div>
-                  {generalFileForm(classes, formik, [
-                    {
-                      title: "marker_name",
-                      text:
-                        "the column number of the marker name in the summary statistic file. It can be marker_name, rsid, snpid etc",
-                    },
-                    {
-                      title: "chr",
-                      text:
-                        "the column number of the chromosome in the summary statistic file. It can be also be chr",
-                    },
-                    {
-                      title: "position",
-                      text:
-                        "the column number of the base pair positions in the summary statistic file. It can be bp",
-                    },
-                    {
-                      title: "effect_allele",
-                      text:
-                        "the column number of the reference or effect allele in the summary statistic file",
-                    },
-                    {
-                      title: "alternate_allele",
-                      text:
-                        "the column number of the alternate allele in the summary statistic file",
-                    },
-                    {
-                      title: "maf",
-                      text:
-                        "the column number of the minor allele frequency in the summary statistic file. It can be also be maf, freq etc.",
-                    },
-                    {
-                      title: "beta",
-                      text:
-                        "the column number of the beta in the summary statistic file. It can be beta, slope etc.",
-                    },
-                    {
-                      title: "standard_error",
-                      text:
-                        "the column number of the standard error in the summary statistic file. It can be se, standard_error etc.",
-                    },
-                    {
-                      title: "pvalue",
-                      text:
-                        "the column number of the pvalue in the summary statistic file. It can be p, pvalue, pval_nominal etc.",
-                    },
-                    {
-                      title: "sample_size",
-                      text:
-                        "the column number of the sample size in the summary statistic file. It can be also be n.",
-                    },
-                  ])}
-                  <div className={classes.header_div}>
-                    <h2>Select closest population</h2>
-                  </div>
-                  <SelectFieldsElement
-                    classes={classes}
-                    formik={formik}
-                    selectElement={populations}
-                    selectVariable={"population"}
-                    selectName={"Population"}
-                    tooltip={
-                      "the closest population from which the GWAS summary has been generated. This parameter is crucial as using a different population group can result in misleading results."
-                    }
-                  />
-                </Grid>
-              </div>
-            </AccordionDetails>
-          </Accordion>
-          <Accordion
-            expanded={expanded === "panel2"}
-            onChange={handleChange("panel2")}
-          >
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel2bh-content"
-              id="panel2bh-header"
-              className={classes.accordian_summary}
-            >
-              <Typography
-                className={classes.main_text}
-                sx={{
-                  width: "33%",
-                  flexShrink: 0,
-                  fontWeight: "bold",
-                  fontSize: "1.2rem",
-                }}
-              >
-                Linkage Disequilibrium
-              </Typography>
-              <Typography
-                className={classes.sub_text}
-                sx={{
-                  color: "text.secondary",
-                  fontWeight: "bold",
-                  fontSize: "1rem",
-                }}
-              >
-                Finding independent SNPs
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <div className={classes.container}>
-                <Grid container spacing={3}>
-                  <div className={classes.header_div}>
-                    <h2>Parameters</h2>
-                  </div>
-                  <CommonTextElement
-                    classes={classes}
-                    formik={formik}
-                    label={"Clump P1"}
-                    textVariable={"clump_p1"}
-                    tooltip={
-                      "A pvalue threshold for a SNP to be included as an index and its value should be less than or equal to 0.0001. "
-                    }
-                  />
-                  <CommonTextElement
-                    classes={classes}
-                    formik={formik}
-                    label={"Clump P2"}
-                    textVariable={"clump_p2"}
-                    tooltip={
-                      "Secondary significance threshold for clumped SNPs"
-                    }
-                  />
-                  <CommonTextElement
-                    classes={classes}
-                    formik={formik}
-                    label={"Clump R squared"}
-                    textVariable={"clump_r2"}
-                    tooltip={"LD threshold for clumping"}
-                  />
-                  <CommonTextElement
-                    classes={classes}
-                    formik={formik}
-                    label={"Clump KB"}
-                    textVariable={"clump_kb"}
-                    tooltip={"Physical distance threshold for clumping"}
-                  />
-                  <SelectFieldsElement
-                    classes={classes}
-                    formik={formik}
-                    selectElement={yesNoOptions}
-                    selectVariable={"clump_allow_overlap"}
-                    selectName={"Clump Allow Overlap"}
-                  />
-                  <SelectFieldsElement
-                    classes={classes}
-                    formik={formik}
-                    selectElement={yesNoOptions}
-                    selectVariable={"clump_use_gene_region_file"}
-                    selectName={"Clump Use Gene Region File"}
-                  />
-                  <SelectFieldsElement
-                    classes={classes}
-                    formik={formik}
-                    selectElement={clumpRangeOptions}
-                    selectVariable={"clump_range"}
-                    selectName={"Clump Range"}
-                  />
-                  <CommonTextElement
-                    classes={classes}
-                    formik={formik}
-                    label={"Clump Range Border"}
-                    textVariable={"clump_range_border"}
-                    tooltip={
-                      "A window around gene bounds in kilobases. The default value is 0"
-                    }
-                  />
-                </Grid>
-              </div>
-            </AccordionDetails>
-          </Accordion>
-          <Accordion
-            expanded={expanded === "panel3"}
-            onChange={handleChange("panel3")}
-          >
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel3bh-content"
-              id="panel3bh-header"
-              className={classes.accordian_summary}
-            >
-              <Typography
-                className={classes.main_text}
-                sx={{
-                  width: "33%",
-                  flexShrink: 0,
-                  fontWeight: "bold",
-                  fontSize: "1.2rem",
-                }}
-              >
-                Colocalization
-              </Typography>
-              <Typography
-                className={classes.sub_text}
-                sx={{
-                  color: "text.secondary",
-                  fontWeight: "bold",
-                  fontSize: "1rem",
-                }}
-              >
-                Bayesian genetic colocalization analysis
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <div className={classes.container}>
-                <Grid container spacing={3}>
-                  <div className={classes.header_div}>
-                    <h2>Parameters</h2>
-                  </div>
-
-                  <SelectFieldsElement
-                    classes={classes}
-                    formik={formik}
-                    selectElement={analysisType}
-                    selectVariable={"coloc_type"}
-                    selectName={"Coloc Analysis Type"}
-                  />
-
-                  <CommonTextElement
-                    classes={classes}
-                    formik={formik}
-                    label={"Sample proportion"}
-                    textVariable={"coloc_s"}
-                    tooltip={
-                      "this parameter is required for a case-control GWAS summary dataset and it indicates the proportion of samples in the GWAS summary that are cases."
-                    }
-                  />
-
-                  <CommonTextElement
-                    classes={classes}
-                    formik={formik}
-                    label={"Probability One"}
-                    textVariable={"coloc_p1"}
-                    tooltip={
-                      "this parameter specifies the prior probability a SNP is associated with trait 1, i.e, the GWAS summary"
-                    }
-                  />
-                </Grid>
-              </div>
-            </AccordionDetails>
-          </Accordion>
-          <Accordion
-            expanded={expanded === "panel4"}
-            onChange={handleChange("panel4")}
-          >
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel4bh-content"
-              id="panel4bh-header"
-              className={classes.accordian_summary}
-            >
-              <Typography
-                className={classes.main_text}
-                sx={{
-                  width: "33%",
-                  flexShrink: 0,
-                  fontWeight: "bold",
-                  fontSize: "1.2rem",
-                }}
-              >
-                Pathway Based Analysis
-              </Typography>
-              <Typography
-                className={classes.sub_text}
-                sx={{
-                  color: "text.secondary",
-                  fontWeight: "bold",
-                  fontSize: "1rem",
-                }}
-              >
-                Perform gene scoring and pathway analysis using GWAS summary
-                statistics
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <div className={classes.container}>
-                <Grid container spacing={3}>
-                  <div className={classes.header_div}>
-                    <h2>Parameters</h2>
-                  </div>
-                  <SelectFieldsElement
-                    classes={classes}
-                    formik={formik}
-                    selectElement={run_pathways}
-                    selectVariable={"pascal_runpathway"}
-                    selectName={"Run Pathway Option"}
-                  />
-
-                  <SelectFieldsElement
-                    classes={classes}
-                    formik={formik}
-                    selectElement={chromosomes}
-                    selectVariable={"pascal_chr"}
-                    selectName={"Chromosome"}
-                  />
-
-                  <SelectFieldsElement
-                    classes={classes}
-                    formik={formik}
-                    selectElement={geneSetFileOptions}
-                    selectVariable={"pascal_genesetfile"}
-                    selectName={"Gene Set File"}
-                    tooltip={
-                      "Geneset file where users can choose the database for the pathway analysis either as msigdb.v4.0.entrez or msigBIOCARTA_KEGG_REACTOME data set"
-                    }
-                  />
-
-                  <CommonTextElement
-                    classes={classes}
-                    formik={formik}
-                    label={"Pvalue Cut off"}
-                    textVariable={"pascal_pvalue_cutoff"}
-                    tooltip={
-                      "p-value cutoff to report the statistically significant genes and pathways. The default value is 0.05."
-                    }
-                  />
-
-                  <CommonTextElement
-                    classes={classes}
-                    formik={formik}
-                    label={"Up Window Size(bp)"}
-                    textVariable={"pascal_up"}
-                    tooltip={
-                      "Upstream window size around genes. The default values are 50000 base-pairs upstream of transcription start site and 50000 base-pairs downstream of transcription termination site."
-                    }
-                  />
-
-                  <CommonTextElement
-                    classes={classes}
-                    formik={formik}
-                    label={"Down Window Size(bp)"}
-                    textVariable={"pascal_down"}
-                    tooltip={
-                      "downstream window size around genes. The default values are 50000 base-pairs upstream of transcription start site and 50000 base-pairs downstream of transcription termination site."
-                    }
-                  />
-
-                  <CommonTextElement
-                    classes={classes}
-                    formik={formik}
-                    label={"Max SNPs"}
-                    textVariable={"pascal_maxsnp"}
-                    tooltip={
-                      "Maximum number of SNPs per gene. The default value is 3000 SNPs."
-                    }
-                  />
-                  <SelectFieldsElement
-                    classes={classes}
-                    formik={formik}
-                    selectElement={geneScoringOptions}
-                    selectVariable={"pascal_genescoring"}
-                    selectName={"Gene Scoring Option"}
-                    tooltip={
-                      "ene scoring method as either max or sum. The max gene scoring method is based on the maximum-of-chi-squares algorithm (MOCS), while the sum method is based on the sum-of-chi-squares (SOCS) algorithm."
-                    }
-                  />
-                  <CommonTextElement
-                    classes={classes}
-                    formik={formik}
-                    label={"Merge Distance"}
-                    textVariable={"pascal_mergedistance"}
-                    tooltip={"merge distance"}
-                  />
-
-                  <CommonTextElement
-                    classes={classes}
-                    formik={formik}
-                    label={"MAF Cut off"}
-                    textVariable={"pascal_mafcutoff"}
-                    tooltip={
-                      "The minor allele frequency cutoff value (between 0 and 1). The default value is 0.05"
-                    }
-                  />
-                </Grid>
-              </div>
-            </AccordionDetails>
-          </Accordion>
-          <Accordion
-            expanded={expanded === "panel5"}
-            onChange={handleChange("panel5")}
-          >
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel5bh-content"
-              id="panel5bh-header"
-              className={classes.accordian_summary}
-            >
-              <Typography
-                className={classes.main_text}
-                sx={{
-                  width: "33%",
-                  flexShrink: 0,
-                  fontWeight: "bold",
-                  fontSize: "1.2rem",
-                }}
-              >
-                Gene Based Analysis
-              </Typography>
-              <Typography
-                className={classes.sub_text}
-                sx={{
-                  color: "text.secondary",
-                  fontWeight: "bold",
-                  fontSize: "1rem",
-                }}
-              >
-                Identify genes associated with a particular trait/phenotype
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <div className={classes.container}>
-                <Grid container spacing={3}>
-                  <div className={classes.header_div}>
-                    <h2>Parameters</h2>
-                  </div>
-                  <SelectFieldsElement
-                    classes={classes}
-                    formik={formik}
-                    selectElement={synonyms}
-                    selectVariable={"emagma_synonym"}
-                    selectName={"Synonyms"}
-                    tooltip={
-                      "The option that indicates how to deal with synonymous SNP IDs."
-                    }
-                  />
-
-                  <SelectFieldsElement
-                    classes={classes}
-                    formik={formik}
-                    selectElement={tissues}
-                    selectVariable={"emagma_tissues"}
-                    selectName={"Tissue"}
-                    tooltip={
-                      "The tissue to calculate tissue-specific gene set analysis"
-                    }
-                  />
-
-                  <CommonTextElement
-                    classes={classes}
-                    formik={formik}
-                    label={"Up Window Size(KB)"}
-                    textVariable={"emagma_up_window"}
-                    tooltip={
-                      "A value upstream annotation window around genes in kb. The default value is 0"
-                    }
-                  />
-
-                  <CommonTextElement
-                    classes={classes}
-                    formik={formik}
-                    label={"Down Window Size(KB)"}
-                    textVariable={"emagma_down_window"}
-                    tooltip={
-                      "A value downstream annotation window around genes in kb. The default value is 0."
-                    }
-                  />
-                </Grid>
-              </div>
-            </AccordionDetails>
-          </Accordion>
-          <Accordion
-            expanded={expanded === "panel6"}
-            onChange={handleChange("panel6")}
-          >
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel6bh-content"
-              id="panel6bh-header"
-              className={classes.accordian_summary}
-            >
-              <Typography
-                className={classes.main_text}
-                sx={{
-                  width: "33%",
-                  flexShrink: 0,
-                  fontWeight: "bold",
-                  fontSize: "1.2rem",
-                }}
-              >
-                EQTL SMR/HEIDI
-              </Typography>
-              <Typography
-                className={classes.sub_text}
-                sx={{
-                  color: "text.secondary",
-                  fontWeight: "bold",
-                  fontSize: "1rem",
-                }}
-              >
-                Expression quantitative trait locus (eQTL) analysis
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <div className={classes.container}>
-                <Grid container spacing={3}>
-                  <div className={classes.header_div}>
-                    <h2>Parameters</h2>
-                  </div>
-                  <SelectFieldsElement
-                    classes={classes}
-                    formik={formik}
-                    selectElement={onOffOptions}
-                    selectVariable={"smr_heidi"}
-                    selectName={"Option (Heidi)"}
-                  />
-
-                  <SelectFieldsElement
-                    classes={classes}
-                    formik={formik}
-                    selectElement={onOffOptions}
-                    selectVariable={"smr_trans"}
-                    selectName={"option (Trans)"}
-                  />
-
-                  <SelectFieldsElement
-                    classes={classes}
-                    formik={formik}
-                    selectElement={onOffOptions}
-                    selectVariable={"smr_smr_multi"}
-                    selectName={"option (SMR Multi)"}
-                  />
-
-                  {eqtlVariables.map((element) => (
+                <Typography
+                  className={classes.main_text}
+                  sx={{
+                    width: "33%",
+                    flexShrink: 0,
+                    // fontWeight: "bold",
+                    // fontSize: "1.2rem",
+                  }}
+                >
+                  General Job Parameters
+                </Typography>
+                <Typography
+                  className={classes.sub_text}
+                  sx={{
+                    color: "text.secondary",
+                    // fontWeight: "bold",
+                    // fontSize: "1rem",
+                  }}
+                >
+                  Basic information about the job
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <div className={classes.container}>
+                  <Grid container spacing={3}>
+                    <div className={classes.header_div}>
+                      <h2>Enter a Job Name</h2>
+                    </div>
                     <CommonTextElement
-                      key={element.name}
                       classes={classes}
                       formik={formik}
-                      label={element.name}
-                      textVariable={element.variable}
-                      tooltip={element.text}
+                      label={"Job Name"}
+                      textVariable={"job_name"}
+                      tooltip={"Enter a name for the job"}
                     />
-                  ))}
-
-                  <SelectFieldsElement
-                    classes={classes}
-                    formik={formik}
-                    selectElement={trueFalseOptions}
-                    selectVariable={"smr_westra_eqtl"}
-                    selectName={"option (Westra)"}
-                    tooltip={"Use Westra dataset for eQTL analysis"}
-                  />
-
-                  <SelectFieldsElement
-                    classes={classes}
-                    formik={formik}
-                    selectElement={trueFalseOptions}
-                    selectVariable={"smr_cage_eqtl"}
-                    selectName={"option (CAGE)"}
-                    tooltip={"Use CAGE dataset for eQTL analysis"}
-                  />
-
-                  <SelectFieldsElement
-                    classes={classes}
-                    formik={formik}
-                    selectElement={tissues}
-                    selectVariable={"smr_gtex_tissue"}
-                    selectName={"GTEX V8 Tissue"}
-                    tooltip={"Select GTEX v8 tissue"}
-                  />
-                </Grid>
-              </div>
-            </AccordionDetails>
-          </Accordion>
-          <Accordion
-            expanded={expanded === "panel7"}
-            onChange={handleChange("panel7")}
-          >
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel7bh-content"
-              id="panel7bh-header"
-              className={classes.accordian_summary}
-            >
-              <Typography
-                className={classes.main_text}
-                sx={{
-                  width: "33%",
-                  flexShrink: 0,
-                  fontWeight: "bold",
-                  fontSize: "1.2rem",
-                }}
-              >
-                Annotation and Deleteriousness
-              </Typography>
-              <Typography
-                className={classes.sub_text}
-                sx={{
-                  color: "text.secondary",
-                  fontWeight: "bold",
-                  fontSize: "1rem",
-                }}
-              >
-                Perform annotation and deleteriousness analysis
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <div className={classes.container}>
-                <Grid container spacing={3}>
-                  <div className={classes.header_div}>
-                    <h2>Gene Annotation Database</h2>
-                  </div>
-                  <SelectFieldsElement
-                    classes={classes}
-                    formik={formik}
-                    selectElement={gene_dbs}
-                    selectVariable={"annot_gene_db"}
-                    selectName={"Gene Annotation"}
-                  />
-                  <div className={classes.header_div}>
-                    <h2>Other Annotation Databases</h2>
-                  </div>
-                  <Grid className={classes.grid} item xs={12}>
-                    <Paper variant="outlined" className={classes.paper}>
-                      <FormGroup row>
-                        {databases.map((data, index) => (
-                          <FormControlLabel
-                            key={`check_${index}`}
-                            control={
-                              <Checkbox
-                                checked={formik.values[data.variable]}
-                                {...formik.getFieldProps(data.variable)}
-                              />
-                            }
-                            label={data.name}
-                          />
-                        ))}
-                      </FormGroup>
-                    </Paper>
+                    {user?.username ? null : (
+                      <>
+                        <div className={classes.header_div}>
+                          <h2>Enter your email</h2>
+                        </div>
+                        <CommonTextElement
+                          classes={classes}
+                          formik={formik}
+                          label={"Email"}
+                          textVariable={"email"}
+                          tooltip={"This will be used to send you job details"}
+                        />
+                      </>
+                    )}
+                    <div className={classes.header_div}>
+                      <h2>Upload a file</h2>
+                    </div>
+                    <CommonFileElement
+                      classes={classes}
+                      formik={formik}
+                      fileInput={fileInput}
+                      handleFileUploadChange={handleFileUploadChange}
+                      handleFileBlur={handleFileBlur}
+                      handleRemove={handleRemove}
+                    />
+                    <div className={classes.header_div}>
+                      <h2>Summary statistics column positions</h2>
+                    </div>
+                    {generalFileForm(classes, formik, [
+                      {
+                        title: "marker_name",
+                        text:
+                          "the column number of the marker name in the summary statistic file. It can be marker_name, rsid, snpid etc",
+                      },
+                      {
+                        title: "chr",
+                        text:
+                          "the column number of the chromosome in the summary statistic file. It can be also be chr",
+                      },
+                      {
+                        title: "position",
+                        text:
+                          "the column number of the base pair positions in the summary statistic file. It can be bp",
+                      },
+                      {
+                        title: "effect_allele",
+                        text:
+                          "the column number of the reference or effect allele in the summary statistic file",
+                      },
+                      {
+                        title: "alternate_allele",
+                        text:
+                          "the column number of the alternate allele in the summary statistic file",
+                      },
+                      {
+                        title: "maf",
+                        text:
+                          "the column number of the minor allele frequency in the summary statistic file. It can be also be maf, freq etc.",
+                      },
+                      {
+                        title: "beta",
+                        text:
+                          "the column number of the beta in the summary statistic file. It can be beta, slope etc.",
+                      },
+                      {
+                        title: "standard_error",
+                        text:
+                          "the column number of the standard error in the summary statistic file. It can be se, standard_error etc.",
+                      },
+                      {
+                        title: "pvalue",
+                        text:
+                          "the column number of the pvalue in the summary statistic file. It can be p, pvalue, pval_nominal etc.",
+                      },
+                      {
+                        title: "sample_size",
+                        text:
+                          "the column number of the sample size in the summary statistic file. It can be also be n.",
+                      },
+                    ])}
+                    <div className={classes.header_div}>
+                      <h2>Select closest population</h2>
+                    </div>
+                    <SelectFieldsElement
+                      classes={classes}
+                      formik={formik}
+                      selectElement={populations}
+                      selectVariable={"population"}
+                      selectName={"Population"}
+                      tooltip={
+                        "the closest population from which the GWAS summary has been generated. This parameter is crucial as using a different population group can result in misleading results."
+                      }
+                    />
                   </Grid>
-                  <div className={classes.header_div}>
-                    <h2>Deleteriousness Databases</h2>
-                  </div>
-                  <Grid className={classes.grid} item xs={12} sm={12}>
-                    <Paper variant="outlined" className={classes.paper}>
-                      <ul className={classes.db_list}>
-                        {dbs.map((db, i) => (
-                          <li key={i}>{db}</li>
-                        ))}
-                      </ul>
-                    </Paper>
+                </div>
+              </AccordionDetails>
+            </Accordion>
+            <Accordion
+              expanded={expanded === "panel2"}
+              onChange={handleChange("panel2")}
+            >
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel2bh-content"
+                id="panel2bh-header"
+                className={classes.accordian_summary}
+              >
+                <Typography
+                  className={classes.main_text}
+                  sx={{
+                    width: "33%",
+                    flexShrink: 0,
+                    fontWeight: "bold",
+                    fontSize: "1.2rem",
+                  }}
+                >
+                  Linkage Disequilibrium
+                </Typography>
+                <Typography
+                  className={classes.sub_text}
+                  sx={{
+                    color: "text.secondary",
+                    fontWeight: "bold",
+                    fontSize: "1rem",
+                  }}
+                >
+                  Finding independent SNPs
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <div className={classes.container}>
+                  <Grid container spacing={3}>
+                    <div className={classes.header_div}>
+                      <h2>Parameters</h2>
+                    </div>
+                    <CommonTextElement
+                      classes={classes}
+                      formik={formik}
+                      label={"Clump P1"}
+                      textVariable={"clump_p1"}
+                      tooltip={
+                        "A pvalue threshold for a SNP to be included as an index and its value should be less than or equal to 0.0001. "
+                      }
+                    />
+                    <CommonTextElement
+                      classes={classes}
+                      formik={formik}
+                      label={"Clump P2"}
+                      textVariable={"clump_p2"}
+                      tooltip={
+                        "Secondary significance threshold for clumped SNPs"
+                      }
+                    />
+                    <CommonTextElement
+                      classes={classes}
+                      formik={formik}
+                      label={"Clump R squared"}
+                      textVariable={"clump_r2"}
+                      tooltip={"LD threshold for clumping"}
+                    />
+                    <CommonTextElement
+                      classes={classes}
+                      formik={formik}
+                      label={"Clump KB"}
+                      textVariable={"clump_kb"}
+                      tooltip={"Physical distance threshold for clumping"}
+                    />
+                    <SelectFieldsElement
+                      classes={classes}
+                      formik={formik}
+                      selectElement={yesNoOptions}
+                      selectVariable={"clump_allow_overlap"}
+                      selectName={"Clump Allow Overlap"}
+                    />
+                    <SelectFieldsElement
+                      classes={classes}
+                      formik={formik}
+                      selectElement={yesNoOptions}
+                      selectVariable={"clump_use_gene_region_file"}
+                      selectName={"Clump Use Gene Region File"}
+                    />
+                    <SelectFieldsElement
+                      classes={classes}
+                      formik={formik}
+                      selectElement={clumpRangeOptions}
+                      selectVariable={"clump_range"}
+                      selectName={"Clump Range"}
+                    />
+                    <CommonTextElement
+                      classes={classes}
+                      formik={formik}
+                      label={"Clump Range Border"}
+                      textVariable={"clump_range_border"}
+                      tooltip={
+                        "A window around gene bounds in kilobases. The default value is 0"
+                      }
+                    />
                   </Grid>
-                </Grid>
-              </div>
-            </AccordionDetails>
-          </Accordion>
-          <Accordion
-            expanded={expanded === "panel8"}
-            onChange={handleChange("panel8")}
-          >
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel8bh-content"
-              id="panel8bh-header"
-              className={classes.accordian_summary}
+                </div>
+              </AccordionDetails>
+            </Accordion>
+            <Accordion
+              expanded={expanded === "panel3"}
+              onChange={handleChange("panel3")}
             >
-              <Typography
-                className={classes.main_text}
-                sx={{
-                  width: "33%",
-                  flexShrink: 0,
-                  fontWeight: "bold",
-                  fontSize: "1.2rem",
-                }}
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel3bh-content"
+                id="panel3bh-header"
+                className={classes.accordian_summary}
               >
-                Regulation
-              </Typography>
-              <Typography
-                className={classes.sub_text}
-                sx={{
-                  color: "text.secondary",
-                  fontWeight: "bold",
-                  fontSize: "1rem",
-                }}
-              >
-                Annotate variants based on HaploReg and RegulomeDB
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <div className={classes.container}>
-                <Grid container spacing={3}>
-                  <div className={classes.header_div}>
-                    <h2>Parameters</h2>
-                  </div>
-                  <CommonTextElement
-                    classes={classes}
-                    formik={formik}
-                    label={"LD Threshold"}
-                    textVariable={"haplor_ld_threshold"}
-                    tooltip={"Linkage disequilibrium threshold"}
-                  />
-                  <SelectFieldsElement
-                    classes={classes}
-                    formik={formik}
-                    selectElement={epiOptions}
-                    selectVariable={"haplor_epi"}
-                    selectName={"EPI Options"}
-                    tooltip={
-                      "Source of the epigenome. There four possible values for this parameter which are vanilla for querying ChromHMM (Core 15-state model), imputed for querying ChromHMM (25-state model using 12 imputed marks), amd methyl for querying H3K4me1/H3K4me3 peaks and acetyl for querying H3K27ac/H3K9ac peaks."
-                    }
-                  />
-                  <SelectFieldsElement
-                    classes={classes}
-                    formik={formik}
-                    selectElement={consOptions}
-                    selectVariable={"haplor_cons"}
-                    selectName={"CONS Options"}
-                    tooltip={
-                      "Mammalian conservation algorithm to be used. There are three possible values for this parameter which are: gerp for GERP algorithm, siphy for SiPhy-omega algorithm, and both to use both algorithms."
-                    }
-                  />
-                  <SelectFieldsElement
-                    classes={classes}
-                    formik={formik}
-                    selectElement={genetypesOptions}
-                    selectVariable={"haplor_genetypes"}
-                    selectName={"Genetype Options"}
-                    tooltip={
-                      "The genomic coordinates for querying. There are possible values for this parameter, which are gencode for using Gencode genes coordinates and refseq for using RefSeq genes coordinates."
-                    }
-                  />
-                </Grid>
-              </div>
-            </AccordionDetails>
-          </Accordion>
-        </div>
-        <div className={classes.button_container}>
-          {loading ? (
-            <CircularProgress color="secondary" className="progress" />
-          ) : (
-            <Button
-              className={classes.form_button}
-              startIcon={<PlayArrow />}
-              size="large"
-              type={"submit"}
-              variant="contained"
-              color="primary"
-              disabled={!formik.isValid}
+                <Typography
+                  className={classes.main_text}
+                  sx={{
+                    width: "33%",
+                    flexShrink: 0,
+                    fontWeight: "bold",
+                    fontSize: "1.2rem",
+                  }}
+                >
+                  Colocalization
+                </Typography>
+                <Typography
+                  className={classes.sub_text}
+                  sx={{
+                    color: "text.secondary",
+                    fontWeight: "bold",
+                    fontSize: "1rem",
+                  }}
+                >
+                  Bayesian genetic colocalization analysis
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <div className={classes.container}>
+                  <Grid container spacing={3}>
+                    <div className={classes.header_div}>
+                      <h2>Parameters</h2>
+                    </div>
+
+                    <SelectFieldsElement
+                      classes={classes}
+                      formik={formik}
+                      selectElement={analysisType}
+                      selectVariable={"coloc_type"}
+                      selectName={"Coloc Analysis Type"}
+                    />
+
+                    <CommonTextElement
+                      classes={classes}
+                      formik={formik}
+                      label={"Sample proportion"}
+                      textVariable={"coloc_s"}
+                      tooltip={
+                        "this parameter is required for a case-control GWAS summary dataset and it indicates the proportion of samples in the GWAS summary that are cases."
+                      }
+                    />
+
+                    <CommonTextElement
+                      classes={classes}
+                      formik={formik}
+                      label={"Probability One"}
+                      textVariable={"coloc_p1"}
+                      tooltip={
+                        "this parameter specifies the prior probability a SNP is associated with trait 1, i.e, the GWAS summary"
+                      }
+                    />
+                  </Grid>
+                </div>
+              </AccordionDetails>
+            </Accordion>
+            <Accordion
+              expanded={expanded === "panel4"}
+              onChange={handleChange("panel4")}
             >
-              Execute <Hidden xsDown> Analysis</Hidden>
-            </Button>
-          )}
-        </div>
-      </form>
-      {/*</section>*/}
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel4bh-content"
+                id="panel4bh-header"
+                className={classes.accordian_summary}
+              >
+                <Typography
+                  className={classes.main_text}
+                  sx={{
+                    width: "33%",
+                    flexShrink: 0,
+                    fontWeight: "bold",
+                    fontSize: "1.2rem",
+                  }}
+                >
+                  Pathway Based Analysis
+                </Typography>
+                <Typography
+                  className={classes.sub_text}
+                  sx={{
+                    color: "text.secondary",
+                    fontWeight: "bold",
+                    fontSize: "1rem",
+                  }}
+                >
+                  Perform gene scoring and pathway analysis using GWAS summary
+                  statistics
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <div className={classes.container}>
+                  <Grid container spacing={3}>
+                    <div className={classes.header_div}>
+                      <h2>Parameters</h2>
+                    </div>
+                    <SelectFieldsElement
+                      classes={classes}
+                      formik={formik}
+                      selectElement={run_pathways}
+                      selectVariable={"pascal_runpathway"}
+                      selectName={"Run Pathway Option"}
+                    />
+
+                    <SelectFieldsElement
+                      classes={classes}
+                      formik={formik}
+                      selectElement={chromosomes}
+                      selectVariable={"pascal_chr"}
+                      selectName={"Chromosome"}
+                    />
+
+                    <SelectFieldsElement
+                      classes={classes}
+                      formik={formik}
+                      selectElement={geneSetFileOptions}
+                      selectVariable={"pascal_genesetfile"}
+                      selectName={"Gene Set File"}
+                      tooltip={
+                        "Geneset file where users can choose the database for the pathway analysis either as msigdb.v4.0.entrez or msigBIOCARTA_KEGG_REACTOME data set"
+                      }
+                    />
+
+                    <CommonTextElement
+                      classes={classes}
+                      formik={formik}
+                      label={"Pvalue Cut off"}
+                      textVariable={"pascal_pvalue_cutoff"}
+                      tooltip={
+                        "p-value cutoff to report the statistically significant genes and pathways. The default value is 0.05."
+                      }
+                    />
+
+                    <CommonTextElement
+                      classes={classes}
+                      formik={formik}
+                      label={"Up Window Size(bp)"}
+                      textVariable={"pascal_up"}
+                      tooltip={
+                        "Upstream window size around genes. The default values are 50000 base-pairs upstream of transcription start site and 50000 base-pairs downstream of transcription termination site."
+                      }
+                    />
+
+                    <CommonTextElement
+                      classes={classes}
+                      formik={formik}
+                      label={"Down Window Size(bp)"}
+                      textVariable={"pascal_down"}
+                      tooltip={
+                        "downstream window size around genes. The default values are 50000 base-pairs upstream of transcription start site and 50000 base-pairs downstream of transcription termination site."
+                      }
+                    />
+
+                    <CommonTextElement
+                      classes={classes}
+                      formik={formik}
+                      label={"Max SNPs"}
+                      textVariable={"pascal_maxsnp"}
+                      tooltip={
+                        "Maximum number of SNPs per gene. The default value is 3000 SNPs."
+                      }
+                    />
+                    <SelectFieldsElement
+                      classes={classes}
+                      formik={formik}
+                      selectElement={geneScoringOptions}
+                      selectVariable={"pascal_genescoring"}
+                      selectName={"Gene Scoring Option"}
+                      tooltip={
+                        "ene scoring method as either max or sum. The max gene scoring method is based on the maximum-of-chi-squares algorithm (MOCS), while the sum method is based on the sum-of-chi-squares (SOCS) algorithm."
+                      }
+                    />
+                    <CommonTextElement
+                      classes={classes}
+                      formik={formik}
+                      label={"Merge Distance"}
+                      textVariable={"pascal_mergedistance"}
+                      tooltip={"merge distance"}
+                    />
+
+                    <CommonTextElement
+                      classes={classes}
+                      formik={formik}
+                      label={"MAF Cut off"}
+                      textVariable={"pascal_mafcutoff"}
+                      tooltip={
+                        "The minor allele frequency cutoff value (between 0 and 1). The default value is 0.05"
+                      }
+                    />
+                  </Grid>
+                </div>
+              </AccordionDetails>
+            </Accordion>
+            <Accordion
+              expanded={expanded === "panel5"}
+              onChange={handleChange("panel5")}
+            >
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel5bh-content"
+                id="panel5bh-header"
+                className={classes.accordian_summary}
+              >
+                <Typography
+                  className={classes.main_text}
+                  sx={{
+                    width: "33%",
+                    flexShrink: 0,
+                    fontWeight: "bold",
+                    fontSize: "1.2rem",
+                  }}
+                >
+                  Gene Based Analysis
+                </Typography>
+                <Typography
+                  className={classes.sub_text}
+                  sx={{
+                    color: "text.secondary",
+                    fontWeight: "bold",
+                    fontSize: "1rem",
+                  }}
+                >
+                  Identify genes associated with a particular trait/phenotype
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <div className={classes.container}>
+                  <Grid container spacing={3}>
+                    <div className={classes.header_div}>
+                      <h2>Parameters</h2>
+                    </div>
+                    <SelectFieldsElement
+                      classes={classes}
+                      formik={formik}
+                      selectElement={synonyms}
+                      selectVariable={"emagma_synonym"}
+                      selectName={"Synonyms"}
+                      tooltip={
+                        "The option that indicates how to deal with synonymous SNP IDs."
+                      }
+                    />
+
+                    <SelectFieldsElement
+                      classes={classes}
+                      formik={formik}
+                      selectElement={tissues}
+                      selectVariable={"emagma_tissues"}
+                      selectName={"Tissue"}
+                      tooltip={
+                        "The tissue to calculate tissue-specific gene set analysis"
+                      }
+                    />
+
+                    <CommonTextElement
+                      classes={classes}
+                      formik={formik}
+                      label={"Up Window Size(KB)"}
+                      textVariable={"emagma_up_window"}
+                      tooltip={
+                        "A value upstream annotation window around genes in kb. The default value is 0"
+                      }
+                    />
+
+                    <CommonTextElement
+                      classes={classes}
+                      formik={formik}
+                      label={"Down Window Size(KB)"}
+                      textVariable={"emagma_down_window"}
+                      tooltip={
+                        "A value downstream annotation window around genes in kb. The default value is 0."
+                      }
+                    />
+                  </Grid>
+                </div>
+              </AccordionDetails>
+            </Accordion>
+            <Accordion
+              expanded={expanded === "panel6"}
+              onChange={handleChange("panel6")}
+            >
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel6bh-content"
+                id="panel6bh-header"
+                className={classes.accordian_summary}
+              >
+                <Typography
+                  className={classes.main_text}
+                  sx={{
+                    width: "33%",
+                    flexShrink: 0,
+                    fontWeight: "bold",
+                    fontSize: "1.2rem",
+                  }}
+                >
+                  EQTL SMR/HEIDI
+                </Typography>
+                <Typography
+                  className={classes.sub_text}
+                  sx={{
+                    color: "text.secondary",
+                    fontWeight: "bold",
+                    fontSize: "1rem",
+                  }}
+                >
+                  Expression quantitative trait locus (eQTL) analysis
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <div className={classes.container}>
+                  <Grid container spacing={3}>
+                    <div className={classes.header_div}>
+                      <h2>Parameters</h2>
+                    </div>
+                    <SelectFieldsElement
+                      classes={classes}
+                      formik={formik}
+                      selectElement={onOffOptions}
+                      selectVariable={"smr_heidi"}
+                      selectName={"Option (Heidi)"}
+                    />
+
+                    <SelectFieldsElement
+                      classes={classes}
+                      formik={formik}
+                      selectElement={onOffOptions}
+                      selectVariable={"smr_trans"}
+                      selectName={"option (Trans)"}
+                    />
+
+                    <SelectFieldsElement
+                      classes={classes}
+                      formik={formik}
+                      selectElement={onOffOptions}
+                      selectVariable={"smr_smr_multi"}
+                      selectName={"option (SMR Multi)"}
+                    />
+
+                    {eqtlVariables.map((element) => (
+                      <CommonTextElement
+                        key={element.name}
+                        classes={classes}
+                        formik={formik}
+                        label={element.name}
+                        textVariable={element.variable}
+                        tooltip={element.text}
+                      />
+                    ))}
+
+                    <SelectFieldsElement
+                      classes={classes}
+                      formik={formik}
+                      selectElement={trueFalseOptions}
+                      selectVariable={"smr_westra_eqtl"}
+                      selectName={"option (Westra)"}
+                      tooltip={"Use Westra dataset for eQTL analysis"}
+                    />
+
+                    <SelectFieldsElement
+                      classes={classes}
+                      formik={formik}
+                      selectElement={trueFalseOptions}
+                      selectVariable={"smr_cage_eqtl"}
+                      selectName={"option (CAGE)"}
+                      tooltip={"Use CAGE dataset for eQTL analysis"}
+                    />
+
+                    <SelectFieldsElement
+                      classes={classes}
+                      formik={formik}
+                      selectElement={tissues}
+                      selectVariable={"smr_gtex_tissue"}
+                      selectName={"GTEX V8 Tissue"}
+                      tooltip={"Select GTEX v8 tissue"}
+                    />
+                  </Grid>
+                </div>
+              </AccordionDetails>
+            </Accordion>
+            <Accordion
+              expanded={expanded === "panel7"}
+              onChange={handleChange("panel7")}
+            >
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel7bh-content"
+                id="panel7bh-header"
+                className={classes.accordian_summary}
+              >
+                <Typography
+                  className={classes.main_text}
+                  sx={{
+                    width: "33%",
+                    flexShrink: 0,
+                    fontWeight: "bold",
+                    fontSize: "1.2rem",
+                  }}
+                >
+                  Annotation and Deleteriousness
+                </Typography>
+                <Typography
+                  className={classes.sub_text}
+                  sx={{
+                    color: "text.secondary",
+                    fontWeight: "bold",
+                    fontSize: "1rem",
+                  }}
+                >
+                  Perform annotation and deleteriousness analysis
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <div className={classes.container}>
+                  <Grid container spacing={3}>
+                    <div className={classes.header_div}>
+                      <h2>Gene Annotation Database</h2>
+                    </div>
+                    <SelectFieldsElement
+                      classes={classes}
+                      formik={formik}
+                      selectElement={gene_dbs}
+                      selectVariable={"annot_gene_db"}
+                      selectName={"Gene Annotation"}
+                    />
+                    <div className={classes.header_div}>
+                      <h2>Other Annotation Databases</h2>
+                    </div>
+                    <Grid className={classes.grid} item xs={12}>
+                      <Paper variant="outlined" className={classes.paper}>
+                        <FormGroup row>
+                          {databases.map((data, index) => (
+                            <FormControlLabel
+                              key={`check_${index}`}
+                              control={
+                                <Checkbox
+                                  checked={formik.values[data.variable]}
+                                  {...formik.getFieldProps(data.variable)}
+                                />
+                              }
+                              label={data.name}
+                            />
+                          ))}
+                        </FormGroup>
+                      </Paper>
+                    </Grid>
+                    <div className={classes.header_div}>
+                      <h2>Deleteriousness Databases</h2>
+                    </div>
+                    <Grid className={classes.grid} item xs={12} sm={12}>
+                      <Paper variant="outlined" className={classes.paper}>
+                        <ul className={classes.db_list}>
+                          {dbs.map((db, i) => (
+                            <li key={i}>{db}</li>
+                          ))}
+                        </ul>
+                      </Paper>
+                    </Grid>
+                  </Grid>
+                </div>
+              </AccordionDetails>
+            </Accordion>
+            <Accordion
+              expanded={expanded === "panel8"}
+              onChange={handleChange("panel8")}
+            >
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel8bh-content"
+                id="panel8bh-header"
+                className={classes.accordian_summary}
+              >
+                <Typography
+                  className={classes.main_text}
+                  sx={{
+                    width: "33%",
+                    flexShrink: 0,
+                    fontWeight: "bold",
+                    fontSize: "1.2rem",
+                  }}
+                >
+                  Regulation
+                </Typography>
+                <Typography
+                  className={classes.sub_text}
+                  sx={{
+                    color: "text.secondary",
+                    fontWeight: "bold",
+                    fontSize: "1rem",
+                  }}
+                >
+                  Annotate variants based on HaploReg and RegulomeDB
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <div className={classes.container}>
+                  <Grid container spacing={3}>
+                    <div className={classes.header_div}>
+                      <h2>Parameters</h2>
+                    </div>
+                    <CommonTextElement
+                      classes={classes}
+                      formik={formik}
+                      label={"LD Threshold"}
+                      textVariable={"haplor_ld_threshold"}
+                      tooltip={"Linkage disequilibrium threshold"}
+                    />
+                    <SelectFieldsElement
+                      classes={classes}
+                      formik={formik}
+                      selectElement={epiOptions}
+                      selectVariable={"haplor_epi"}
+                      selectName={"EPI Options"}
+                      tooltip={
+                        "Source of the epigenome. There four possible values for this parameter which are vanilla for querying ChromHMM (Core 15-state model), imputed for querying ChromHMM (25-state model using 12 imputed marks), amd methyl for querying H3K4me1/H3K4me3 peaks and acetyl for querying H3K27ac/H3K9ac peaks."
+                      }
+                    />
+                    <SelectFieldsElement
+                      classes={classes}
+                      formik={formik}
+                      selectElement={consOptions}
+                      selectVariable={"haplor_cons"}
+                      selectName={"CONS Options"}
+                      tooltip={
+                        "Mammalian conservation algorithm to be used. There are three possible values for this parameter which are: gerp for GERP algorithm, siphy for SiPhy-omega algorithm, and both to use both algorithms."
+                      }
+                    />
+                    <SelectFieldsElement
+                      classes={classes}
+                      formik={formik}
+                      selectElement={genetypesOptions}
+                      selectVariable={"haplor_genetypes"}
+                      selectName={"Genetype Options"}
+                      tooltip={
+                        "The genomic coordinates for querying. There are possible values for this parameter, which are gencode for using Gencode genes coordinates and refseq for using RefSeq genes coordinates."
+                      }
+                    />
+                  </Grid>
+                </div>
+              </AccordionDetails>
+            </Accordion>
+          </div>
+          <p className={classes.text_info}>
+            * Please note this job will take at least two hours
+          </p>
+          <div className={classes.button_container}>
+            {loading ? (
+              <CircularProgress color="secondary" className="progress" />
+            ) : (
+              <Button
+                className={classes.form_button}
+                startIcon={<PlayArrow />}
+                size="large"
+                type={"submit"}
+                variant="contained"
+                color="primary"
+                disabled={!formik.isValid}
+              >
+                Execute <Hidden xsDown> Analysis</Hidden>
+              </Button>
+            )}
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

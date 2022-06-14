@@ -195,7 +195,7 @@
         //@include respondMax(phone-port) {
         //  height: 14rem;
         //}
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         border-radius: 10px;
         padding: 0.625rem;
         //background-color: #b8c3c6;
@@ -256,7 +256,7 @@
       .buttons {
         margin-bottom: 1rem;
         .button {
-          margin-right: 1rem;
+          margin: 1rem;
           @include respondMax(ipad-port) {
             width: 240px;
             font-size: 10px;
@@ -274,7 +274,7 @@
       padding: 10px;
     }
     padding: 1rem;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     //overflow-x: auto;
     .panels {
       //background-color: red;

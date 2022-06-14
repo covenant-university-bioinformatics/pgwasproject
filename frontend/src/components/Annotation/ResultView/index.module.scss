@@ -34,7 +34,7 @@
 
   .table_wrapper {
     width: 100%;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     overflow-x: auto;
     @include respondMax(tab-port) {
       width: 100%; //change width
@@ -47,18 +47,18 @@
         }
       }
     }
+  }
+  .panels {
+    margin: 1rem;
+    padding: 1rem;
+    overflow-x: auto;
+  }
 
-    .panels {
-      margin: 1rem;
-      padding: 1rem;
-      overflow-x: auto;
-    }
-
-    .table_section {
-      width: 100%;
-      @include respondMin(big-desktop) {
-        width: 100vw;
-      }
+  .table_section {
+    width: 100%;
+    //overflow-x: scroll;
+    @include respondMin(big-desktop) {
+      width: 100vw;
     }
   }
 }
