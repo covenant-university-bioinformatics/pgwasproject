@@ -2,9 +2,9 @@
 
 .custom_home{
   width: 100%;
-  padding: 3rem 4rem;
+  padding: 3rem 1rem;
   margin-top: 1rem;
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  //box-shadow: 0 0 10px rgba(0,0,0,0.2);
 
   @include specialMax(959px) {
     padding: 2rem 1rem;
