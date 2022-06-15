@@ -425,6 +425,7 @@ const AnnotResult: React.FC<Props> = ({
               color="primary"
               className={mainClasses.button}
               endIcon={<GetAppRounded />}
+              target={"_blank"}
               href={`/results${customResult.annot_outputFile}`}
             >
               Download Annotation Results
@@ -435,6 +436,7 @@ const AnnotResult: React.FC<Props> = ({
                 color="default"
                 className={mainClasses.button}
                 endIcon={<GetAppRounded />}
+                target={"_blank"}
                 href={`/results${customResult.annot_disgenet}`}
               >
                 Download DISGENET Results

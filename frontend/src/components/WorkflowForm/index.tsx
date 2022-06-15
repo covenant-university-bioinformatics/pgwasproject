@@ -544,7 +544,7 @@ const WorkflowForm: React.FC<Props & RouteComponentProps> = (props) => {
     coloc_p1: "0.00001",
     pascal_runpathway: "on",
     pascal_chr: "22",
-    pascal_genesetfile: "msigdb_entrez",
+    pascal_genesetfile: "msigBIOCARTA_KEGG_REACTOME",
     pascal_pvalue_cutoff: "0.05",
     pascal_up: "50000",
     pascal_down: "50000",
@@ -599,6 +599,10 @@ const WorkflowForm: React.FC<Props & RouteComponentProps> = (props) => {
     enableReinitialize: true,
     validationSchema: Yup.object({
       filename: Yup.string().required("Please upload a file"),
+      job_name: Yup.string().required("Job name is required"),
+      ...(!user?.username && {
+        email: Yup.string().email().required("Email field is required"),
+      }),
       marker_name: Yup.number()
         .required("Marker name column number is required")
         .min(1, "The minimum is one")
@@ -639,10 +643,6 @@ const WorkflowForm: React.FC<Props & RouteComponentProps> = (props) => {
         .required("Sample size column number is required")
         .min(1, "The minimum is one")
         .max(20, "the max is twenty"),
-      job_name: Yup.string().required("Job name is required"),
-      ...(!user?.username && {
-        email: Yup.string().email().required("Email field is required"),
-      }),
       population: Yup.string().required("Please select a closest population"),
       clump_p1: Yup.number().required(
         "This value is required and must be a number value"
