@@ -476,6 +476,7 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
               color="primary"
               className={mainClasses.button}
               endIcon={<GetAppRounded />}
+              target={"_blank"}
               href={`/results${annotRes.outputFile}`}
             >
               Download Annotation Results
@@ -486,6 +487,7 @@ const AnnotationResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
                 color="default"
                 className={mainClasses.button}
                 endIcon={<GetAppRounded />}
+                target={"_blank"}
                 href={`/results${annotRes.disgenet}`}
               >
                 Download DISGENET Results

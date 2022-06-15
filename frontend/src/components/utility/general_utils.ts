@@ -36,6 +36,11 @@ export const getErrorMessage = (error: any) => {
       message = error.message;
     }
   }
+
+  if (!message) {
+    message = "Something went wrong...";
+  }
+
   return message;
 };
 
