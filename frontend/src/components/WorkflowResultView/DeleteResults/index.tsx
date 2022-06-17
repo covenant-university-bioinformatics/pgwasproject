@@ -179,7 +179,11 @@ const DeletResults: React.FC<Props> = ({
   };
 
   const showTables = () => {
-    if (snpResults.length > 0) {
+    if (
+      customResult &&
+      customResult.status === "completed" &&
+      snpResults.length > 0
+    ) {
       return (
         <div className={mainClasses.tables}>
           <h3 className={mainClasses.sub_heading}>
