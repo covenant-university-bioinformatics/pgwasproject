@@ -25,8 +25,8 @@ type UserFormData = {
   job_name: string;
   email?: string;
   useTest: boolean;
-  marker_name: string | undefined;
-  p_value: string | undefined;
+  marker_name: string;
+  p_value: string;
   beta?: string | undefined;
   slope_se?: string | undefined;
   GTEX8tissue: string;
@@ -121,9 +121,46 @@ const EqtlColocForm: React.FC<Props & RouteComponentProps> = (props) => {
     }),
 
     onSubmit: (values: FormikValues) => {
+      const results: Partial<{
+        filename: string;
+        job_name: string;
+        email?: string;
+        useTest: boolean;
+        marker_name: string;
+        p_value: string;
+        beta?: string | undefined;
+        slope_se?: string | undefined;
+        GTEX8tissue: string;
+        p_one: string;
+        p_two: string;
+        p_twelve: string;
+        type: string;
+        s_prop: string;
+      }> = {};
+
+      results.filename = values.filename;
+      results.job_name = values.job_name;
+      results.useTest = values.useTest;
+      results.marker_name = values.marker_name;
+      results.p_value = values.p_value;
+      results.GTEX8tissue = values.GTEX8tissue;
+      results.p_one = values.p_one;
+      results.p_two = values.p_two;
+      results.p_twelve = values.p_twelve;
+      results.type = values.type;
+      results.s_prop = values.s_prop;
+
+      if (values.beta) {
+        results.beta = values.beta;
+      }
+
+      if (values.slope_se) {
+        results.slope_se = values.slope_se;
+      }
+
       if (user?.username) {
         submitToServer(
-          values,
+          results,
           uploadFile,
           setLoading,
           "eqtlcoloc",
@@ -132,8 +169,9 @@ const EqtlColocForm: React.FC<Props & RouteComponentProps> = (props) => {
           props
         );
       } else {
+        results.email = values.email;
         submitToServer(
-          values,
+          results,
           uploadFile,
           setLoading,
           "eqtlcoloc/noauth",
