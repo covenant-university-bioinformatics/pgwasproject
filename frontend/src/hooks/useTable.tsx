@@ -23,13 +23,15 @@ const useStyles = makeStyles((theme: Theme) =>
         // color: theme.palette.primary.main,
         color: "#fff",
         // backgroundColor: theme.palette.primary.light,
-        backgroundColor: "black",
+        // backgroundColor: "black",
+        backgroundColor: "#1a1a1a",
       },
       "& tbody td": {
         fontWeight: "bold",
       },
       "& tbody tr:hover": {
         backgroundColor: "#fffbf2",
+        // backgroundColor: "#1a1a1a",
         // cursor: "pointer",
       },
     },

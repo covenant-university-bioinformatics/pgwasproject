@@ -27,6 +27,9 @@ export const signupUser = (user: {
           message = error?.response.data?.message;
         }
       }
+      if (!message) {
+        message = "Something went wrong, Please try again";
+      }
 
       dispatch({
         type: ActionType.SIGNUP_ERROR,
@@ -59,7 +62,7 @@ export const signinUser = (user: { credential: string; password: string }) => {
         payload: data.user,
       });
     } catch (error) {
-      console.dir(error);
+      // console.dir(error);
       let message = "Sign In Failed";
       if (error?.response) {
         if (Array.isArray(error.response.data?.message)) {
@@ -140,6 +143,9 @@ export const getCurrentUser = () => {
           message = error?.response.data?.message;
         }
       }
+      if (!message) {
+        message = "Something went wrong, Please try again";
+      }
       dispatch({
         type: ActionType.CURRENT_USER_ERROR,
         payload: message,
@@ -168,6 +174,9 @@ export const signOut = () => {
         } else {
           message = error?.response.data?.message;
         }
+      }
+      if (!message) {
+        message = "Something went wrong, Please try again";
       }
       dispatch({
         type: ActionType.SIGNOUT_ERROR,
