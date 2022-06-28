@@ -6,18 +6,23 @@ import { GetAppRounded } from "@material-ui/icons";
 import pgwasAxios from "../../../../axios-fetches";
 import HaploRRow from "./HaploRRow";
 import mainClasses from "./index.module.scss";
+import { CustomResult } from "../../../WorkflowResultView";
 
 type Props = {
-  resultObj: HaploRResult;
+  resultObj: HaploRResult | CustomResult;
   apiPath: string;
   jobId: string;
+  file_key: string;
   classes: any;
 };
+
+let counter = 0;
 
 const HaploR: React.FC<Props> = ({
   resultObj,
   apiPath,
   jobId,
+  file_key,
   classes,
 }: Props) => {
   const [haploRResults, setHaploRResults] = useState<string[][]>([]);
@@ -102,7 +107,7 @@ const HaploR: React.FC<Props> = ({
   };
 
   const showDownloadButton = (download: string, title: string) => {
-    if (resultObj && resultObj.status === "completed" && resultObj.haploRFile) {
+    if (resultObj && resultObj.status === "completed" && resultObj[file_key]) {
       return (
         <div className={classes.download}>
           <p>
@@ -120,16 +125,16 @@ const HaploR: React.FC<Props> = ({
             >
               Download {title} Results
             </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              className={classes.button}
-              endIcon={<GetAppRounded />}
-              target="_blank"
-              href={`/results${resultObj["haploRErrorFile"]}`}
-            >
-              Download Errors File
-            </Button>
+            {/*<Button*/}
+            {/*  variant="contained"*/}
+            {/*  color="primary"*/}
+            {/*  className={classes.button}*/}
+            {/*  endIcon={<GetAppRounded />}*/}
+            {/*  target="_blank"*/}
+            {/*  href={`/results${resultObj["haploRErrorFile"]}`}*/}
+            {/*>*/}
+            {/*  Download Errors File*/}
+            {/*</Button>*/}
           </div>
         </div>
       );
@@ -139,10 +144,10 @@ const HaploR: React.FC<Props> = ({
 
   useEffect(() => {
     if (resultObj && resultObj.status === "completed") {
-      if (resultObj.haploRFile) {
+      if (resultObj[file_key]) {
         setLoading(true);
         pgwasAxios
-          .get(`/${apiPath}/jobs/output/${jobId}/haploRFile`)
+          .get(`/${apiPath}/jobs/output/${jobId}/${file_key}`)
           .then((response) => {
             const alllines = response.data.split("\n");
             const header: string[] = alllines[0].split("\t");
@@ -162,10 +167,10 @@ const HaploR: React.FC<Props> = ({
 
   return (
     <div>
-      {resultObj && resultObj.status === "completed" && resultObj.haploRFile && (
+      {resultObj && resultObj.status === "completed" && resultObj[file_key] && (
         <div className={classes.tables}>
           <h3 className={classes.sub_heading}>HaploR Results Table</h3>
-          {showDownloadButton("haploRFile", "HaploR")}
+          {showDownloadButton(file_key, "HaploR")}
           <div
             className={[classes.table_wrapper, mainClasses.overflow].join(" ")}
           >
@@ -177,14 +182,22 @@ const HaploR: React.FC<Props> = ({
                 <TblContainer>
                   <TblHead />
                   <TableBody>
-                    {recordsAfterPaging().map((item, index) => (
-                      <HaploRRow
-                        key={`item${index}`}
-                        item={item}
-                        chromatinValues={otherValues[index]}
-                        classes={mainClasses}
-                      />
-                    ))}
+                    {recordsAfterPaging().map((item, index, arr) => {
+                      const row = (
+                        <HaploRRow
+                          key={`item${index + counter}`}
+                          item={item}
+                          chromatinValues={otherValues[index + counter]}
+                          classes={mainClasses}
+                        />
+                      );
+
+                      if (index === arr.length - 1) {
+                        counter += arr.length;
+                      }
+
+                      return row;
+                    })}
                   </TableBody>
                 </TblContainer>
                 <TblPagination />
