@@ -19,6 +19,7 @@ import EqtlSmrResult from "./EqtlSmrResult";
 import DeletResults from "./DeleteResults";
 import AnnotResults from "./AnnotResults";
 import RegulationResults from "./RegulationResults";
+import HaploR from "../Regulation/ResultView/HaploR";
 
 type Props = {};
 
@@ -63,7 +64,7 @@ export type CustomResult = {
   annot_disgenet: string;
   annot_snp_plot: string;
   annot_exon_plot: string;
-  haplor_resultsFile: string;
+  haplor_ResultsFile: string;
   version: number;
   completionTime: Date;
   [key: string]: any;
@@ -351,9 +352,19 @@ const WorkflowResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
           jobId={id}
           classes={classes}
         />
-        {customResult && customResult.status === "completed" && (
-          <RegulationResults />
-        )}
+        {customResult &&
+          customResult.status === "completed" &&
+          (customResult.haplor_ResultsFile ? (
+            <HaploR
+              resultObj={customResult}
+              apiPath={apiPath}
+              jobId={id}
+              file_key={"haplor_ResultsFile"}
+              classes={classes}
+            />
+          ) : (
+            <RegulationResults />
+          ))}
       </div>
     </div>
   );

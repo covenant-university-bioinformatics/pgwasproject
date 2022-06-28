@@ -233,6 +233,7 @@ const HaploRResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
             resultObj={haploRRes}
             apiPath={apiPath}
             jobId={id}
+            file_key={"haploRFile"}
             classes={classes}
           />
         )}

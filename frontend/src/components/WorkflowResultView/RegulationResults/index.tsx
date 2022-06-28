@@ -8,7 +8,7 @@ const RegulationResults: React.FC<Props> = (props: Props) => {
     <div className={classes.regulation}>
       <h1>Regulation Results</h1>
       <div className={classes.content}>
-        <p>Coming Soon</p>
+        <p>Results Not Available</p>
       </div>
     </div>
   );
