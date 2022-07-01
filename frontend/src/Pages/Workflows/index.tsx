@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Divider from "@mui/material/Divider";
 import { NavLink, Route, RouteComponentProps, Switch } from "react-router-dom";
 import AddBoxIcon from "@mui/icons-material/AddBox";
@@ -90,6 +90,10 @@ const Workflows: React.FC<Props & RouteComponentProps> = (props) => {
       </ul>
     </div>
   );
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <div className={classes.workflows}>
