@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import pgwasAxios from "../../axios-fetches";
 import MainLayout from "../MainLayout";
 import classes from "./index.module.scss";
@@ -23,6 +23,11 @@ type Props = {
 const ToolsLayout: React.FC<Props> = ({ title, path, children }) => {
   const { user } = useTypedSelector((state) => state.auth);
   const [showButton, setShowButton] = useState(true);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const resendConfirm = () => {
     pgwasAxios
       .get("/auth/resendconfirm")
