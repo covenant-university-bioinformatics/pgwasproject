@@ -18,8 +18,8 @@ const ToolsHome: React.FC<Props> = (props) => {
     { title: "Imputation", linkTo: "/tools/imputation" },
     { title: "ZScore", linkTo: "/tools/zscore" },
     {
-      title: "Bayes FineMap",
-      linkTo: "/tools/bayes_finemap",
+      title: "Probabilistic FineMapping",
+      linkTo: "/tools/focus_fmap",
     },
     { title: "Annotation", linkTo: "/tools/annotation" },
     {

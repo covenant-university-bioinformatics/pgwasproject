@@ -1,7 +1,7 @@
-@import "../../partials/mixins";
+@import "../../../partials/mixins";
 
 .result_view {
-  margin: 3rem 0;
+  margin: 3rem 0 3rem 0;
 
   .error_message {
     width: 100%;
@@ -11,34 +11,22 @@
     padding: 1rem;
     margin-bottom: 1rem;
     color: #fff;
-    @include respondMax(phone-land) {
-      font-size: 10px;
-      padding: 10px;
-      width: 240px;
-      overflow: auto;
-    }
   }
 
   .job_running {
     width: 350px;
-    @include respondMax(phone-land) {
-      width: 240px;
-      padding: 10px;
-    }
     background-color: #3d8af3;
     border-radius: 5px;
     padding: 1rem;
     margin-bottom: 1rem;
     p {
       font-size: 1.4rem;
-      @include respondMax(phone-land) {
-       font-size: 1rem;
-      }
       font-weight: bold;
       margin-bottom: 2rem;
       color: #fff;
     }
   }
+
 
   .info_section {
     margin-bottom: 2rem;
@@ -54,16 +42,14 @@
 
       @include respondMax(ipad-land) {
         flex-direction: column;
-        align-items: flex-start;
-        margin-left: 2rem;
+        align-items: center;
       }
       @include respondMax(ipad-port) {
         align-items: center;
-        margin-left: 0;
       }
 
       .job_list {
-        width: 20rem;
+        width: 22rem;
         height: 22rem;
         @include respondMax(phone-port) {
           width: 15rem;
@@ -91,8 +77,7 @@
             }
             &:nth-of-type(odd) {
               color: #fff;
-              //background-color: #6cbbe5;
-              background-color: #3d8af3;;
+              background-color: #3d8af3;
             }
             span {
               //text-transform: capitalize;
@@ -104,10 +89,8 @@
       }
 
       .params_list {
-        width: 20rem;
+        width: 22rem;
         height: 22rem;
-        overflow-y: auto;
-
         @include respondMax(phone-port) {
           width: 15rem;
         }
@@ -133,7 +116,6 @@
             }
             &:nth-of-type(odd) {
               color: #fff;
-              //background-color: #6cbbe5;
               background-color: #3d8af3;
             }
             span {
@@ -153,57 +135,39 @@
     .sub_heading {
       font-size: 1.4rem;
       margin-bottom: 2rem;
-      @include respondMax(ipad-port) {
-        font-size: 14px;
-      }
     }
 
-    .images {
-      width: 100%; //change width
+    .images{
+      width: 100%;
       display: flex;
-      gap: 1.5rem;
       justify-content: space-between;
-      @include respondMax(tab-port) {
-        width: 100%;
+      @include respondMax(ipad-port) {
         flex-direction: column;
-        margin-bottom: 2rem;
       }
       .image_tab {
         //width: 40rem;
         //height: 35rem;
         flex: 1;
-        //@include respondMax(tab-port) {
-        //  margin-bottom: 1rem;
-        //}
-        //&:nth-of-type(1) {
-        //  margin-right: 3rem;
-        //  @include respondMax(tab-port) {
-        //    margin-right: 0;
-        //  }
-        //}
+        &:nth-of-type(1){
+          margin-right: 3rem;
+        }
         //@include respondMax(ipad-land) {
         //  width: 35rem;
         //  height: 30rem;
         //  margin: 0 auto;
         //}
-        //@include respondMax(ipad-land) {
-        //  margin-bottom: 2rem;
-        //}
+        @include respondMax(ipad-port) {
+          margin-bottom: 2rem;
+        }
         //@include respondMax(phone-land) {
         //  height: 20rem;
         //}
         //@include respondMax(phone-port) {
         //  height: 14rem;
         //}
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        border-radius: 10px;
+        box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.3);
         padding: 0.625rem;
         //background-color: #b8c3c6;
-        h3{
-          @include respondMax(ipad-port) {
-            font-size: 12px;
-          }
-        }
         .image_box {
           //width: 38rem;
           //height: 33rem;
@@ -228,7 +192,6 @@
             height: 100%;
             object-fit: contain;
             object-position: center center;
-            //height: 28rem;
           }
         }
       }
@@ -240,55 +203,29 @@
     .sub_heading {
       font-size: 1.4rem;
       margin-bottom: 2rem;
-      @include respondMax(ipad-port) {
-        font-size: 14px;
-      }
     }
     .download {
       p {
         margin-bottom: 1rem;
-        overflow-wrap: break-word;
-        width: 90%;
-        @include respondMax(ipad-port) {
-          font-size: 9px;
-        }
       }
       .buttons {
         margin-bottom: 1rem;
         .button {
-          margin: 1rem;
+          margin-right: 1rem;
           @include respondMax(ipad-port) {
-            width: 240px;
-            font-size: 10px;
-            margin: 0 10px 1rem 0
+            margin-bottom: 1rem;
+            margin-right: 0;
           }
         }
       }
     }
   }
 
-  .table_wrapper {
+  .table_wrapper{
     width: 100%;
-    @include respondMax(tab-port) {
-      width: 100%; //change width
-      padding: 10px;
-    }
+    //margin: 0 auto;
     padding: 1rem;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.3);
     overflow-x: auto;
-    .panels {
-      //background-color: red;
-      //margin: 1rem;
-      //padding: 1rem;
-      overflow-x: auto;
-      //box-shadow: 0 0 5px rgba(0,0,0,0.4);
-
-      .table_section {
-        width: 100%;
-        @include respondMin(big-desktop) {
-          width: 100vw;
-        }
-      }
-    }
   }
 }
