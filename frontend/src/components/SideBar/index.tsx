@@ -70,8 +70,8 @@ const SideBar: React.FC<Props> = (props) => {
     // },
     // { title: "SuSie", linkTo: "/tools/bayes_susie", icon: <LabelSharp /> },
     {
-      title: "Bayes FineMap",
-      linkTo: "/tools/bayes_finemap",
+      title: "Probabilistic FineMapping",
+      linkTo: "/tools/focus_fmap",
       icon: <LabelSharp />,
     },
     { title: "ZScore", linkTo: "/tools/zscore", icon: <LabelSharp /> },

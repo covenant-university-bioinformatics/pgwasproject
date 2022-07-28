@@ -24,14 +24,14 @@ import MainLayout from "./layouts/MainLayout";
 //Lazy imports
 const Annotation = React.lazy(() => import("./components/Annotation"));
 const Imputation = React.lazy(() => import("./components/Imputation"));
-const Finemap = React.lazy(() => import("./components/Finemap"));
+// const Finemap = React.lazy(() => import("./components/Finemap"));
 const LDStructure = React.lazy(() => import("./components/LDStructure"));
 const Deleteriousness = React.lazy(
   () => import("./components/Deleteriousness")
 );
 const RegHaploR = React.lazy(() => import("./components/Regulation"));
 const Liftover = React.lazy(() => import("./components/Liftover"));
-// const Susie = React.lazy(() => import("./components/Susie"));
+const Focus = React.lazy(() => import("./components/Focus"));
 const Coloc = React.lazy(() => import("./components/EQTLColoc"));
 const ZScore = React.lazy(() => import("./components/ZScore"));
 const EQTL = React.lazy(() => import("./components/EQTL"));
@@ -83,16 +83,16 @@ const Routes: React.FC<Props> = (props) => {
           // component={AuthGuard(Annotation)}
         />
         <Route
-          path="/tools/bayes_finemap"
+          path="/tools/focus_fmap"
           render={(props) => (
             <Suspense
               fallback={
-                <MainLayout title={"Bayesian Finemapping (Susie & FineMap)"}>
+                <MainLayout title={"Probabilistic FineMapping (FOCUS)"}>
                   <div className={"suspense_center"}>Loading...</div>
                 </MainLayout>
               }
             >
-              <AuthenticatedRoute Component={Finemap} {...props} />
+              <AuthenticatedRoute Component={Focus} {...props} />
             </Suspense>
           )}
           // component={AuthGuard(Finemap)}
