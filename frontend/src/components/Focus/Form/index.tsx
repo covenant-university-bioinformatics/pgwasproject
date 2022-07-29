@@ -144,15 +144,15 @@ const FocusForm: React.FC<Props & RouteComponentProps> = (props) => {
         .required("Chromosome column number is required")
         .min(1, "The minimum is one")
         .max(15, "the max is fifteen"),
-      pos: Yup.number()
+      position: Yup.number()
         .required("Position column number is required")
         .min(1, "The minimum is one")
         .max(15, "the max is fifteen"),
-      ref: Yup.number()
-        .required("Ref Allele column number is required")
+      effect_allele: Yup.number()
+        .required("Effect Allele column number is required")
         .min(1, "The minimum is one")
         .max(15, "the max is fifteen"),
-      alt: Yup.number()
+      alternate_allele: Yup.number()
         .required("Alternate allele column number is required")
         .min(1, "The minimum is one")
         .max(15, "the max is fifteen"),
@@ -195,13 +195,14 @@ const FocusForm: React.FC<Props & RouteComponentProps> = (props) => {
     }),
 
     onSubmit: (values: FormikValues) => {
+      // console.log(values);
       if (user?.username) {
         submitToServer(
           values,
           uploadFile,
           setLoading,
           "focus",
-          "focus",
+          "focus_fmap",
           user.username,
           props
         );
@@ -211,7 +212,7 @@ const FocusForm: React.FC<Props & RouteComponentProps> = (props) => {
           uploadFile,
           setLoading,
           "focus/noauth",
-          "focus",
+          "focus_fmap",
           undefined,
           props
         );
@@ -308,6 +309,7 @@ const FocusForm: React.FC<Props & RouteComponentProps> = (props) => {
   ];
 
   const tissues = [
+    { variable: "none", name: "None" },
     { variable: "Adipose_Subcutaneous", name: "Adipose_Subcutaneous" },
     { variable: "Adipose_Visceral_Omentum", name: "Adipose_Visceral_Omentum" },
     { variable: "Adrenal_Gland", name: "Adrenal_Gland" },
@@ -481,7 +483,7 @@ const FocusForm: React.FC<Props & RouteComponentProps> = (props) => {
                 "the column number of the alternate allele in the summary statistic file",
             },
             {
-              title: "maf",
+              title: "freq",
               text:
                 "the column number of the minor allele frequency in the summary statistic file. It can be also be maf, freq etc.",
             },
@@ -491,12 +493,12 @@ const FocusForm: React.FC<Props & RouteComponentProps> = (props) => {
                 "the column number of the beta in the summary statistic file. It can be beta, slope etc.",
             },
             {
-              title: "standard_error",
+              title: "se",
               text:
                 "the column number of the standard error in the summary statistic file. It can be se, standard_error etc.",
             },
             {
-              title: "pvalue",
+              title: "p_value",
               text:
                 "the column number of the pvalue in the summary statistic file. It can be p, pvalue, pval_nominal etc.",
             },
@@ -544,8 +546,8 @@ const FocusForm: React.FC<Props & RouteComponentProps> = (props) => {
             classes={classes}
             formik={formik}
             selectElement={trueFalseOptions}
-            selectVariable={"All_gwas_sig"}
-            selectName={"all_gwas_sig"}
+            selectVariable={"all_gwas_sig"}
+            selectName={"All_gwas_sig"}
             tooltip={
               "Boolean indicator for whether fine-mapping regions that contains GWAS signal for all population; False means GWAS signal for at least one population"
             }
@@ -575,8 +577,8 @@ const FocusForm: React.FC<Props & RouteComponentProps> = (props) => {
             classes={classes}
             formik={formik}
             selectElement={trueFalseOptions}
-            selectVariable={"Intercept"}
-            selectName={"intercept"}
+            selectVariable={"intercept"}
+            selectName={"Intercept"}
             tooltip={
               "Indicates whether to include an intercept term in the model."
             }
@@ -630,9 +632,11 @@ const FocusForm: React.FC<Props & RouteComponentProps> = (props) => {
             classes={classes}
             formik={formik}
             selectElement={trueFalseOptions}
-            selectVariable={"Plot"}
-            selectName={"plot"}
-            tooltip={"Generate fine-mapping plots (Plots not yet available)"}
+            selectVariable={"plot"}
+            selectName={"Plot"}
+            tooltip={
+              "Generate fine-mapping plots (Plots are not yet available)"
+            }
           />
 
           <SelectFieldsElement
