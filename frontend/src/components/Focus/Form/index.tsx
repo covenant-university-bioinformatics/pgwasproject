@@ -41,7 +41,7 @@ type UserFormData = {
   all_gwas_sig: string;
   p_threshold: string;
   ridge_term: string;
-  intercept: string;
+  // intercept: string;
   max_genes: string;
   prior_prob: string;
   credible_level: string;
@@ -82,7 +82,7 @@ const FocusForm: React.FC<Props & RouteComponentProps> = (props) => {
     all_gwas_sig: "",
     p_threshold: "",
     ridge_term: "",
-    intercept: "",
+    // intercept: "",
     max_genes: "",
     prior_prob: "",
     credible_level: "",
@@ -115,7 +115,7 @@ const FocusForm: React.FC<Props & RouteComponentProps> = (props) => {
     all_gwas_sig: "false",
     p_threshold: "0.5",
     ridge_term: "0.1",
-    intercept: "false",
+    // intercept: "false",
     max_genes: "3",
     prior_prob: "0.001",
     credible_level: "0.9",
@@ -182,7 +182,7 @@ const FocusForm: React.FC<Props & RouteComponentProps> = (props) => {
       all_gwas_sig: Yup.string().required("Please select a value"),
       p_threshold: Yup.string().required("This input is required"),
       ridge_term: Yup.string().required("This input is required"),
-      intercept: Yup.string().required("This input is required"),
+      // intercept: Yup.string().required("This input is required"),
       max_genes: Yup.string().required("This input is required"),
       prior_prob: Yup.string().required("This input is required"),
       credible_level: Yup.string().required("This input is required"),
@@ -573,16 +573,16 @@ const FocusForm: React.FC<Props & RouteComponentProps> = (props) => {
             }
           />
 
-          <SelectFieldsElement
-            classes={classes}
-            formik={formik}
-            selectElement={trueFalseOptions}
-            selectVariable={"intercept"}
-            selectName={"Intercept"}
-            tooltip={
-              "Indicates whether to include an intercept term in the model."
-            }
-          />
+          {/*<SelectFieldsElement*/}
+          {/*  classes={classes}*/}
+          {/*  formik={formik}*/}
+          {/*  selectElement={trueFalseOptions}*/}
+          {/*  selectVariable={"intercept"}*/}
+          {/*  selectName={"Intercept"}*/}
+          {/*  tooltip={*/}
+          {/*    "Indicates whether to include an intercept term in the model."*/}
+          {/*  }*/}
+          {/*/>*/}
 
           <CommonTextElement
             classes={classes}
