@@ -33,7 +33,7 @@ const Footer: React.FC<Props> = (props) => {
         </div>
         {/*// <!-- <hr /> -->*/}
         <div className={classes.Footer__Copy}>
-          <p>Copyright &copy; 2021 All Rights Reserved</p>
+          <p>Copyright &copy; {new Date().getFullYear()} Sysbiol PGWAS. All rights reserved</p>
           <div className={classes.Footer__Socials}>
             <a href="mailto:ezekiel.adebiyi@covenantuniversity.edu.ng">
               <EmailIcon />
