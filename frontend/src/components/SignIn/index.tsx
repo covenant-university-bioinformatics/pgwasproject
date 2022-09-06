@@ -46,7 +46,7 @@ const SignIn: React.FC<
   let redirect: JSX.Element | null = null;
   if (success && user.username) {
     showToastSuccess(`Welcome ${user.username}`);
-    const path = props?.location?.state?.referrer || "/admin";
+    const path = props?.location?.state?.referrer || "/";
     redirect = <Redirect to={path} />;
   }
 
