@@ -21,6 +21,10 @@ const ToolsHome: React.FC<Props> = (props) => {
       title: "Probabilistic FineMapping",
       linkTo: "/tools/focus_fmap",
     },
+    {
+      title: "DIVAN",
+      linkTo: "/tools/divan",
+    },
     { title: "Annotation", linkTo: "/tools/annotation" },
     {
       title: "Deleteriousness",

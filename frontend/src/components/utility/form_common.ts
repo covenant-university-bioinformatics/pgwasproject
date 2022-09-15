@@ -66,8 +66,10 @@ export const handleFileUploadChangedCommon = (
       reader.readAsDataURL(file);
     } else {
       formik.setFieldError("filename", "Please upload a text file");
+      formik.setFieldValue("filename", undefined);
     }
   } else {
     formik.setFieldError("filename", "Please upload a readable text file");
+    formik.setFieldValue("filename", undefined);
   }
 };
