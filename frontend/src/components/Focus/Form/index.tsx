@@ -25,6 +25,7 @@ type UserFormData = {
   filename: string;
   job_name: string;
   useTest: boolean;
+  email?: string;
   marker_name: string;
   chr: string;
   position: string;

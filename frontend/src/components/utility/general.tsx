@@ -353,7 +353,7 @@ export const CreateInfoSection: React.FC<Props> = ({
   classes,
 }: Props) => {
   const toRemove = ["_id", "job", "createdAt", "updatedAt", "version", "id"];
-
+  // console.log(resultObj);
   if (resultObj) {
     const list = Object.keys(resultObj[params]).filter(
       (x) => !toRemove.includes(x)

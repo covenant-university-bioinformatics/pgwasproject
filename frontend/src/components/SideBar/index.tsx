@@ -74,6 +74,21 @@ const SideBar: React.FC<Props> = (props) => {
       linkTo: "/tools/focus_fmap",
       icon: <LabelSharp />,
     },
+    {
+      title: "DIVAN",
+      linkTo: "/tools/divan",
+      icon: <LabelSharp />,
+    },
+    {
+      title: "Functional Prediction",
+      linkTo: "/tools/filterannot",
+      icon: <LabelSharp />,
+    },
+    {
+      title: "EQTL Loci2Path",
+      linkTo: "/tools/loci2path",
+      icon: <LabelSharp />,
+    },
     { title: "ZScore", linkTo: "/tools/zscore", icon: <LabelSharp /> },
     { title: "Annotation", linkTo: "/tools/annotation", icon: <LabelSharp /> },
     {
