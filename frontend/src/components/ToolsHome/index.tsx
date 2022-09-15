@@ -25,6 +25,14 @@ const ToolsHome: React.FC<Props> = (props) => {
       title: "DIVAN",
       linkTo: "/tools/divan",
     },
+    {
+      title: "Functional Prediction",
+      linkTo: "/tools/filterannot",
+    },
+    {
+      title: "EQTL(Loci2Path)",
+      linkTo: "/tools/loci2path",
+    },
     { title: "Annotation", linkTo: "/tools/annotation" },
     {
       title: "Deleteriousness",

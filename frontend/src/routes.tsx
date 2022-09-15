@@ -33,6 +33,8 @@ const RegHaploR = React.lazy(() => import("./components/Regulation"));
 const Liftover = React.lazy(() => import("./components/Liftover"));
 const Focus = React.lazy(() => import("./components/Focus"));
 const Divan = React.lazy(() => import("./components/Divan"));
+const FilterAnnot = React.lazy(() => import("./components/FilterAnnot"));
+const Loci2Path = React.lazy(() => import("./components/Loci2Path"));
 const Coloc = React.lazy(() => import("./components/EQTLColoc"));
 const ZScore = React.lazy(() => import("./components/ZScore"));
 const EQTL = React.lazy(() => import("./components/EQTL"));
@@ -52,32 +54,66 @@ const Routes: React.FC<Props> = (props) => {
     <BrowserRouter>
       <Header />
       <Switch>
-          <Route
-              path="/tools/imputation"
-              render={(props) => (
-                  <Suspense
-                      fallback={
-                          <MainLayout title={"Imputation from Summary Statistics"}>
-                              <div className={"suspense_center"}>Loading...</div>
-                          </MainLayout>
-                      }
-                  >
-                      <AuthenticatedRoute Component={Imputation} {...props} />
-                  </Suspense>
-              )}
-              // component={AuthGuard(Imputation)}
-          />
+        <Route
+          path="/tools/imputation"
+          render={(props) => (
+            <Suspense
+              fallback={
+                <MainLayout title={"Imputation from Summary Statistics"}>
+                  <div className={"suspense_center"}>Loading...</div>
+                </MainLayout>
+              }
+            >
+              <AuthenticatedRoute Component={Imputation} {...props} />
+            </Suspense>
+          )}
+          // component={AuthGuard(Imputation)}
+        />
         <Route
           path="/tools/divan"
           render={(props) => (
             <Suspense
               fallback={
-                <MainLayout title={"DIVAN (Disease-specific Variant ANnotation)"}>
+                <MainLayout
+                  title={"DIVAN (Disease-specific Variant ANnotation)"}
+                >
                   <div className={"suspense_center"}>Loading...</div>
                 </MainLayout>
               }
             >
               <AuthenticatedRoute Component={Divan} {...props} />
+            </Suspense>
+          )}
+          // component={AuthGuard(Imputation)}
+        />
+        <Route
+          path="/tools/filterannot"
+          render={(props) => (
+            <Suspense
+              fallback={
+                <MainLayout
+                  title={"Functional Prediction of Variants"}
+                >
+                  <div className={"suspense_center"}>Loading...</div>
+                </MainLayout>
+              }
+            >
+              <AuthenticatedRoute Component={FilterAnnot} {...props} />
+            </Suspense>
+          )}
+          // component={AuthGuard(Imputation)}
+        />
+        <Route
+          path="/tools/loci2path"
+          render={(props) => (
+            <Suspense
+              fallback={
+                <MainLayout title={"EQTL Loci2Path"}>
+                  <div className={"suspense_center"}>Loading...</div>
+                </MainLayout>
+              }
+            >
+              <AuthenticatedRoute Component={Loci2Path} {...props} />
             </Suspense>
           )}
           // component={AuthGuard(Imputation)}
@@ -331,7 +367,7 @@ const Routes: React.FC<Props> = (props) => {
       </Switch>
       <ToastContainer
         position="top-left"
-        autoClose={6000}
+        autoClose={12000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick

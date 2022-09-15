@@ -5,6 +5,7 @@ import classes from "../../utility/form_styles.module.scss";
 import {Button, CircularProgress, FormControl, Grid, Hidden, InputLabel, NativeSelect, Paper} from "@material-ui/core";
 import {generalFileForm, selectErrorHelper} from "../../utility/general";
 import { GetAppRounded, PlayArrow } from "@material-ui/icons";
+import {toast} from "react-toastify";
 import { RouteComponentProps } from "react-router-dom";
 import { useTypedSelector } from "../../../hooks/useTypedSelector";
 import {
@@ -128,7 +129,11 @@ const DivanForm: React.FC<Props & RouteComponentProps> = (props) => {
     }),
 
     onSubmit: (values: FormikValues) => {
-      console.log(values);
+      // console.log(values);
+      if(values.variant_type === "unknown" && values.input_type === "variant_based"){
+        toast.info("Your input type must be a region based file when using unknown variant type")
+        return;
+      }
       let results: Partial<UserFormData>;
       results = {
         filename: values.filename,
@@ -360,7 +365,7 @@ const DivanForm: React.FC<Props & RouteComponentProps> = (props) => {
                   className={classes.formControl}
                   error={selectIsError(formik, "input_type")}
               >
-                <InputLabel htmlFor={"input_type"}>Select value</InputLabel>
+                <InputLabel htmlFor={"input_type"}>Select Input Type</InputLabel>
                 <NativeSelect
                     id={"input_type"}
                     name={"input_type"}
@@ -432,7 +437,7 @@ const DivanForm: React.FC<Props & RouteComponentProps> = (props) => {
                   className={classes.formControl}
                   error={selectIsError(formik, "variant_type")}
               >
-                <InputLabel htmlFor={"variant_type"}>Select value</InputLabel>
+                <InputLabel htmlFor={"variant_type"}>Select Variant Type</InputLabel>
                 <NativeSelect
                     id={"variant_type"}
                     name={"variant_type"}

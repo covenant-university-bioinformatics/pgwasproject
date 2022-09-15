@@ -4,8 +4,8 @@ import axios from "axios";
 // export let cancel;
 
 const instance = axios.create({
-  // baseURL: "https://spgwas.waslitbre.org/api",
-  baseURL: "https://pgwas.dev/api",
+  baseURL: "https://spgwas.waslitbre.org/api",
+  // baseURL: "https://pgwas.dev/api",
 });
 
 const authUser = localStorage.getItem("user");
