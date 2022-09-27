@@ -33,6 +33,8 @@ const RegHaploR = React.lazy(() => import("./components/Regulation"));
 const Liftover = React.lazy(() => import("./components/Liftover"));
 const Focus = React.lazy(() => import("./components/Focus"));
 const Divan = React.lazy(() => import("./components/Divan"));
+const TseaDB = React.lazy(() => import("./components/TseaDB"));
+const EnsemblVEP = React.lazy(() => import("./components/EnsemblVEP"));
 const FilterAnnot = React.lazy(() => import("./components/FilterAnnot"));
 const Loci2Path = React.lazy(() => import("./components/Loci2Path"));
 const Coloc = React.lazy(() => import("./components/EQTLColoc"));
@@ -86,6 +88,40 @@ const Routes: React.FC<Props> = (props) => {
           )}
           // component={AuthGuard(Imputation)}
         />
+          <Route
+              path="/tools/tseadb"
+              render={(props) => (
+                  <Suspense
+                      fallback={
+                          <MainLayout
+                              title={"Tissue Specific Enrichment Analysis"}
+                          >
+                              <div className={"suspense_center"}>Loading...</div>
+                          </MainLayout>
+                      }
+                  >
+                      <AuthenticatedRoute Component={TseaDB} {...props} />
+                  </Suspense>
+              )}
+              // component={AuthGuard(Imputation)}
+          />
+          <Route
+              path="/tools/ensemblvep"
+              render={(props) => (
+                  <Suspense
+                      fallback={
+                          <MainLayout
+                              title={"CADD Annotation"}
+                          >
+                              <div className={"suspense_center"}>Loading...</div>
+                          </MainLayout>
+                      }
+                  >
+                      <AuthenticatedRoute Component={EnsemblVEP} {...props} />
+                  </Suspense>
+              )}
+              // component={AuthGuard(Imputation)}
+          />
         <Route
           path="/tools/filterannot"
           render={(props) => (

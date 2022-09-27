@@ -24,7 +24,7 @@ type JobParam = {
   jobId: string;
 };
 
-export type Loci2PathResult = {
+export type EnsemblVEPResult = {
   _id: string;
   status: string;
   job_name: string;
@@ -32,35 +32,38 @@ export type Loci2PathResult = {
   inputFile: string;
   createdAt: string;
   resultsFile: string;
+  summaryFile: string;
   failed_reason: string | undefined;
   longJob: string;
   completionTime: string;
-  loci2path_params: {
+  ensemblvep_params: {
     id: string;
     version: number;
+    useTest: boolean;
     chr: number;
     start_position: number;
     stop_position: number;
-    tissue: string;
+    alleles: number;
+    strand: number;
   };
   [key: string]: any;
 };
 
-const Loci2PathResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
+const EnsemblVEPResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
     props
 ) => {
   const { user } = useTypedSelector((state) => state.auth);
 
   let apiPath = "";
   if (user?.username) {
-    apiPath = "loci2path";
+    apiPath = "ensemblvep";
   } else {
-    apiPath = "loci2path/noauth";
+    apiPath = "ensemblvep/noauth";
   }
 
   const reloadLimit = 60;
   const { jobId: id } = props.match.params;
-  const [loci2pathRes, setLoci2PathRes] = useState<Loci2PathResult | undefined>(undefined);
+  const [ensembelVEPRes, setensemblVEPRes] = useState<EnsemblVEPResult | undefined>(undefined);
   const [errorInfo, setErrorInfo] = useState("");
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -70,20 +73,21 @@ const Loci2PathResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
   let errorMessage: any | null = null;
   let genMessage: any | null = null;
 
-  const [loci2pathResults, setLoci2PathResults] = useState<string[][]>([]);
-  const [loci2pathHeader, setLoci2PathHeader] = useState<
+  //table data
+  const [ensemblVEPResults, setEnsemblVEPResults] = useState<string[][]>([]);
+  const [ensemblVEPHeader, setEnsemblVEPHeader] = useState<
       { id: string; label: string; disableSorting: boolean }[]
       >([]);
-  const [loadingLoci2PathResults, setLoadingLoci2PathResults] = useState(false);
+  const [loadingEnsemblVEPResults, setLoadingEnsemblVEPResults] = useState(false);
 
   const { TblContainer, TblHead, TblPagination, recordsAfterPaging } = useTable(
-      loci2pathResults,
-      loci2pathHeader,
+      ensemblVEPResults,
+      ensemblVEPHeader,
       [10, 15, 20],
-      loci2pathResults.length
+      ensemblVEPResults.length
   );
 
-  const createLoci2PathHeaders = (headers: string[]) => {
+  const createEnsemblVEPHeaders = (headers: string[]) => {
     const dcd = headers.map((ele, i) => {
       return {
         id: ele.toLowerCase().replaceAll('"', ''),
@@ -93,17 +97,17 @@ const Loci2PathResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
     });
     // dcd.unshift({ id: "123", label: "", disableSorting: true });
     // console.log(dcd);
-    setLoci2PathHeader(dcd);
+    setEnsemblVEPHeader(dcd);
   };
 
-  const createLoci2PathTableBody = (allines: string[]) => {
+  const createEnsemblVEPTableBody = (allines: string[]) => {
     const ddd = allines
         .filter((line) => line !== "")
         .slice(1)
         .map((list_string: string) => {
           return list_string.split("\t");
         });
-    setLoci2PathResults(ddd);
+    setEnsemblVEPResults(ddd);
   };
 
   const createTableSection = (
@@ -113,9 +117,9 @@ const Loci2PathResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
       recordsAfterPaging: () => any[]
   ) => {
     if (
-        loci2pathRes &&
-        loci2pathRes.status === "completed" &&
-        loci2pathResults.length > 0
+        ensembelVEPRes &&
+        ensembelVEPRes.status === "completed" &&
+        ensemblVEPResults.length > 0
     ) {
       return (
           <div className={classes.table_section}>
@@ -146,8 +150,8 @@ const Loci2PathResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
     return null;
   };
 
-  const showDownloadButton = (download: string, title: string) => {
-    if (loci2pathRes && loci2pathRes.status === "completed") {
+  const showDownloadButton = (download: string, title: string, download_two: string, title_two: string) => {
+    if (ensembelVEPRes && ensembelVEPRes.status === "completed") {
       return (
           <div className={classes.download}>
             <p>
@@ -160,9 +164,18 @@ const Loci2PathResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
                   color="primary"
                   className={classes.button}
                   endIcon={<GetAppRounded />}
-                  href={`/results${loci2pathRes[download]}`}
+                  href={`/results${ensembelVEPRes[download]}`}
               >
                 Download {title} Results
+              </Button>
+              <Button
+                  variant="contained"
+                  color="primary"
+                  className={classes.button}
+                  endIcon={<GetAppRounded />}
+                  href={`/results${ensembelVEPRes[download_two]}`}
+              >
+                Download {title_two} Results
               </Button>
             </div>
           </div>
@@ -171,14 +184,14 @@ const Loci2PathResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
     return false;
   };
 
-  const showLoci2PathTables = () => {
-    if (loci2pathRes && loci2pathRes.status === "completed") {
+  const showEnsemblVEPTables = () => {
+    if (ensembelVEPRes && ensembelVEPRes.status === "completed") {
       return (
           <div className={classes.tables}>
             <h3 className={classes.sub_heading}>FineMapping Result Table</h3>
-            {showDownloadButton("resultsFile", "Loci2Path")}
+            {showDownloadButton("resultsFile", "CADD Annotation", "summaryFile", "Summary File")}
             <div className={classes.table_wrapper}>
-              {loadingLoci2PathResults ? (
+              {loadingEnsemblVEPResults ? (
                   <CircularProgress />
               ) : (
                   createTableSection(
@@ -203,9 +216,9 @@ const Loci2PathResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
   useEffect(() => {
     setLoading(true);
     pgwasAxios
-        .get<Loci2PathResult>(`/${apiPath}/jobs/${id}`)
+        .get<EnsemblVEPResult>(`/${apiPath}/jobs/${id}`)
         .then((result) => {
-          setLoci2PathRes(result.data);
+          setensemblVEPRes(result.data);
           setLoading(false);
           setError(false);
           if (
@@ -217,7 +230,7 @@ const Loci2PathResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
           }
         })
         .catch((e) => {
-          setLoci2PathRes(undefined);
+          setensemblVEPRes(undefined);
           setLoading(false);
           setError(true);
           setErrorInfo(e.response.data.message);
@@ -228,9 +241,9 @@ const Loci2PathResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
 
   useEffect(() => {
     if (
-        loci2pathRes &&
-        !loci2pathRes.longJob &&
-        (loci2pathRes.status === "running" || loci2pathRes.status === "queued")
+        ensembelVEPRes &&
+        !ensembelVEPRes.longJob &&
+        (ensembelVEPRes.status === "running" || ensembelVEPRes.status === "queued")
     ) {
       if (seconds > 0) {
         timeout.current = setTimeout(() => setSeconds(seconds - 1), 1000);
@@ -239,7 +252,7 @@ const Loci2PathResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
         setReload((prev) => prev + 1);
       }
     }
-  }, [loci2pathRes, seconds]);
+  }, [ensembelVEPRes, seconds]);
 
   useEffect(() => {
     return () => {
@@ -249,26 +262,26 @@ const Loci2PathResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
   }, []);
 
   useEffect(() => {
-    if (loci2pathRes && loci2pathRes.status === "completed") {
-      if (loci2pathResults.length === 0) {
-        setLoadingLoci2PathResults(true);
+    if (ensembelVEPRes && ensembelVEPRes.status === "completed") {
+      if (ensemblVEPResults.length === 0) {
+        setLoadingEnsemblVEPResults(true);
         pgwasAxios
             .get(`/${apiPath}/jobs/output/${id}/resultsFile`)
             .then((response) => {
               const alllines = response.data.split("\n");
               const header: string[] = alllines[0].split("\t");
-              createLoci2PathHeaders(header);
-              createLoci2PathTableBody(alllines);
-              setLoadingLoci2PathResults(false);
+              createEnsemblVEPHeaders(header);
+              createEnsemblVEPTableBody(alllines);
+              setLoadingEnsemblVEPResults(false);
             })
             .catch((error) => {
               console.dir(error);
-              setLoadingLoci2PathResults(false);
+              setLoadingEnsemblVEPResults(false);
             });
       }
     }
     // eslint-disable-next-line
-  }, [loci2pathRes, id]);
+  }, [ensembelVEPRes, id]);
 
   return (
       <div className={classes.result_view}>
@@ -279,19 +292,19 @@ const Loci2PathResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
               {errorMessage}
             </div>
         )}
-        {createJobStatus(loci2pathRes, seconds, classes)}
+        {createJobStatus(ensembelVEPRes, seconds, classes)}
         <h2 style={{ marginBottom: "2rem" }}>
-          Results for Job: {loci2pathRes ? loci2pathRes.job_name : id}
+          Results for Job: {ensembelVEPRes ? ensembelVEPRes.job_name : id}
         </h2>
         <CreateInfoSection
-            resultObj={loci2pathRes}
-            params={"loci2path_params"}
+            resultObj={ensembelVEPRes}
+            params={"ensemblvep_params"}
             classes={classes}
         />
-        {createJobFailedReason(loci2pathRes, classes)}
-        {showLoci2PathTables()}
+        {createJobFailedReason(ensembelVEPRes, classes)}
+        {showEnsemblVEPTables()}
       </div>
   );
 };
 
-export default Loci2PathResultView;
+export default EnsemblVEPResultView;

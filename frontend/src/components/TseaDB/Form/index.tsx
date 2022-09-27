@@ -26,13 +26,14 @@ type UserFormData = {
   job_name: string;
   useTest: boolean;
   email?: string;
-  chr: string;
-  start_position: string;
-  stop_position: string;
-  tissue: string;
+  genes: string;
+  analysisType: string;
+  reference_panel: string;
+  ratio: string;
+  p_adjust_method: string;
 };
 
-const Loci2PathForm: React.FC<Props & RouteComponentProps> = (props) => {
+const TseaDBForm: React.FC<Props & RouteComponentProps> = (props) => {
   const { user } = useTypedSelector((state) => state.auth);
   const [uploadFile, setUploadFile] = useState<any>(null);
   const [useTest, setUseTest] = useState<boolean>(false);
@@ -45,21 +46,23 @@ const Loci2PathForm: React.FC<Props & RouteComponentProps> = (props) => {
     job_name: "",
     ...(!user?.username && { email: "" }),
     useTest: false,
-    chr: "",
-    start_position: "",
-    stop_position: "",
-    tissue: "",
+    genes: "",
+    analysisType: "",
+    reference_panel: "",
+    ratio: "",
+    p_adjust_method: ""
   };
 
   const testValues = {
     filename: "test.txt",
-    job_name: "Test Loci2Path",
+    job_name: "Test Focus",
     ...(!user?.username && { email: "" }),
     useTest: true,
-    chr: "1",
-    start_position: "2",
-    stop_position: "3",
-    tissue: "Adipose_Subcutaneous",
+    genes: "1",
+    analysisType: "single_sample",
+    reference_panel: "GTEx_t_score",
+    ratio: "0.05",
+    p_adjust_method: "bonferroni"
   };
 
   const formik = useFormik<UserFormData>({
@@ -71,19 +74,14 @@ const Loci2PathForm: React.FC<Props & RouteComponentProps> = (props) => {
       ...(!user?.username && {
         email: Yup.string().email().required("Email field is required"),
       }),
-      chr: Yup.number()
-        .required("Chromosome column number is required")
+      genes: Yup.number()
+        .required("Genes column number is required")
         .min(1, "The minimum is one")
         .max(15, "the max is fifteen"),
-      start_position: Yup.number()
-        .required("Start position column number is required")
-        .min(1, "The minimum is one")
-        .max(15, "the max is fifteen"),
-      stop_position: Yup.number()
-        .required("Stop position column number is required")
-        .min(1, "The minimum is one")
-        .max(15, "the max is fifteen"),
-      tissue: Yup.string().required("This input is required"),
+      analysisType: Yup.string().required("Please select a value"),
+      reference_panel: Yup.string().required("Please select a value"),
+      ratio: Yup.string().required("This input is required"),
+      p_adjust_method: Yup.string().required("Please select a value"),
     }),
 
     onSubmit: (values: FormikValues) => {
@@ -93,8 +91,8 @@ const Loci2PathForm: React.FC<Props & RouteComponentProps> = (props) => {
           values,
           uploadFile,
           setLoading,
-          "loci2path",
-          "loci2path",
+          "tseadb",
+          "tseadb",
           user.username,
           props
         );
@@ -103,8 +101,8 @@ const Loci2PathForm: React.FC<Props & RouteComponentProps> = (props) => {
           values,
           uploadFile,
           setLoading,
-          "loci2path/noauth",
-          "loci2path",
+          "tseadb/noauth",
+          "tseadb",
           undefined,
           props
         );
@@ -116,6 +114,7 @@ const Loci2PathForm: React.FC<Props & RouteComponentProps> = (props) => {
     formik.resetForm();
     setUseTest(true);
     setFormValues(testValues);
+    setUploadFile(null)
     fileInput.current.querySelector("input").disabled = true;
   };
 
@@ -133,7 +132,7 @@ const Loci2PathForm: React.FC<Props & RouteComponentProps> = (props) => {
   };
 
   const handleFileBlur = (event: any) => {
-    if (!event.target.files) {
+    if (event.target.files) {
       formik.setFieldError("filename", "Please upload a file");
       formik.setFieldTouched("filename");
     }
@@ -146,88 +145,24 @@ const Loci2PathForm: React.FC<Props & RouteComponentProps> = (props) => {
     fileInput.current.querySelector("input").value = "";
   };
 
-  const tissues = [
-    // { variable: "none", name: "None" },
-    { variable: "Adipose_Subcutaneous", name: "Adipose_Subcutaneous" },
-    { variable: "Adipose_Visceral_Omentum", name: "Adipose_Visceral_Omentum" },
-    { variable: "Adrenal_Gland", name: "Adrenal_Gland" },
-    { variable: "Artery_Aorta", name: "Artery_Aorta" },
-    { variable: "Artery_Coronary", name: "Artery_Coronary" },
-    { variable: "Artery_Tibial", name: "Artery_Tibial" },
-    { variable: "Brain_Amygdala", name: "Brain_Amygdala" },
-    {
-      variable: "Brain_Anterior_cingulate_cortex_BA24",
-      name: "Brain_Anterior_cingulate_cortex_BA24",
-    },
-    {
-      variable: "Brain_Caudate_basal_ganglia",
-      name: "Brain_Caudate_basal_ganglia",
-    },
-    {
-      variable: "Brain_Cerebellar_Hemisphere",
-      name: "Brain_Cerebellar_Hemisphere",
-    },
-    { variable: "Brain_Cerebellum", name: "Brain_Cerebellum" },
-    { variable: "Brain_Cortex", name: "Brain_Cortex" },
-    { variable: "Brain_Frontal_Cortex_BA9", name: "Brain_Frontal_Cortex_BA9" },
-    { variable: "Brain_Hippocampus", name: "Brain_Hippocampus" },
-    { variable: "Brain_Hypothalamus", name: "Brain_Hypothalamus" },
-    {
-      variable: "Brain_Nucleus_accumbens_basal_ganglia",
-      name: "Brain_Nucleus_accumbens_basal_ganglia",
-    },
-    {
-      variable: "Brain_Putamen_basal_ganglia",
-      name: "Brain_Putamen_basal_ganglia",
-    },
-    {
-      variable: "Brain_Spinal_cord_cervical_c_1",
-      name: "Brain_Spinal_cord_cervical_c-1",
-    },
-    { variable: "Brain_Substantia_nigra", name: "Brain_Substantia_nigra" },
-    { variable: "Breast_Mammary_Tissue", name: "Breast_Mammary_Tissue" },
-    {
-      variable: "Cells_EBV_transformed_lymphocytes",
-      name: "Cells_EBV-transformed_lymphocytes",
-    },
-    { variable: "Colon_Sigmoid", name: "Colon_Sigmoid" },
-    { variable: "Colon_Transverse", name: "Colon_Transverse" },
-    {
-      variable: "Esophagus_Gastroesophageal_Junction",
-      name: "Esophagus_Gastroesophageal_Junction",
-    },
-    { variable: "Esophagus_Mucosa", name: "Esophagus_Mucosa" },
-    { variable: "Esophagus_Muscularis", name: "Esophagus_Muscularis" },
-    { variable: "Heart_Atrial_Appendage", name: "Heart_Atrial_Appendage" },
-    { variable: "Heart_Left_Ventricle", name: "Heart_Left_Ventricle" },
-    { variable: "Liver", name: "Liver" },
-    { variable: "Lung", name: "Lung" },
-    { variable: "Minor_Salivary_Gland", name: "Minor_Salivary_Gland" },
-    { variable: "Muscle_Skeletal", name: "Muscle_Skeletal" },
-    { variable: "Nerve_Tibial", name: "Nerve_Tibial" },
-    { variable: "Ovary", name: "Ovary" },
-    { variable: "Pancreas", name: "Pancreas" },
-    { variable: "Pituitary", name: "Pituitary" },
-    { variable: "Prostate", name: "Prostate" },
-    {
-      variable: "Skin_Not_Sun_Exposed_Suprapubic",
-      name: "Skin_Not_Sun_Exposed_Suprapubic",
-    },
-    {
-      variable: "Skin_Sun_Exposed_Lower_leg",
-      name: "Skin_Sun_Exposed_Lower_leg",
-    },
-    {
-      variable: "Small_Intestine_Terminal_Ileum",
-      name: "Small_Intestine_Terminal_Ileum",
-    },
-    { variable: "Spleen", name: "Spleen" },
-    { variable: "Stomach", name: "Stomach" },
-    { variable: "Testis", name: "Testis" },
-    { variable: "Thyroid", name: "Thyroid" },
-    { variable: "Uterus", name: "Uterus" },
-    { variable: "Vagina", name: "Vagina" },
-    { variable: "Whole_Blood", name: "Whole_Blood" },
+  const P_ADJUST_METHOD = [
+    { variable: "holm", name: "HOLM" },
+    { variable: "hochberg", name: "HOCHBERG" },
+    { variable: "hommel", name: "HOMMEL" },
+    { variable: "bonferroni", name: "BONFERRONI" },
+    { variable: "BH", name: "BH" },
+    { variable: "BY", name: "BY" },
+    { variable: "fdr", name: "FDR" },
+    { variable: "none", name: "NONE" },
+  ];
+
+  const AnalysisType = [
+    { variable: "single_sample", name: "SINGLE_SAMPLE" },
+  ];
+
+  const ReferencePanel = [
+    { variable: "GTEx_t_score", name: "GTEx_t_score" },
+    { variable: "ENCODE_z_score", name: "ENCODE_z_score" },
   ];
 
   return (
@@ -248,7 +183,7 @@ const Loci2PathForm: React.FC<Props & RouteComponentProps> = (props) => {
             className={classes.button}
             endIcon={<GetAppRounded />}
             href={
-              "https://drive.google.com/file/d/1z8Y23kp6pdG3PvXKj8rtnuz2Poz6ndj3/view?usp=sharing"
+              "https://drive.google.com/file/d/1pqPBm0Y9iyj9S2PmWeJC8RPctDW_mrgb/view?usp=sharing"
             }
             target="_blank"
           >
@@ -296,19 +231,9 @@ const Loci2PathForm: React.FC<Props & RouteComponentProps> = (props) => {
 
           {generalFileForm(classes, formik, [
             {
-              title: "chr",
+              title: "genes",
               text:
-                "the column number of the chromosome in the summary statistic file. It can be also be chr",
-            },
-            {
-              title: "start_position",
-              text:
-                "the column number of the base pair positions in the summary statistic file. It can be bp",
-            },
-            {
-              title: "stop_position",
-              text:
-                  "the column number of the base pair positions in the summary statistic file. It can be bp",
+                "the column number of the gene name in the summary statistic file. Check test file",
             }
           ])}
 
@@ -319,12 +244,40 @@ const Loci2PathForm: React.FC<Props & RouteComponentProps> = (props) => {
           <SelectFieldsElement
             classes={classes}
             formik={formik}
-            selectElement={tissues}
-            selectVariable={"tissue"}
-            selectName={"Tissue"}
+            selectElement={AnalysisType}
+            selectVariable={"analysisType"}
+            selectName={"Analysis Type"}
+            tooltip={"Analysis Type"}
+          />
+
+          <SelectFieldsElement
+            classes={classes}
+            formik={formik}
+            selectElement={ReferencePanel}
+            selectVariable={"reference_panel"}
+            selectName={"Reference Panel"}
             tooltip={
-              "Name of tissue for analysis."
+              "The reference panel which can be either GTex score (GTEx_t_scor) or Encode score ,ENCODE_z_score)"
             }
+          />
+
+          <CommonTextElement
+              classes={classes}
+              formik={formik}
+              label={"P_Threshold"}
+              textVariable={"p_threshold"}
+              tooltip={
+                "The threshold to define tissue-specific genes (with top t-score or z-score), the default value is 0.05."
+              }
+          />
+
+          <SelectFieldsElement
+            classes={classes}
+            formik={formik}
+            selectElement={P_ADJUST_METHOD}
+            selectVariable={"p_adjust_method"}
+            selectName={"Pvalue ADJUST METHOD"}
+            tooltip={"Pvalue adjustment method (p_adjust_method)"}
           />
         </Grid>
         <div className={classes.button_container}>
@@ -349,4 +302,4 @@ const Loci2PathForm: React.FC<Props & RouteComponentProps> = (props) => {
   );
 };
 
-export default Loci2PathForm;
+export default TseaDBForm;
