@@ -15,7 +15,6 @@ import {
   CommonFileElement,
   CommonTextElement,
   LoadTestData,
-  SelectFieldsElement,
 } from "../../utility/form_common_fields";
 // import classes from "./index.module.scss";
 
@@ -29,10 +28,11 @@ type UserFormData = {
   chr: string;
   start_position: string;
   stop_position: string;
-  tissue: string;
+  alleles: string;
+  strand: string;
 };
 
-const Loci2PathForm: React.FC<Props & RouteComponentProps> = (props) => {
+const EnsemblVEPForm: React.FC<Props & RouteComponentProps> = (props) => {
   const { user } = useTypedSelector((state) => state.auth);
   const [uploadFile, setUploadFile] = useState<any>(null);
   const [useTest, setUseTest] = useState<boolean>(false);
@@ -48,18 +48,20 @@ const Loci2PathForm: React.FC<Props & RouteComponentProps> = (props) => {
     chr: "",
     start_position: "",
     stop_position: "",
-    tissue: "",
+    alleles: "",
+    strand: "",
   };
 
   const testValues = {
     filename: "test.txt",
-    job_name: "Test Loci2Path",
+    job_name: "Test CADD",
     ...(!user?.username && { email: "" }),
     useTest: true,
     chr: "1",
     start_position: "2",
     stop_position: "3",
-    tissue: "Adipose_Subcutaneous",
+    alleles: "4",
+    strand: "5",
   };
 
   const formik = useFormik<UserFormData>({
@@ -83,7 +85,14 @@ const Loci2PathForm: React.FC<Props & RouteComponentProps> = (props) => {
         .required("Stop position column number is required")
         .min(1, "The minimum is one")
         .max(15, "the max is fifteen"),
-      tissue: Yup.string().required("This input is required"),
+      alleles: Yup.number()
+        .required("alleles column number is required")
+        .min(1, "The minimum is one")
+        .max(15, "the max is fifteen"),
+      strand: Yup.number()
+        .required("strand column number is required")
+        .min(1, "The minimum is one")
+        .max(15, "the max is fifteen"),
     }),
 
     onSubmit: (values: FormikValues) => {
@@ -93,8 +102,8 @@ const Loci2PathForm: React.FC<Props & RouteComponentProps> = (props) => {
           values,
           uploadFile,
           setLoading,
-          "loci2path",
-          "loci2path",
+          "ensemblvep",
+          "ensemblvep",
           user.username,
           props
         );
@@ -103,8 +112,8 @@ const Loci2PathForm: React.FC<Props & RouteComponentProps> = (props) => {
           values,
           uploadFile,
           setLoading,
-          "loci2path/noauth",
-          "loci2path",
+          "ensemblvep/noauth",
+          "ensemblvep",
           undefined,
           props
         );
@@ -116,6 +125,7 @@ const Loci2PathForm: React.FC<Props & RouteComponentProps> = (props) => {
     formik.resetForm();
     setUseTest(true);
     setFormValues(testValues);
+    setUploadFile(null)
     fileInput.current.querySelector("input").disabled = true;
   };
 
@@ -146,90 +156,6 @@ const Loci2PathForm: React.FC<Props & RouteComponentProps> = (props) => {
     fileInput.current.querySelector("input").value = "";
   };
 
-  const tissues = [
-    // { variable: "none", name: "None" },
-    { variable: "Adipose_Subcutaneous", name: "Adipose_Subcutaneous" },
-    { variable: "Adipose_Visceral_Omentum", name: "Adipose_Visceral_Omentum" },
-    { variable: "Adrenal_Gland", name: "Adrenal_Gland" },
-    { variable: "Artery_Aorta", name: "Artery_Aorta" },
-    { variable: "Artery_Coronary", name: "Artery_Coronary" },
-    { variable: "Artery_Tibial", name: "Artery_Tibial" },
-    { variable: "Brain_Amygdala", name: "Brain_Amygdala" },
-    {
-      variable: "Brain_Anterior_cingulate_cortex_BA24",
-      name: "Brain_Anterior_cingulate_cortex_BA24",
-    },
-    {
-      variable: "Brain_Caudate_basal_ganglia",
-      name: "Brain_Caudate_basal_ganglia",
-    },
-    {
-      variable: "Brain_Cerebellar_Hemisphere",
-      name: "Brain_Cerebellar_Hemisphere",
-    },
-    { variable: "Brain_Cerebellum", name: "Brain_Cerebellum" },
-    { variable: "Brain_Cortex", name: "Brain_Cortex" },
-    { variable: "Brain_Frontal_Cortex_BA9", name: "Brain_Frontal_Cortex_BA9" },
-    { variable: "Brain_Hippocampus", name: "Brain_Hippocampus" },
-    { variable: "Brain_Hypothalamus", name: "Brain_Hypothalamus" },
-    {
-      variable: "Brain_Nucleus_accumbens_basal_ganglia",
-      name: "Brain_Nucleus_accumbens_basal_ganglia",
-    },
-    {
-      variable: "Brain_Putamen_basal_ganglia",
-      name: "Brain_Putamen_basal_ganglia",
-    },
-    {
-      variable: "Brain_Spinal_cord_cervical_c_1",
-      name: "Brain_Spinal_cord_cervical_c-1",
-    },
-    { variable: "Brain_Substantia_nigra", name: "Brain_Substantia_nigra" },
-    { variable: "Breast_Mammary_Tissue", name: "Breast_Mammary_Tissue" },
-    {
-      variable: "Cells_EBV_transformed_lymphocytes",
-      name: "Cells_EBV-transformed_lymphocytes",
-    },
-    { variable: "Colon_Sigmoid", name: "Colon_Sigmoid" },
-    { variable: "Colon_Transverse", name: "Colon_Transverse" },
-    {
-      variable: "Esophagus_Gastroesophageal_Junction",
-      name: "Esophagus_Gastroesophageal_Junction",
-    },
-    { variable: "Esophagus_Mucosa", name: "Esophagus_Mucosa" },
-    { variable: "Esophagus_Muscularis", name: "Esophagus_Muscularis" },
-    { variable: "Heart_Atrial_Appendage", name: "Heart_Atrial_Appendage" },
-    { variable: "Heart_Left_Ventricle", name: "Heart_Left_Ventricle" },
-    { variable: "Liver", name: "Liver" },
-    { variable: "Lung", name: "Lung" },
-    { variable: "Minor_Salivary_Gland", name: "Minor_Salivary_Gland" },
-    { variable: "Muscle_Skeletal", name: "Muscle_Skeletal" },
-    { variable: "Nerve_Tibial", name: "Nerve_Tibial" },
-    { variable: "Ovary", name: "Ovary" },
-    { variable: "Pancreas", name: "Pancreas" },
-    { variable: "Pituitary", name: "Pituitary" },
-    { variable: "Prostate", name: "Prostate" },
-    {
-      variable: "Skin_Not_Sun_Exposed_Suprapubic",
-      name: "Skin_Not_Sun_Exposed_Suprapubic",
-    },
-    {
-      variable: "Skin_Sun_Exposed_Lower_leg",
-      name: "Skin_Sun_Exposed_Lower_leg",
-    },
-    {
-      variable: "Small_Intestine_Terminal_Ileum",
-      name: "Small_Intestine_Terminal_Ileum",
-    },
-    { variable: "Spleen", name: "Spleen" },
-    { variable: "Stomach", name: "Stomach" },
-    { variable: "Testis", name: "Testis" },
-    { variable: "Thyroid", name: "Thyroid" },
-    { variable: "Uterus", name: "Uterus" },
-    { variable: "Vagina", name: "Vagina" },
-    { variable: "Whole_Blood", name: "Whole_Blood" },
-  ];
-
   return (
     <div className={classes.job_form}>
       <form onSubmit={formik.handleSubmit}>
@@ -248,7 +174,7 @@ const Loci2PathForm: React.FC<Props & RouteComponentProps> = (props) => {
             className={classes.button}
             endIcon={<GetAppRounded />}
             href={
-              "https://drive.google.com/file/d/1z8Y23kp6pdG3PvXKj8rtnuz2Poz6ndj3/view?usp=sharing"
+              "https://drive.google.com/file/d/1_zxyfh0ckzfNjzs6320hOkthvNtRy-85/view?usp=sharing"
             }
             target="_blank"
           >
@@ -309,23 +235,18 @@ const Loci2PathForm: React.FC<Props & RouteComponentProps> = (props) => {
               title: "stop_position",
               text:
                   "the column number of the base pair positions in the summary statistic file. It can be bp",
+            },
+            {
+              title: "alleles",
+              text:
+                  "the column number of the alleles in the summary statistic file.",
+            },
+            {
+              title: "strand",
+              text:
+                  "the column number of the strand in the summary statistic file.",
             }
           ])}
-
-          <div className={classes.header_div}>
-            <h2>Tool Parameters</h2>
-          </div>
-
-          <SelectFieldsElement
-            classes={classes}
-            formik={formik}
-            selectElement={tissues}
-            selectVariable={"tissue"}
-            selectName={"Tissue"}
-            tooltip={
-              "Name of tissue for analysis."
-            }
-          />
         </Grid>
         <div className={classes.button_container}>
           {loading ? (
@@ -349,4 +270,4 @@ const Loci2PathForm: React.FC<Props & RouteComponentProps> = (props) => {
   );
 };
 
-export default Loci2PathForm;
+export default EnsemblVEPForm;

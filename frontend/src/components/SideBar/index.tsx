@@ -80,6 +80,15 @@ const SideBar: React.FC<Props> = (props) => {
       icon: <LabelSharp />,
     },
     {
+      title: "TSEA DB",
+      linkTo: "/tools/tseadb",
+      icon: <LabelSharp />,
+    },{
+      title: "Annotation(CADD)",
+      linkTo: "/tools/ensemblvep",
+      icon: <LabelSharp />,
+    },
+    {
       title: "Functional Prediction",
       linkTo: "/tools/filterannot",
       icon: <LabelSharp />,
