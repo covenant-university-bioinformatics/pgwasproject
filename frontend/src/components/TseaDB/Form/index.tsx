@@ -55,7 +55,7 @@ const TseaDBForm: React.FC<Props & RouteComponentProps> = (props) => {
 
   const testValues = {
     filename: "test.txt",
-    job_name: "Test Focus",
+    job_name: "Test TSEA DB",
     ...(!user?.username && { email: "" }),
     useTest: true,
     genes: "1",
@@ -264,8 +264,8 @@ const TseaDBForm: React.FC<Props & RouteComponentProps> = (props) => {
           <CommonTextElement
               classes={classes}
               formik={formik}
-              label={"P_Threshold"}
-              textVariable={"p_threshold"}
+              label={"Pvalue Threshold"}
+              textVariable={"ratio"}
               tooltip={
                 "The threshold to define tissue-specific genes (with top t-score or z-score), the default value is 0.05."
               }
