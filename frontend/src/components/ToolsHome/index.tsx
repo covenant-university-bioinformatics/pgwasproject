@@ -27,7 +27,7 @@ const ToolsHome: React.FC<Props> = (props) => {
     },
     {
       title: "TSEA DB",
-      linkTo: "/tools/tseaddb",
+      linkTo: "/tools/tseadb",
     },
     {
       title: "Annotation(CADD)",

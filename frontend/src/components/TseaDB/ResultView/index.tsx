@@ -176,7 +176,7 @@ const TseaDBResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
     if (tseaRes && tseaRes.status === "completed") {
       return (
         <div className={classes.tables}>
-          <h3 className={classes.sub_heading}>FineMapping Result Table</h3>
+          <h3 className={classes.sub_heading}>TSEA DB Result Table</h3>
           {showDownloadButton("tseaResultsFile", "TSEA Result File")}
           <div className={classes.table_wrapper}>
             {loadingTseaResults ? (
@@ -254,7 +254,7 @@ const TseaDBResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
       if (tseaResults.length === 0) {
         setLoadingTseaResults(true);
         pgwasAxios
-          .get(`/${apiPath}/jobs/output/${id}/focusResultsFile`)
+          .get(`/${apiPath}/jobs/output/${id}/tseaResultsFile`)
           .then((response) => {
             const alllines = response.data.split("\n");
             const header: string[] = alllines[0].split("\t");
