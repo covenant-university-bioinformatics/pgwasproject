@@ -34,14 +34,14 @@ const ToolsHome: React.FC<Props> = (props) => {
       linkTo: "/tools/ensemblvep",
     },
     {
-      title: "Functional Prediction",
+      title: "Functional Prediction (GWAVA)",
       linkTo: "/tools/filterannot",
     },
     {
       title: "EQTL(Loci2Path)",
       linkTo: "/tools/loci2path",
     },
-    { title: "Annotation", linkTo: "/tools/annotation" },
+    { title: "Annotation (ANNOVAR)", linkTo: "/tools/annotation" },
     {
       title: "Deleteriousness",
       linkTo: "/tools/deleteriousness",
