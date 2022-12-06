@@ -177,7 +177,7 @@ const FilterAnnotResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
     if (filterannotRes && filterannotRes.status === "completed") {
       return (
         <div className={classes.tables}>
-          <h3 className={classes.sub_heading}>FineMapping Result Table</h3>
+          <h3 className={classes.sub_heading}>GWAVA Result Table</h3>
           {showDownloadButton("resultsFile", "Annotation")}
           <div className={classes.table_wrapper}>
             {loadingFilterAnnotResults ? (

@@ -89,7 +89,7 @@ const SideBar: React.FC<Props> = (props) => {
       icon: <LabelSharp />,
     },
     {
-      title: "Functional Prediction",
+      title: "GWAVA",
       linkTo: "/tools/filterannot",
       icon: <LabelSharp />,
     },
