@@ -188,7 +188,7 @@ const EnsemblVEPResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
     if (ensembelVEPRes && ensembelVEPRes.status === "completed") {
       return (
           <div className={classes.tables}>
-            <h3 className={classes.sub_heading}>FineMapping Result Table</h3>
+            <h3 className={classes.sub_heading}>CADD Result Table</h3>
             {showDownloadButton("resultsFile", "CADD Annotation", "summaryFile", "Summary File")}
             <div className={classes.table_wrapper}>
               {loadingEnsemblVEPResults ? (
