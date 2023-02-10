@@ -148,7 +148,7 @@ const Tutorials: React.FC<Props> = (props: Props) => {
             <li>
               Upload the files you want to use for the analysis (important! -
               please ensure your filename doesn't have illegal characters like
-              spaces, braces etc!). Please use only text files.
+              spaces, braces etc!). Please use only text files. Please note that the file upload limit is 300mb.
             </li>
             <li>
               In the next section, fill in the correct column number for the

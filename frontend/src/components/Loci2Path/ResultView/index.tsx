@@ -175,7 +175,7 @@ const Loci2PathResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
     if (loci2pathRes && loci2pathRes.status === "completed") {
       return (
           <div className={classes.tables}>
-            <h3 className={classes.sub_heading}>FineMapping Result Table</h3>
+            <h3 className={classes.sub_heading}>LociToPath Result Table</h3>
             {showDownloadButton("resultsFile", "Loci2Path")}
             <div className={classes.table_wrapper}>
               {loadingLoci2PathResults ? (

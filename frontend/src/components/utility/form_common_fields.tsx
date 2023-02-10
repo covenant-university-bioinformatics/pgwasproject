@@ -313,6 +313,7 @@ export const CommonFileElement: React.FC<CommonFileElementProps> = ({
             onBlur={handleFileBlur}
             {...textErrorHelper(formik, "filename")}
           />
+          <span>Max 295mb</span>
         </FormControl>
         {/*{!formik.errors.filename && formik.touched.filename && (*/}
         {/*  <Button*/}
