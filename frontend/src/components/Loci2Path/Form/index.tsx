@@ -329,7 +329,10 @@ const Loci2PathForm: React.FC<Props & RouteComponentProps> = (props) => {
         </Grid>
         <div className={classes.button_container}>
           {loading ? (
-            <CircularProgress color="secondary" className="progress" />
+              <div>
+                <CircularProgress color="secondary" className="progress" />
+                <div>Uploading...</div>
+              </div>
           ) : (
             <Button
               className={classes.form_button}
