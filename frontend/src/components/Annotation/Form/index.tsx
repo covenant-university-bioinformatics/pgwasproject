@@ -192,7 +192,7 @@ const AnnotationForm: React.FC<Props & RouteComponentProps> = (props) => {
   };
 
   const handleFileBlur = (event: any) => {
-    if (event.target.files) {
+    if (!event.target.files) {
       formik.setFieldError("filename", "Please upload a file");
       formik.setFieldTouched("filename");
     }

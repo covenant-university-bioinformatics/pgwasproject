@@ -56,7 +56,7 @@ export const handleFileUploadChangedCommon = (
   let reader = new FileReader();
   let file = event.target.files[0];
   if (file) {
-    if (file.type === "text/plain") {
+    // if (file.type === "text/plain") {
       reader.onloadend = () => {
         formik.setFieldValue("filename", event.target.files[0].name);
         setUploadFile(event.target.files[0]);
@@ -64,10 +64,10 @@ export const handleFileUploadChangedCommon = (
         formik.setFieldError("filename", undefined);
       };
       reader.readAsDataURL(file);
-    } else {
-      formik.setFieldError("filename", "Please upload a text file");
-      formik.setFieldValue("filename", undefined);
-    }
+    // } else {
+    //   formik.setFieldError("filename", "Please upload a text file");
+    //   formik.setFieldValue("filename", undefined);
+    // }
   } else {
     formik.setFieldError("filename", "Please upload a readable text file");
     formik.setFieldValue("filename", undefined);
