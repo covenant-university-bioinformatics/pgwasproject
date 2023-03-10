@@ -1584,85 +1584,85 @@ const WorkflowForm: React.FC<Props & RouteComponentProps> = (props) => {
                 </div>
               </AccordionDetails>
             </Accordion>
-            <Accordion
-              expanded={expanded === "panel8"}
-              onChange={handleChange("panel8")}
-            >
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel8bh-content"
-                id="panel8bh-header"
-                className={classes.accordian_summary}
-              >
-                <Typography
-                  className={classes.main_text}
-                  sx={{
-                    width: "33%",
-                    flexShrink: 0,
-                    fontWeight: "bold",
-                    fontSize: "1.2rem",
-                  }}
-                >
-                  Regulation
-                </Typography>
-                <Typography
-                  className={classes.sub_text}
-                  sx={{
-                    color: "text.secondary",
-                    fontWeight: "bold",
-                    fontSize: "1rem",
-                  }}
-                >
-                  Annotate variants based on HaploReg and RegulomeDB
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <div className={classes.container}>
-                  <Grid container spacing={3}>
-                    <div className={classes.header_div}>
-                      <h2>Parameters</h2>
-                    </div>
-                    <CommonTextElement
-                      classes={classes}
-                      formik={formik}
-                      label={"LD Threshold"}
-                      textVariable={"haplor_ld_threshold"}
-                      tooltip={"Linkage disequilibrium threshold"}
-                    />
-                    <SelectFieldsElement
-                      classes={classes}
-                      formik={formik}
-                      selectElement={epiOptions}
-                      selectVariable={"haplor_epi"}
-                      selectName={"EPI Options"}
-                      tooltip={
-                        "Source of the epigenome. There four possible values for this parameter which are vanilla for querying ChromHMM (Core 15-state model), imputed for querying ChromHMM (25-state model using 12 imputed marks), amd methyl for querying H3K4me1/H3K4me3 peaks and acetyl for querying H3K27ac/H3K9ac peaks."
-                      }
-                    />
-                    <SelectFieldsElement
-                      classes={classes}
-                      formik={formik}
-                      selectElement={consOptions}
-                      selectVariable={"haplor_cons"}
-                      selectName={"CONS Options"}
-                      tooltip={
-                        "Mammalian conservation algorithm to be used. There are three possible values for this parameter which are: gerp for GERP algorithm, siphy for SiPhy-omega algorithm, and both to use both algorithms."
-                      }
-                    />
-                    <SelectFieldsElement
-                      classes={classes}
-                      formik={formik}
-                      selectElement={genetypesOptions}
-                      selectVariable={"haplor_genetypes"}
-                      selectName={"Genetype Options"}
-                      tooltip={
-                        "The genomic coordinates for querying. There are possible values for this parameter, which are gencode for using Gencode genes coordinates and refseq for using RefSeq genes coordinates."
-                      }
-                    />
-                  </Grid>
-                </div>
-              </AccordionDetails>
-            </Accordion>
+            {/*<Accordion*/}
+            {/*  expanded={expanded === "panel8"}*/}
+            {/*  onChange={handleChange("panel8")}*/}
+            {/*>*/}
+            {/*  <AccordionSummary*/}
+            {/*    expandIcon={<ExpandMoreIcon />}*/}
+            {/*    aria-controls="panel8bh-content"*/}
+            {/*    id="panel8bh-header"*/}
+            {/*    className={classes.accordian_summary}*/}
+            {/*  >*/}
+            {/*    <Typography*/}
+            {/*      className={classes.main_text}*/}
+            {/*      sx={{*/}
+            {/*        width: "33%",*/}
+            {/*        flexShrink: 0,*/}
+            {/*        fontWeight: "bold",*/}
+            {/*        fontSize: "1.2rem",*/}
+            {/*      }}*/}
+            {/*    >*/}
+            {/*      Regulation*/}
+            {/*    </Typography>*/}
+            {/*    <Typography*/}
+            {/*      className={classes.sub_text}*/}
+            {/*      sx={{*/}
+            {/*        color: "text.secondary",*/}
+            {/*        fontWeight: "bold",*/}
+            {/*        fontSize: "1rem",*/}
+            {/*      }}*/}
+            {/*    >*/}
+            {/*      Annotate variants based on HaploReg and RegulomeDB*/}
+            {/*    </Typography>*/}
+            {/*  </AccordionSummary>*/}
+            {/*  <AccordionDetails>*/}
+            {/*    <div className={classes.container}>*/}
+            {/*      <Grid container spacing={3}>*/}
+            {/*        <div className={classes.header_div}>*/}
+            {/*          <h2>Parameters</h2>*/}
+            {/*        </div>*/}
+            {/*        <CommonTextElement*/}
+            {/*          classes={classes}*/}
+            {/*          formik={formik}*/}
+            {/*          label={"LD Threshold"}*/}
+            {/*          textVariable={"haplor_ld_threshold"}*/}
+            {/*          tooltip={"Linkage disequilibrium threshold"}*/}
+            {/*        />*/}
+            {/*        <SelectFieldsElement*/}
+            {/*          classes={classes}*/}
+            {/*          formik={formik}*/}
+            {/*          selectElement={epiOptions}*/}
+            {/*          selectVariable={"haplor_epi"}*/}
+            {/*          selectName={"EPI Options"}*/}
+            {/*          tooltip={*/}
+            {/*            "Source of the epigenome. There four possible values for this parameter which are vanilla for querying ChromHMM (Core 15-state model), imputed for querying ChromHMM (25-state model using 12 imputed marks), amd methyl for querying H3K4me1/H3K4me3 peaks and acetyl for querying H3K27ac/H3K9ac peaks."*/}
+            {/*          }*/}
+            {/*        />*/}
+            {/*        <SelectFieldsElement*/}
+            {/*          classes={classes}*/}
+            {/*          formik={formik}*/}
+            {/*          selectElement={consOptions}*/}
+            {/*          selectVariable={"haplor_cons"}*/}
+            {/*          selectName={"CONS Options"}*/}
+            {/*          tooltip={*/}
+            {/*            "Mammalian conservation algorithm to be used. There are three possible values for this parameter which are: gerp for GERP algorithm, siphy for SiPhy-omega algorithm, and both to use both algorithms."*/}
+            {/*          }*/}
+            {/*        />*/}
+            {/*        <SelectFieldsElement*/}
+            {/*          classes={classes}*/}
+            {/*          formik={formik}*/}
+            {/*          selectElement={genetypesOptions}*/}
+            {/*          selectVariable={"haplor_genetypes"}*/}
+            {/*          selectName={"Genetype Options"}*/}
+            {/*          tooltip={*/}
+            {/*            "The genomic coordinates for querying. There are possible values for this parameter, which are gencode for using Gencode genes coordinates and refseq for using RefSeq genes coordinates."*/}
+            {/*          }*/}
+            {/*        />*/}
+            {/*      </Grid>*/}
+            {/*    </div>*/}
+            {/*  </AccordionDetails>*/}
+            {/*</Accordion>*/}
           </div>
           <p className={classes.text_info}>
             * Please note this job will take at least two hours

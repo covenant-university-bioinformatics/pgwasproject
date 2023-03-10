@@ -28,9 +28,9 @@ const WorkflowHome: React.FC<Props> = (props: Props) => {
         <p>
           The input file is a GWAS summary file with at least 8 fields. The
           required fields are: SNPs IDs (rsid), SNP chromosome (CHR), SNP
-          position (BP), Reference allele (A1), Alternative (Minor) allele (A2),
+          position (BP), Reference allele (A1 or effect_allele), Alternative (A2, Minor or alternate_allele) allele,
           Alternative (Minor) allele frequency (freq), Beta (slope) value
-          (beta), Standard error (slope_ser), p value (pval_nominal), Sample
+          (beta), Standard error (standard_error), p value (pval_nominal), Sample
           size (n), and Zscore (z). Population users should specify the
           population to calculate LD. Users can choose one of five 1000 genomes
           super populations, which are African (afr), American (amr), European

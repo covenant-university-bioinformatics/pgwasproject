@@ -352,19 +352,19 @@ const WorkflowResultView: React.FC<Props & RouteComponentProps<JobParam>> = (
           jobId={id}
           classes={classes}
         />
-        {customResult &&
-          customResult.status === "completed" &&
-          (customResult.haplor_ResultsFile ? (
-            <HaploR
-              resultObj={customResult}
-              apiPath={apiPath}
-              jobId={id}
-              file_key={"haplor_ResultsFile"}
-              classes={classes}
-            />
-          ) : (
-            <RegulationResults />
-          ))}
+        {/*{customResult &&*/}
+        {/*  customResult.status === "completed" &&*/}
+        {/*  (customResult.haplor_ResultsFile ? (*/}
+        {/*    <HaploR*/}
+        {/*      resultObj={customResult}*/}
+        {/*      apiPath={apiPath}*/}
+        {/*      jobId={id}*/}
+        {/*      file_key={"haplor_ResultsFile"}*/}
+        {/*      classes={classes}*/}
+        {/*    />*/}
+        {/*  ) : (*/}
+        {/*    <RegulationResults />*/}
+        {/*  ))}*/}
       </div>
     </div>
   );
