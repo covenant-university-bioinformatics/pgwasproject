@@ -52,7 +52,7 @@ const ToolsHome: React.FC<Props> = (props) => {
     { title: "EQTL-Colocalization", linkTo: "/tools/eqtlcoloc" },
     { title: "Gene-Based Analysis", linkTo: "/tools/genebased" },
     { title: "Pathway-Based Analysis", linkTo: "/tools/pathwaybased" },
-    { title: "Regulation", linkTo: "/tools/regulationhaplor" },
+    // { title: "Regulation", linkTo: "/tools/regulationhaplor" },
   ];
 
   const constructTabs = () => {

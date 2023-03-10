@@ -122,11 +122,11 @@ const SideBar: React.FC<Props> = (props) => {
       linkTo: "/tools/pathwaybased",
       icon: <LabelSharp />,
     },
-    {
-      title: "Regulation",
-      linkTo: "/tools/regulationhaplor",
-      icon: <LabelSharp />,
-    },
+    // {
+    //   title: "Regulation",
+    //   linkTo: "/tools/regulationhaplor",
+    //   icon: <LabelSharp />,
+    // },
   ];
 
   const renderItems = () => {
