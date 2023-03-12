@@ -84,10 +84,16 @@ const EqtlSmrResult: React.FC<Props> = ({
     if (customResult && customResult.status === "completed") {
       return (
         <div className={classes.download}>
-          <p>
-            The table below may have been chunked and pruned to allow for proper
-            display. Use the buttons below to download the full files.
-          </p>
+          {
+            customResult[`smr_${dataset.toLowerCase()}SMRFile`].includes('error')
+              ? <p>
+                  There has been an error with your analysis. Please use the download button to get error file.
+                </p>
+                : <p>
+                  The table below may have been chunked and pruned to allow for proper
+                  display. Use the buttons below to download the full files.
+                </p>
+          }
 
           <div className={classes.buttons}>
             <Button
@@ -100,7 +106,9 @@ const EqtlSmrResult: React.FC<Props> = ({
               }
               target="_blank"
             >
-              Download SMR Results
+              {
+                customResult[`smr_${dataset.toLowerCase()}SMRFile`].includes('error') ? 'Download SMR Error' : 'Download SMR Results'
+              }
             </Button>
             {customResult.spgwas_params.smr_trans === "on" && (
               <Button
@@ -114,7 +122,9 @@ const EqtlSmrResult: React.FC<Props> = ({
                 }
                 target="_blank"
               >
-                Download Trans Results
+                {
+                  customResult[`smr_${dataset.toLowerCase()}TransFile`].includes('error') ? 'Download Trans Error' : 'Download Trans Results'
+                }
               </Button>
             )}
             {customResult.spgwas_params.smr_smr_multi === "on" && (
@@ -129,7 +139,9 @@ const EqtlSmrResult: React.FC<Props> = ({
                 }
                 target="_blank"
               >
-                Download Multi Results
+                {
+                  customResult[`smr_${dataset.toLowerCase()}MultiFile`].includes('error') ? 'Download Multi Error' : 'Download Multi Results'
+                }
               </Button>
             )}
           </div>
@@ -278,7 +290,7 @@ const EqtlSmrResult: React.FC<Props> = ({
   };
   //smr file
   useEffect(() => {
-    if (customResult && customResult.status === "completed") {
+    if (customResult && customResult.status === "completed" && !customResult[`smr_${dataset.toLowerCase()}SMRFile`].includes('error')) {
       if (SMRResults.length === 0) {
         setLoadingSMRResults(true);
         pgwasAxios
@@ -306,7 +318,8 @@ const EqtlSmrResult: React.FC<Props> = ({
     if (
       customResult &&
       customResult.status === "completed" &&
-      customResult.spgwas_params.smr_trans === "on"
+      customResult.spgwas_params.smr_trans === "on" &&
+      !customResult[`smr_${dataset.toLowerCase()}TransFile`].includes('error')
     ) {
       if (TransResults.length === 0) {
         setLoadingTransResults(true);
@@ -335,7 +348,8 @@ const EqtlSmrResult: React.FC<Props> = ({
     if (
       customResult &&
       customResult.status === "completed" &&
-      customResult.spgwas_params.smr_smr_multi === "on"
+      customResult.spgwas_params.smr_smr_multi === "on" &&
+      !customResult[`smr_${dataset.toLowerCase()}MultiFile`].includes('error')
     ) {
       if (MultiResults.length === 0) {
         setLoadingMultiResults(true);
