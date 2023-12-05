@@ -13,7 +13,8 @@ export const submitToServer = (
   apiPath: string,
   frontEndPath: string,
   username: string | undefined,
-  props: any
+  props: any,
+  setUploadProgress?: any
 ) => {
   const data = new FormData();
 
@@ -28,7 +29,16 @@ export const submitToServer = (
   setLoading(true);
 
   pgwasAxios
-    .post(`/${apiPath}/jobs`, data)
+    .post(`/${apiPath}/jobs`, data, {
+      onUploadProgress: (progressEvent) => {
+        const percentCompleted = Math.round(
+          (progressEvent.loaded * 100) / progressEvent.total
+        );
+        if (setUploadProgress) {
+          setUploadProgress(percentCompleted);
+        }
+      },
+    })
     .then((res) => {
       // then print response status
       showToastMessage("Job submitted successfully");
@@ -57,13 +67,13 @@ export const handleFileUploadChangedCommon = (
   let file = event.target.files[0];
   if (file) {
     // if (file.type === "text/plain") {
-      reader.onloadend = () => {
-        formik.setFieldValue("filename", event.target.files[0].name);
-        setUploadFile(event.target.files[0]);
+    reader.onloadend = () => {
+      formik.setFieldValue("filename", event.target.files[0].name);
+      setUploadFile(event.target.files[0]);
 
-        formik.setFieldError("filename", undefined);
-      };
-      reader.readAsDataURL(file);
+      formik.setFieldError("filename", undefined);
+    };
+    reader.readAsDataURL(file);
     // } else {
     //   formik.setFieldError("filename", "Please upload a text file");
     //   formik.setFieldValue("filename", undefined);

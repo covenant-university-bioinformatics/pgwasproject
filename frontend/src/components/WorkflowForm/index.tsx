@@ -5,6 +5,7 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { LinearProgress } from "@material-ui/core";
 import classes from "./index.module.scss";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { FormikValues, useFormik } from "formik";
@@ -276,26 +277,22 @@ const eqtlVariables = [
   {
     variable: "smr_maf",
     name: "MAF",
-    text:
-      "The minor allele frequency (maf) cutoff value. The default value of this parameter is 0.05",
+    text: "The minor allele frequency (maf) cutoff value. The default value of this parameter is 0.05",
   },
   {
     variable: "smr_diff_freq",
     name: "diff freq",
-    text:
-      "A threshold value for allele frequency quality control. The default value is 0.2.",
+    text: "A threshold value for allele frequency quality control. The default value is 0.2.",
   },
   {
     variable: "smr_diff_freq_prop",
     name: "diff freq prop",
-    text:
-      "A threshold value for the maximum proportion of variants that can vary in the population. The default value is 0.05.",
+    text: "A threshold value for the maximum proportion of variants that can vary in the population. The default value is 0.05.",
   },
   {
     variable: "smr_cis_wind",
     name: "cis wind",
-    text:
-      "A value of a window arround cis-eQTLs signal (cis_wind). The default value is 2000 Kb.",
+    text: "A value of a window arround cis-eQTLs signal (cis_wind). The default value is 2000 Kb.",
   },
   {
     variable: "smr_peqtl_smr",
@@ -305,14 +302,12 @@ const eqtlVariables = [
   {
     variable: "smr_ld_upper_limit",
     name: "ld upper limit",
-    text:
-      "The upper limit value for R-square value to prune SNPs. The default value is 0.9",
+    text: "The upper limit value for R-square value to prune SNPs. The default value is 0.9",
   },
   {
     variable: "smr_ld_lower_limit",
     name: "ld lower limit",
-    text:
-      "The lower limit value for R-square value to prune SNPs. The default value is 0.05.",
+    text: "The lower limit value for R-square value to prune SNPs. The default value is 0.05.",
   },
   {
     variable: "smr_peqtl_heidi",
@@ -322,20 +317,17 @@ const eqtlVariables = [
   {
     variable: "smr_heidi_mtd",
     name: "heidi mtd",
-    text:
-      "HEIDI test method where 0 indicates the original HEIDI method and the value of 1 indicates the new HEIDI method.The default value is 1.",
+    text: "HEIDI test method where 0 indicates the original HEIDI method and the value of 1 indicates the new HEIDI method.The default value is 1.",
   },
   {
     variable: "smr_heidi_min_m",
     name: "heidi min m",
-    text:
-      "The minimum of f cis-SNPs to perfom Heidi test. The default value is 3",
+    text: "The minimum of f cis-SNPs to perfom Heidi test. The default value is 3",
   },
   {
     variable: "smr_heidi_max_m",
     name: "heidi max m",
-    text:
-      "The maximum number of eQTLs to be used for Heidi test. The default value is 20.",
+    text: "The maximum number of eQTLs to be used for Heidi test. The default value is 20.",
   },
   {
     variable: "smr_trans_wind",
@@ -345,14 +337,12 @@ const eqtlVariables = [
   {
     variable: "smr_set_wind",
     name: "set wind",
-    text:
-      "A value for a window size in Kb to select SNPs in the cis-region. The defulat value is -9 which resulting in selecting SNPs in the whole cis-region.",
+    text: "A value for a window size in Kb to select SNPs in the cis-region. The defulat value is -9 which resulting in selecting SNPs in the whole cis-region.",
   },
   {
     variable: "smr_ld_multi_snp",
     name: "ld multi snp",
-    text:
-      "A cutoff value for R-square value to prune SNPs. The default value is 0.1.",
+    text: "A cutoff value for R-square value to prune SNPs. The default value is 0.1.",
   },
 ];
 
@@ -435,6 +425,7 @@ const WorkflowForm: React.FC<Props & RouteComponentProps> = (props) => {
   const [formValues, setFormValues] = useState<UserFormData>();
   const fileInput = useRef<any>(null);
   const [loading, setLoading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const initialValues = {
     filename: "",
@@ -774,7 +765,14 @@ const WorkflowForm: React.FC<Props & RouteComponentProps> = (props) => {
       setLoading(true);
 
       pgwasAxios
-        .post(apiPath, data)
+        .post(apiPath, data, {
+          onUploadProgress: (progressEvent) => {
+            const percentCompleted = Math.round(
+              (progressEvent.loaded * 100) / progressEvent.total
+            );
+            setUploadProgress(percentCompleted);
+          },
+        })
         .then((res) => {
           // then print response status
           showToastMessage("Job submitted successfully");
@@ -793,12 +791,10 @@ const WorkflowForm: React.FC<Props & RouteComponentProps> = (props) => {
     },
   });
 
-  const handleChange = (panel: string) => (
-    event: React.SyntheticEvent,
-    isExpanded: boolean
-  ) => {
-    setExpanded(isExpanded ? panel : false);
-  };
+  const handleChange =
+    (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+      setExpanded(isExpanded ? panel : false);
+    };
 
   const handleFileUploadChange = (event: any) => {
     handleFileUploadChangedCommon(event, formik, setUploadFile);
@@ -940,53 +936,43 @@ const WorkflowForm: React.FC<Props & RouteComponentProps> = (props) => {
                     {generalFileForm(classes, formik, [
                       {
                         title: "marker_name",
-                        text:
-                          "the column number of the marker name in the summary statistic file. It can be marker_name, rsid, snpid etc",
+                        text: "the column number of the marker name in the summary statistic file. It can be marker_name, rsid, snpid etc",
                       },
                       {
                         title: "chr",
-                        text:
-                          "the column number of the chromosome in the summary statistic file. It can be also be chr",
+                        text: "the column number of the chromosome in the summary statistic file. It can be also be chr",
                       },
                       {
                         title: "position",
-                        text:
-                          "the column number of the base pair positions in the summary statistic file. It can be bp",
+                        text: "the column number of the base pair positions in the summary statistic file. It can be bp",
                       },
                       {
                         title: "effect_allele",
-                        text:
-                          "the column number of the reference or effect allele in the summary statistic file",
+                        text: "the column number of the reference or effect allele in the summary statistic file",
                       },
                       {
                         title: "alternate_allele",
-                        text:
-                          "the column number of the alternate allele in the summary statistic file",
+                        text: "the column number of the alternate allele in the summary statistic file",
                       },
                       {
                         title: "maf",
-                        text:
-                          "the column number of the minor allele frequency in the summary statistic file. It can be also be maf, freq etc.",
+                        text: "the column number of the minor allele frequency in the summary statistic file. It can be also be maf, freq etc.",
                       },
                       {
                         title: "beta",
-                        text:
-                          "the column number of the beta in the summary statistic file. It can be beta, slope etc.",
+                        text: "the column number of the beta in the summary statistic file. It can be beta, slope etc.",
                       },
                       {
                         title: "standard_error",
-                        text:
-                          "the column number of the standard error in the summary statistic file. It can be se, standard_error etc.",
+                        text: "the column number of the standard error in the summary statistic file. It can be se, standard_error etc.",
                       },
                       {
                         title: "pvalue",
-                        text:
-                          "the column number of the pvalue in the summary statistic file. It can be p, pvalue, pval_nominal etc.",
+                        text: "the column number of the pvalue in the summary statistic file. It can be p, pvalue, pval_nominal etc.",
                       },
                       {
                         title: "sample_size",
-                        text:
-                          "the column number of the sample size in the summary statistic file. It can be also be n.",
+                        text: "the column number of the sample size in the summary statistic file. It can be also be n.",
                       },
                     ])}
                     <div className={classes.header_div}>
@@ -1669,10 +1655,34 @@ const WorkflowForm: React.FC<Props & RouteComponentProps> = (props) => {
           </p>
           <div className={classes.button_container}>
             {loading ? (
-                <div>
-                  <CircularProgress color="secondary" className="progress" />
-                  <div>Uploading...</div>
+              <div>
+                <CircularProgress color="secondary" className="progress" />
+                <LinearProgress
+                  variant="determinate"
+                  value={uploadProgress}
+                  style={{
+                    margin: "1rem 0",
+                    width: "100%",
+                  }}
+                />
+                <div
+                  style={{
+                    textAlign: "center",
+                    marginBottom: "1rem",
+                  }}
+                >
+                  {uploadProgress < 50 && <p>Uploading file...</p>}
+                  {uploadProgress >= 50 && uploadProgress < 60 && (
+                    <p>Half way there... Hang on!</p>
+                  )}
+                  {uploadProgress >= 60 && uploadProgress < 80 && (
+                    <p>Almost there...</p>
+                  )}
+                  {uploadProgress >= 80 && (
+                    <p>Processing... Analysis about to be queued</p>
+                  )}
                 </div>
+              </div>
             ) : (
               <Button
                 className={classes.form_button}
