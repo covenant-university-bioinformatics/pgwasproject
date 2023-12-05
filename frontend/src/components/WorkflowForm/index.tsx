@@ -1679,7 +1679,7 @@ const WorkflowForm: React.FC<Props & RouteComponentProps> = (props) => {
                     <p>Almost there...</p>
                   )}
                   {uploadProgress >= 80 && (
-                    <p>Processing... Analysis about to be queued</p>
+                    <p>Processing... Job about to be queued</p>
                   )}
                 </div>
               </div>

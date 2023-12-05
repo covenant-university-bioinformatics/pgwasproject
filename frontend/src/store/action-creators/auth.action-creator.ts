@@ -18,7 +18,7 @@ export const signupUser = (user: {
       dispatch({
         type: ActionType.SIGNUP_SUCCESS,
       });
-    } catch (error) {
+    } catch (error: any) {
       let message = "Registration Failed";
       if (error?.response) {
         if (Array.isArray(error.response.data?.message)) {
@@ -61,7 +61,7 @@ export const signinUser = (user: { credential: string; password: string }) => {
         type: ActionType.AUTH_SUCCESS,
         payload: data.user,
       });
-    } catch (error) {
+    } catch (error: any) {
       // console.dir(error);
       let message = "Sign In Failed";
       if (error?.response) {
@@ -96,9 +96,8 @@ export const authCheckState = () => {
     if (!authuser) {
       signOut();
     } else {
-      const { expiresIn, emailConfirmed, username, role, email } = JSON.parse(
-        authuser
-      );
+      const { expiresIn, emailConfirmed, username, role, email } =
+        JSON.parse(authuser);
 
       const expirationDate = new Date(expiresIn);
       if (expirationDate < new Date()) {
@@ -133,7 +132,7 @@ export const getCurrentUser = () => {
         type: ActionType.CURRENT_USER_SUCCESS,
         payload: response.data,
       });
-    } catch (error) {
+    } catch (error: any) {
       console.log(error?.response?.data);
       let message = "Unable to connect";
       if (error?.response) {
@@ -166,7 +165,7 @@ export const signOut = () => {
         type: ActionType.SIGNOUT_SUCCESS,
       });
       localStorage.removeItem("user");
-    } catch (error) {
+    } catch (error: any) {
       let message = "Sign out Failed";
       if (error?.response) {
         if (Array.isArray(error.response.data?.message)) {

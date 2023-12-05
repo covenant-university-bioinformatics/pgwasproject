@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import { FormikValues, useFormik } from "formik";
+import { LinearProgress } from "@material-ui/core";
 import * as Yup from "yup";
 import classes from "./index.module.scss";
 import { Button, CircularProgress, Grid, Hidden } from "@material-ui/core";
@@ -37,6 +38,7 @@ const LiftoverForm: React.FC<Props & RouteComponentProps> = (props) => {
   const [formValues, setFormValues] = useState<UserFormData>();
   const fileInput = useRef<any>(null);
   const [loading, setLoading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const assemblies = [
     { name: "Gcrh38/hg38", variable: "38" },
@@ -97,7 +99,8 @@ const LiftoverForm: React.FC<Props & RouteComponentProps> = (props) => {
           "liftover",
           "liftover",
           user.username,
-          props
+          props,
+          setUploadProgress
         );
       } else {
         submitToServer(
@@ -107,7 +110,8 @@ const LiftoverForm: React.FC<Props & RouteComponentProps> = (props) => {
           "liftover/noauth",
           "liftover",
           undefined,
-          props
+          props,
+          setUploadProgress
         );
       }
     },
@@ -196,18 +200,15 @@ const LiftoverForm: React.FC<Props & RouteComponentProps> = (props) => {
           {generalFileForm(classes, formik, [
             {
               title: "marker_name",
-              text:
-                "the column number of the marker name in the summary statistic file. It can be marker_name, rsid, snpid etc",
+              text: "the column number of the marker name in the summary statistic file. It can be marker_name, rsid, snpid etc",
             },
             {
               title: "chromosome",
-              text:
-                "the column number of the chromosome in the summary statistic file. It can be also be chr",
+              text: "the column number of the chromosome in the summary statistic file. It can be also be chr",
             },
             {
               title: "position",
-              text:
-                "the column number of the  base pair positions in the summary statistic file. It can be bp",
+              text: "the column number of the  base pair positions in the summary statistic file. It can be bp",
             },
           ])}
           <div className={classes.header_div}>
@@ -226,10 +227,38 @@ const LiftoverForm: React.FC<Props & RouteComponentProps> = (props) => {
         </Grid>
         <div className={classes.button_container}>
           {loading ? (
-              <div>
-                <CircularProgress color="secondary" className="progress" />
-                <div>Uploading...</div>
+            <div
+              style={{
+                width: "280px",
+              }}
+            >
+              <CircularProgress color="secondary" className="progress" />
+              <LinearProgress
+                variant="determinate"
+                value={uploadProgress}
+                style={{
+                  margin: "1rem 0",
+                  width: "100%",
+                }}
+              />
+              <div
+                style={{
+                  textAlign: "center",
+                  marginBottom: "1rem",
+                }}
+              >
+                {uploadProgress < 50 && <p>Uploading file...</p>}
+                {uploadProgress >= 50 && uploadProgress < 60 && (
+                  <p>Half way there... Hang on!</p>
+                )}
+                {uploadProgress >= 60 && uploadProgress < 80 && (
+                  <p>Almost there...</p>
+                )}
+                {uploadProgress >= 80 && (
+                  <p>Processing... Job about to be queued</p>
+                )}
               </div>
+            </div>
           ) : (
             <Button
               className={classes.form_button}

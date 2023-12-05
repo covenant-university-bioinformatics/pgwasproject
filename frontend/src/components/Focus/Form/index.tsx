@@ -667,7 +667,11 @@ const FocusForm: React.FC<Props & RouteComponentProps> = (props) => {
         </Grid>
         <div className={classes.button_container}>
           {loading ? (
-            <div>
+            <div
+              style={{
+                width: "280px",
+              }}
+            >
               <CircularProgress color="secondary" className="progress" />
               <LinearProgress
                 variant="determinate"
@@ -691,7 +695,7 @@ const FocusForm: React.FC<Props & RouteComponentProps> = (props) => {
                   <p>Almost there...</p>
                 )}
                 {uploadProgress >= 80 && (
-                  <p>Processing... Analysis about to be queued</p>
+                  <p>Processing... Job about to be queued</p>
                 )}
               </div>
             </div>

@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import { FormikValues, useFormik } from "formik";
+import { LinearProgress } from "@material-ui/core";
 import * as Yup from "yup";
 import classes from "../../utility/form_styles.module.scss";
 import { Button, CircularProgress, Grid, Hidden } from "@material-ui/core";
@@ -77,6 +78,7 @@ const EqtlForm: React.FC<Props & RouteComponentProps> = (props) => {
   const [formValues, setFormValues] = useState<UserFormData>();
   const fileInput = useRef<any>(null);
   const [loading, setLoading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const initialValues = {
     filename: "",
@@ -256,7 +258,8 @@ const EqtlForm: React.FC<Props & RouteComponentProps> = (props) => {
           "eqtl",
           "eqtl",
           user.username,
-          props
+          props,
+          setUploadProgress
         );
       } else {
         submitToServer(
@@ -266,7 +269,8 @@ const EqtlForm: React.FC<Props & RouteComponentProps> = (props) => {
           "eqtl/noauth",
           "eqtl",
           undefined,
-          props
+          props,
+          setUploadProgress
         );
       }
     },
@@ -416,26 +420,22 @@ const EqtlForm: React.FC<Props & RouteComponentProps> = (props) => {
     {
       variable: "maf",
       name: "MAF",
-      text:
-        "The minor allele frequency (maf) cutoff value. The default value of this parameter is 0.05",
+      text: "The minor allele frequency (maf) cutoff value. The default value of this parameter is 0.05",
     },
     {
       variable: "diff_freq",
       name: "diff freq",
-      text:
-        "A threshold value for allele frequency quality control. The default value is 0.2.",
+      text: "A threshold value for allele frequency quality control. The default value is 0.2.",
     },
     {
       variable: "diff_freq_prop",
       name: "diff freq prop",
-      text:
-        "A threshold value for the maximum proportion of variants that can vary in the population. The default value is 0.05.",
+      text: "A threshold value for the maximum proportion of variants that can vary in the population. The default value is 0.05.",
     },
     {
       variable: "cis_wind",
       name: "cis wind",
-      text:
-        "A value of a window arround cis-eQTLs signal (cis_wind). The default value is 2000 Kb.",
+      text: "A value of a window arround cis-eQTLs signal (cis_wind). The default value is 2000 Kb.",
     },
     {
       variable: "peqtl_smr",
@@ -445,14 +445,12 @@ const EqtlForm: React.FC<Props & RouteComponentProps> = (props) => {
     {
       variable: "ld_upper_limit",
       name: "ld upper limit",
-      text:
-        "The upper limit value for R-square value to prune SNPs. The default value is 0.9",
+      text: "The upper limit value for R-square value to prune SNPs. The default value is 0.9",
     },
     {
       variable: "ld_lower_limit",
       name: "ld lower limit",
-      text:
-        "The lower limit value for R-square value to prune SNPs. The default value is 0.05.",
+      text: "The lower limit value for R-square value to prune SNPs. The default value is 0.05.",
     },
     {
       variable: "peqtl_heidi",
@@ -462,20 +460,17 @@ const EqtlForm: React.FC<Props & RouteComponentProps> = (props) => {
     {
       variable: "heidi_mtd",
       name: "heidi mtd",
-      text:
-        "HEIDI test method where 0 indicates the original HEIDI method and the value of 1 indicates the new HEIDI method.The default value is 1.",
+      text: "HEIDI test method where 0 indicates the original HEIDI method and the value of 1 indicates the new HEIDI method.The default value is 1.",
     },
     {
       variable: "heidi_min_m",
       name: "heidi min m",
-      text:
-        "The minimum of f cis-SNPs to perfom Heidi test. The default value is 3",
+      text: "The minimum of f cis-SNPs to perfom Heidi test. The default value is 3",
     },
     {
       variable: "heidi_max_m",
       name: "heidi max m",
-      text:
-        "The maximum number of eQTLs to be used for Heidi test. The default value is 20.",
+      text: "The maximum number of eQTLs to be used for Heidi test. The default value is 20.",
     },
     {
       variable: "trans_wind",
@@ -485,14 +480,12 @@ const EqtlForm: React.FC<Props & RouteComponentProps> = (props) => {
     {
       variable: "set_wind",
       name: "set wind",
-      text:
-        "A value for a window size in Kb to select SNPs in the cis-region. The defulat value is -9 which resulting in selecting SNPs in the whole cis-region.",
+      text: "A value for a window size in Kb to select SNPs in the cis-region. The defulat value is -9 which resulting in selecting SNPs in the whole cis-region.",
     },
     {
       variable: "ld_multi_snp",
       name: "ld multi snp",
-      text:
-        "A cutoff value for R-square value to prune SNPs. The default value is 0.1.",
+      text: "A cutoff value for R-square value to prune SNPs. The default value is 0.1.",
     },
   ];
 
@@ -561,43 +554,35 @@ const EqtlForm: React.FC<Props & RouteComponentProps> = (props) => {
           {generalFileForm(classes, formik, [
             {
               title: "marker_name",
-              text:
-                "the column number of the marker name in the summary statistic file. It can be marker_name, rsid, snpid etc",
+              text: "the column number of the marker name in the summary statistic file. It can be marker_name, rsid, snpid etc",
             },
             {
               title: "effect_allele",
-              text:
-                "the column number of the reference or effect allele in the summary statistic file",
+              text: "the column number of the reference or effect allele in the summary statistic file",
             },
             {
               title: "alternate_allele",
-              text:
-                "the column number of the alternate allele in the summary statistic file",
+              text: "the column number of the alternate allele in the summary statistic file",
             },
             {
               title: "effect_allele_freq",
-              text:
-                "the column number of the reference or effect allele frequency in the summary statistic file",
+              text: "the column number of the reference or effect allele frequency in the summary statistic file",
             },
             {
               title: "beta",
-              text:
-                "the column number of the beta in the summary statistic file. It can be beta, slope etc.",
+              text: "the column number of the beta in the summary statistic file. It can be beta, slope etc.",
             },
             {
               title: "se",
-              text:
-                "the column number of the standard error in the summary statistic file. It can be se, standard_error etc.",
+              text: "the column number of the standard error in the summary statistic file. It can be se, standard_error etc.",
             },
             {
               title: "p_value",
-              text:
-                "the column number of the pvalue in the summary statistic file. It can be p, pvalue, pval_nominal etc.",
+              text: "the column number of the pvalue in the summary statistic file. It can be p, pvalue, pval_nominal etc.",
             },
             {
               title: "sample_size",
-              text:
-                "the column number of the sample size in the summary statistic file. It can be also be n.",
+              text: "the column number of the sample size in the summary statistic file. It can be also be n.",
             },
           ])}
           <div className={classes.header_div}>
@@ -682,10 +667,38 @@ const EqtlForm: React.FC<Props & RouteComponentProps> = (props) => {
         </Grid>
         <div className={classes.button_container}>
           {loading ? (
-              <div>
-                <CircularProgress color="secondary" className="progress" />
-                <div>Uploading...</div>
+            <div
+              style={{
+                width: "280px",
+              }}
+            >
+              <CircularProgress color="secondary" className="progress" />
+              <LinearProgress
+                variant="determinate"
+                value={uploadProgress}
+                style={{
+                  margin: "1rem 0",
+                  width: "100%",
+                }}
+              />
+              <div
+                style={{
+                  textAlign: "center",
+                  marginBottom: "1rem",
+                }}
+              >
+                {uploadProgress < 50 && <p>Uploading file...</p>}
+                {uploadProgress >= 50 && uploadProgress < 60 && (
+                  <p>Half way there... Hang on!</p>
+                )}
+                {uploadProgress >= 60 && uploadProgress < 80 && (
+                  <p>Almost there...</p>
+                )}
+                {uploadProgress >= 80 && (
+                  <p>Processing... Job about to be queued</p>
+                )}
               </div>
+            </div>
           ) : (
             <Button
               className={classes.form_button}

@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import { FormikValues, useFormik } from "formik";
+import { LinearProgress } from "@material-ui/core";
 import * as Yup from "yup";
 import classes from "../../utility/form_styles.module.scss";
 import { Button, CircularProgress, Grid, Hidden } from "@material-ui/core";
@@ -41,6 +42,7 @@ const FilterAnnotForm: React.FC<Props & RouteComponentProps> = (props) => {
   const [formValues, setFormValues] = useState<UserFormData>();
   const fileInput = useRef<any>(null);
   const [loading, setLoading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const initialValues = {
     filename: "",
@@ -52,7 +54,7 @@ const FilterAnnotForm: React.FC<Props & RouteComponentProps> = (props) => {
     position: "",
     effect_allele: "",
     alternate_allele: "",
-    annotation_type: ""
+    annotation_type: "",
   };
 
   const testValues = {
@@ -65,7 +67,7 @@ const FilterAnnotForm: React.FC<Props & RouteComponentProps> = (props) => {
     position: "2",
     effect_allele: "4",
     alternate_allele: "5",
-    annotation_type: "GWAVA"
+    annotation_type: "GWAVA",
   };
 
   const formik = useFormik<UserFormData>({
@@ -78,9 +80,9 @@ const FilterAnnotForm: React.FC<Props & RouteComponentProps> = (props) => {
         email: Yup.string().email().required("Email field is required"),
       }),
       marker_name: Yup.number()
-          .required("Chromosome column number is required")
-          .min(1, "The minimum is one")
-          .max(15, "the max is fifteen"),
+        .required("Chromosome column number is required")
+        .min(1, "The minimum is one")
+        .max(15, "the max is fifteen"),
       chromosome: Yup.number()
         .required("Chromosome column number is required")
         .min(1, "The minimum is one")
@@ -94,9 +96,9 @@ const FilterAnnotForm: React.FC<Props & RouteComponentProps> = (props) => {
         .min(1, "The minimum is one")
         .max(15, "the max is fifteen"),
       alternate_allele: Yup.number()
-          .required("Effect Allele column number is required")
-          .min(1, "The minimum is one")
-          .max(15, "the max is fifteen"),
+        .required("Effect Allele column number is required")
+        .min(1, "The minimum is one")
+        .max(15, "the max is fifteen"),
       annotation_type: Yup.string().required("This input is required"),
     }),
 
@@ -110,7 +112,8 @@ const FilterAnnotForm: React.FC<Props & RouteComponentProps> = (props) => {
           "filterannot",
           "filterannot",
           user.username,
-          props
+          props,
+          setUploadProgress
         );
       } else {
         submitToServer(
@@ -120,7 +123,8 @@ const FilterAnnotForm: React.FC<Props & RouteComponentProps> = (props) => {
           "filterannot/noauth",
           "filterannot",
           undefined,
-          props
+          props,
+          setUploadProgress
         );
       }
     },
@@ -235,28 +239,23 @@ const FilterAnnotForm: React.FC<Props & RouteComponentProps> = (props) => {
           {generalFileForm(classes, formik, [
             {
               title: "marker_name",
-              text:
-                  "the column number of the marker name in the summary statistic file. It can be marker_name, rsid, snpid etc",
+              text: "the column number of the marker name in the summary statistic file. It can be marker_name, rsid, snpid etc",
             },
             {
               title: "chromosome",
-              text:
-                  "the column number of the chromosome in the summary statistic file. It can be also be chr",
+              text: "the column number of the chromosome in the summary statistic file. It can be also be chr",
             },
             {
               title: "position",
-              text:
-                  "the column number of the  base pair positions in the summary statistic file. It can be bp",
+              text: "the column number of the  base pair positions in the summary statistic file. It can be bp",
             },
             {
               title: "effect_allele",
-              text:
-                  "the column number of the reference or effect allele in the summary statistic file",
+              text: "the column number of the reference or effect allele in the summary statistic file",
             },
             {
               title: "alternate_allele",
-              text:
-                  "the column number of the alternate allele in the summary statistic file",
+              text: "the column number of the alternate allele in the summary statistic file",
             },
           ])}
 
@@ -270,17 +269,43 @@ const FilterAnnotForm: React.FC<Props & RouteComponentProps> = (props) => {
             selectElement={annotation_type}
             selectVariable={"annotation_type"}
             selectName={"Annotation Type"}
-            tooltip={
-              "Name of Annotation type for analysis."
-            }
+            tooltip={"Name of Annotation type for analysis."}
           />
         </Grid>
         <div className={classes.button_container}>
           {loading ? (
-              <div>
-                <CircularProgress color="secondary" className="progress" />
-                <div>Uploading...</div>
+            <div
+              style={{
+                width: "280px",
+              }}
+            >
+              <CircularProgress color="secondary" className="progress" />
+              <LinearProgress
+                variant="determinate"
+                value={uploadProgress}
+                style={{
+                  margin: "1rem 0",
+                  width: "100%",
+                }}
+              />
+              <div
+                style={{
+                  textAlign: "center",
+                  marginBottom: "1rem",
+                }}
+              >
+                {uploadProgress < 50 && <p>Uploading file...</p>}
+                {uploadProgress >= 50 && uploadProgress < 60 && (
+                  <p>Half way there... Hang on!</p>
+                )}
+                {uploadProgress >= 60 && uploadProgress < 80 && (
+                  <p>Almost there...</p>
+                )}
+                {uploadProgress >= 80 && (
+                  <p>Processing... Job about to be queued</p>
+                )}
               </div>
+            </div>
           ) : (
             <Button
               className={classes.form_button}

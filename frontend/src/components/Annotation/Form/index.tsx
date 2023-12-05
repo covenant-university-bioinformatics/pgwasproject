@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import { FormikValues, useFormik } from "formik";
+import { LinearProgress } from "@material-ui/core";
 import * as Yup from "yup";
 // import classes from "./index.module.scss";
 import classes from "../../utility/form_styles.module.scss";
@@ -62,6 +63,7 @@ const AnnotationForm: React.FC<Props & RouteComponentProps> = (props) => {
   const [formValues, setFormValues] = useState<UserFormData>();
   const fileInput = useRef<any>(null);
   const [loading, setLoading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const initialValues = {
     filename: "",
@@ -155,7 +157,8 @@ const AnnotationForm: React.FC<Props & RouteComponentProps> = (props) => {
           "annot",
           "annotation",
           user.username,
-          props
+          props,
+          setUploadProgress
         );
       } else {
         submitToServer(
@@ -165,7 +168,8 @@ const AnnotationForm: React.FC<Props & RouteComponentProps> = (props) => {
           "annot/noauth",
           "annotation",
           undefined,
-          props
+          props,
+          setUploadProgress
         );
       }
     },
@@ -290,28 +294,23 @@ const AnnotationForm: React.FC<Props & RouteComponentProps> = (props) => {
           {generalFileForm(classes, formik, [
             {
               title: "marker_name",
-              text:
-                "the column number of the marker name in the summary statistic file. It can be marker_name, rsid, snpid etc",
+              text: "the column number of the marker name in the summary statistic file. It can be marker_name, rsid, snpid etc",
             },
             {
               title: "chromosome",
-              text:
-                "the column number of the chromosome in the summary statistic file. It can be also be chr",
+              text: "the column number of the chromosome in the summary statistic file. It can be also be chr",
             },
             {
               title: "position",
-              text:
-                "the column number of the  base pair positions in the summary statistic file. It can be bp",
+              text: "the column number of the  base pair positions in the summary statistic file. It can be bp",
             },
             {
               title: "effect_allele",
-              text:
-                "the column number of the reference or effect allele in the summary statistic file",
+              text: "the column number of the reference or effect allele in the summary statistic file",
             },
             {
               title: "alternate_allele",
-              text:
-                "the column number of the alternate allele in the summary statistic file",
+              text: "the column number of the alternate allele in the summary statistic file",
             },
           ])}
           <div className={classes.header_div}>
@@ -348,9 +347,37 @@ const AnnotationForm: React.FC<Props & RouteComponentProps> = (props) => {
         </Grid>
         <div className={classes.button_container}>
           {loading ? (
-            <div>
+            <div
+              style={{
+                width: "280px",
+              }}
+            >
               <CircularProgress color="secondary" className="progress" />
-              <div>Uploading...</div>
+              <LinearProgress
+                variant="determinate"
+                value={uploadProgress}
+                style={{
+                  margin: "1rem 0",
+                  width: "100%",
+                }}
+              />
+              <div
+                style={{
+                  textAlign: "center",
+                  marginBottom: "1rem",
+                }}
+              >
+                {uploadProgress < 50 && <p>Uploading file...</p>}
+                {uploadProgress >= 50 && uploadProgress < 60 && (
+                  <p>Half way there... Hang on!</p>
+                )}
+                {uploadProgress >= 60 && uploadProgress < 80 && (
+                  <p>Almost there...</p>
+                )}
+                {uploadProgress >= 80 && (
+                  <p>Processing... Job about to be queued</p>
+                )}
+              </div>
             </div>
           ) : (
             <Button
