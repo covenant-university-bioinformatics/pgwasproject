@@ -1655,7 +1655,11 @@ const WorkflowForm: React.FC<Props & RouteComponentProps> = (props) => {
           </p>
           <div className={classes.button_container}>
             {loading ? (
-              <div>
+              <div
+                style={{
+                  width: "280px",
+                }}
+              >
                 <CircularProgress color="secondary" className="progress" />
                 <LinearProgress
                   variant="determinate"
@@ -1664,7 +1668,8 @@ const WorkflowForm: React.FC<Props & RouteComponentProps> = (props) => {
                     margin: "1rem 0",
                     width: "100%",
                   }}
-                />
+                />{" "}
+                <span> {uploadProgress}%</span>
                 <div
                   style={{
                     textAlign: "center",
