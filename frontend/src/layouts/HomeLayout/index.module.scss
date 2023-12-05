@@ -1,13 +1,14 @@
 @import "../../partials/mixins";
-.Home{
+.Home {
   width: 100%;
   min-height: 100vh;
   margin: 5.2rem auto 0;
-  background-color: #a1bcf5;
+  background-color: #f9f9f9;
+  // background-color: #a1bcf5;
   //background-color: #fff;
   //background-color: #005fb1;
 
-  .container{
+  .container {
     display: flex;
     justify-content: center;
     align-items: center;
