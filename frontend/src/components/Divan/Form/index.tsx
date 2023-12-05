@@ -1,11 +1,21 @@
 import React, { useRef, useState } from "react";
 import { FormikValues, useFormik } from "formik";
+import { LinearProgress } from "@material-ui/core";
 import * as Yup from "yup";
 import classes from "../../utility/form_styles.module.scss";
-import {Button, CircularProgress, FormControl, Grid, Hidden, InputLabel, NativeSelect, Paper} from "@material-ui/core";
-import {generalFileForm, selectErrorHelper} from "../../utility/general";
+import {
+  Button,
+  CircularProgress,
+  FormControl,
+  Grid,
+  Hidden,
+  InputLabel,
+  NativeSelect,
+  Paper,
+} from "@material-ui/core";
+import { generalFileForm, selectErrorHelper } from "../../utility/general";
 import { GetAppRounded, PlayArrow } from "@material-ui/icons";
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 import { RouteComponentProps } from "react-router-dom";
 import { useTypedSelector } from "../../../hooks/useTypedSelector";
 import {
@@ -18,7 +28,7 @@ import {
   LoadTestData,
   SelectFieldsElement,
 } from "../../utility/form_common_fields";
-import {selectIsError} from "../../utility/general_utils";
+import { selectIsError } from "../../utility/general_utils";
 // import classes from "./index.module.scss";
 
 type Props = {};
@@ -46,7 +56,8 @@ const DivanForm: React.FC<Props & RouteComponentProps> = (props) => {
   const fileInput = useRef<any>(null);
   const [loading, setLoading] = useState(false);
   const [inputType, setInputType] = useState("variant_based");
-  const [variantType, setVariantType] = useState("known")
+  const [variantType, setVariantType] = useState("known");
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const initialValues = {
     filename: "",
@@ -86,52 +97,47 @@ const DivanForm: React.FC<Props & RouteComponentProps> = (props) => {
       ...(!user?.username && {
         email: Yup.string().email().required("Email field is required"),
       }),
-      ...(inputType === "variant_based" &&
-          {
-            marker_name: Yup.number()
-                .required("Marker name column number is required")
-                .min(1, "The minimum is one")
-                .max(15, "the max is fifteen")
-          }
-      ),
-      ...(inputType === "region_based" &&
-          {
-            chr: Yup.number()
-                .required("Chromosome column number is required")
-                .min(1, "The minimum is one")
-                .max(15, "the max is fifteen")
-          }
-      ),
-      ...(inputType === "region_based" &&
-          {
-            start_position: Yup.number()
-                .required("Start position column number is required")
-                .min(1, "The minimum is one")
-                .max(15, "the max is fifteen")
-          }
-      ),
-      ...(inputType === "region_based" &&
-          {
-            stop_position: Yup.number()
-                .required("Stop position column number is required")
-                .min(1, "The minimum is one")
-                .max(15, "the max is fifteen")
-          }
-      ),
+      ...(inputType === "variant_based" && {
+        marker_name: Yup.number()
+          .required("Marker name column number is required")
+          .min(1, "The minimum is one")
+          .max(15, "the max is fifteen"),
+      }),
+      ...(inputType === "region_based" && {
+        chr: Yup.number()
+          .required("Chromosome column number is required")
+          .min(1, "The minimum is one")
+          .max(15, "the max is fifteen"),
+      }),
+      ...(inputType === "region_based" && {
+        start_position: Yup.number()
+          .required("Start position column number is required")
+          .min(1, "The minimum is one")
+          .max(15, "the max is fifteen"),
+      }),
+      ...(inputType === "region_based" && {
+        stop_position: Yup.number()
+          .required("Stop position column number is required")
+          .min(1, "The minimum is one")
+          .max(15, "the max is fifteen"),
+      }),
       variant_type: Yup.string().required("Please select a value"),
       disease: Yup.string().required("Please select a disease"),
       input_type: Yup.string().required("Please select an input type"),
-      ...(
-          variantType === "known" && {
-            variant_db: Yup.string().required("Please select a variant database")
-          }
-      ),
+      ...(variantType === "known" && {
+        variant_db: Yup.string().required("Please select a variant database"),
+      }),
     }),
 
     onSubmit: (values: FormikValues) => {
       // console.log(values);
-      if(values.variant_type === "unknown" && values.input_type === "variant_based"){
-        toast.info("Your input type must be a region based file when using unknown variant type")
+      if (
+        values.variant_type === "unknown" &&
+        values.input_type === "variant_based"
+      ) {
+        toast.info(
+          "Your input type must be a region based file when using unknown variant type"
+        );
         return;
       }
       let results: Partial<UserFormData>;
@@ -141,21 +147,21 @@ const DivanForm: React.FC<Props & RouteComponentProps> = (props) => {
         useTest: values.useTest,
         variant_type: values.variant_type,
         disease: values.disease,
-        input_type: values.input_type
+        input_type: values.input_type,
+      };
+
+      if (values.input_type === "variant_based") {
+        results.marker_name = values.marker_name;
       }
 
-      if(values.input_type === "variant_based"){
-        results.marker_name = values.marker_name
+      if (values.input_type === "region_based") {
+        results.chr = values.chr;
+        results.start_position = values.start_position;
+        results.stop_position = values.stop_position;
       }
 
-      if(values.input_type === "region_based"){
-        results.chr = values.chr
-        results.start_position = values.start_position
-        results.stop_position = values.stop_position
-      }
-
-      if(values.variant_type === "known"){
-        results.variant_db = values.variant_db
+      if (values.variant_type === "known") {
+        results.variant_db = values.variant_db;
       }
 
       if (user?.username) {
@@ -166,7 +172,8 @@ const DivanForm: React.FC<Props & RouteComponentProps> = (props) => {
           "divan",
           "divan",
           user.username,
-          props
+          props,
+          setUploadProgress
         );
       } else {
         results.email = values.email;
@@ -177,7 +184,8 @@ const DivanForm: React.FC<Props & RouteComponentProps> = (props) => {
           "divan/noauth",
           "divan",
           undefined,
-          props
+          props,
+          setUploadProgress
         );
       }
     },
@@ -249,51 +257,66 @@ const DivanForm: React.FC<Props & RouteComponentProps> = (props) => {
   ];
 
   const DiseaseOptions = [
-    {variable: "Albuminuria", name: "Albuminuria"},
-    {variable: "Alcoholism", name: "Alcoholism"},
-    {variable: "AlzheimerDisease", name: "AlzheimerDisease"},
-    {variable: "AmyotrophicLateralSclerosis", name: "AmyotrophicLateralSclerosis"},
-    {variable: "Arthritis_Rheumatoid", name: "Arthritis_Rheumatoid"},
-    {variable: "Asthma", name: "Asthma"},
-    {variable: "AttentionDeficitDisorderwithHyperactivity", name: "AttentionDeficitDisorderwithHyperactivity"},
-    {variable: "BehcetSyndrome", name: "BehcetSyndrome"},
-    {variable: "BipolarDisorder", name: "BipolarDisorder"},
-    {variable: "BodyWeightChanges", name: "BodyWeightChanges"},
-    {variable: "BodyWeight", name: "BodyWeight"},
-    {variable: "BreastNeoplasms", name: "BreastNeoplasms"},
-    {variable: "CardiovascularDiseases", name: "CardiovascularDiseases"},
-    {variable: "CarotidArteryDiseases", name: "CarotidArteryDiseases"},
-    {variable: "Colitis_Ulcerative", name: "Colitis_Ulcerative"},
-    {variable: "CoronaryArteryDisease", name: "CoronaryArteryDisease"},
-    {variable: "CoronaryDisease", name: "CoronaryDisease"},
-    {variable: "CrohnDisease", name: "CrohnDisease"},
-    {variable: "Death_Sudden_Cardiac", name: "Death_Sudden_Cardiac"},
-    {variable: "DepressiveDisorder_Major", name: "DepressiveDisorder_Major"},
-    {variable: "DiabetesMellitus_Type1", name: "DiabetesMellitus_Type1"},
-    {variable: "DiabetesMellitus_Type2", name: "DiabetesMellitus_Type2"},
-    {variable: "DiabeticNephropathies", name: "DiabeticNephropathies"},
-    {variable: "HeartFailure", name: "HeartFailure"},
-    {variable: "Hypertension", name: "Hypertension"},
-    {variable: "Hypertrophy_LeftVentricular", name: "Hypertrophy_LeftVentricular"},
-    {variable: "Inflammation", name: "Inflammation"},
-    {variable: "InflammatoryBowelDiseases", name: "InflammatoryBowelDiseases"},
-    {variable: "InsulinResistance", name: "InsulinResistance"},
-    {variable: "LupusErythematosus_Systemic", name: "LupusErythematosus_Systemic"},
-    {variable: "MacularDegeneration", name: "MacularDegeneration"},
-    {variable: "MentalCompetency", name: "MentalCompetency"},
-    {variable: "MetabolicSyndromeX", name: "MetabolicSyndromeX"},
-    {variable: "MultipleSclerosis", name: "MultipleSclerosis"},
-    {variable: "MyocardialInfarction", name: "MyocardialInfarction"},
-    {variable: "Neuroblastoma", name: "Neuroblastoma"},
-    {variable: "Obesity", name: "Obesity"},
-    {variable: "Osteoporosis", name: "Osteoporosis"},
-    {variable: "PancreaticNeoplasms", name: "PancreaticNeoplasms"},
-    {variable: "ParkinsonDisease", name: "ParkinsonDisease"},
-    {variable: "ProstaticNeoplasms", name: "ProstaticNeoplasms"},
-    {variable: "Psoriasis", name: "Psoriasis"},
-    {variable: "Schizophrenia", name: "Schizophrenia"},
-    {variable: "Sleep", name: "Sleep"},
-  ]
+    { variable: "Albuminuria", name: "Albuminuria" },
+    { variable: "Alcoholism", name: "Alcoholism" },
+    { variable: "AlzheimerDisease", name: "AlzheimerDisease" },
+    {
+      variable: "AmyotrophicLateralSclerosis",
+      name: "AmyotrophicLateralSclerosis",
+    },
+    { variable: "Arthritis_Rheumatoid", name: "Arthritis_Rheumatoid" },
+    { variable: "Asthma", name: "Asthma" },
+    {
+      variable: "AttentionDeficitDisorderwithHyperactivity",
+      name: "AttentionDeficitDisorderwithHyperactivity",
+    },
+    { variable: "BehcetSyndrome", name: "BehcetSyndrome" },
+    { variable: "BipolarDisorder", name: "BipolarDisorder" },
+    { variable: "BodyWeightChanges", name: "BodyWeightChanges" },
+    { variable: "BodyWeight", name: "BodyWeight" },
+    { variable: "BreastNeoplasms", name: "BreastNeoplasms" },
+    { variable: "CardiovascularDiseases", name: "CardiovascularDiseases" },
+    { variable: "CarotidArteryDiseases", name: "CarotidArteryDiseases" },
+    { variable: "Colitis_Ulcerative", name: "Colitis_Ulcerative" },
+    { variable: "CoronaryArteryDisease", name: "CoronaryArteryDisease" },
+    { variable: "CoronaryDisease", name: "CoronaryDisease" },
+    { variable: "CrohnDisease", name: "CrohnDisease" },
+    { variable: "Death_Sudden_Cardiac", name: "Death_Sudden_Cardiac" },
+    { variable: "DepressiveDisorder_Major", name: "DepressiveDisorder_Major" },
+    { variable: "DiabetesMellitus_Type1", name: "DiabetesMellitus_Type1" },
+    { variable: "DiabetesMellitus_Type2", name: "DiabetesMellitus_Type2" },
+    { variable: "DiabeticNephropathies", name: "DiabeticNephropathies" },
+    { variable: "HeartFailure", name: "HeartFailure" },
+    { variable: "Hypertension", name: "Hypertension" },
+    {
+      variable: "Hypertrophy_LeftVentricular",
+      name: "Hypertrophy_LeftVentricular",
+    },
+    { variable: "Inflammation", name: "Inflammation" },
+    {
+      variable: "InflammatoryBowelDiseases",
+      name: "InflammatoryBowelDiseases",
+    },
+    { variable: "InsulinResistance", name: "InsulinResistance" },
+    {
+      variable: "LupusErythematosus_Systemic",
+      name: "LupusErythematosus_Systemic",
+    },
+    { variable: "MacularDegeneration", name: "MacularDegeneration" },
+    { variable: "MentalCompetency", name: "MentalCompetency" },
+    { variable: "MetabolicSyndromeX", name: "MetabolicSyndromeX" },
+    { variable: "MultipleSclerosis", name: "MultipleSclerosis" },
+    { variable: "MyocardialInfarction", name: "MyocardialInfarction" },
+    { variable: "Neuroblastoma", name: "Neuroblastoma" },
+    { variable: "Obesity", name: "Obesity" },
+    { variable: "Osteoporosis", name: "Osteoporosis" },
+    { variable: "PancreaticNeoplasms", name: "PancreaticNeoplasms" },
+    { variable: "ParkinsonDisease", name: "ParkinsonDisease" },
+    { variable: "ProstaticNeoplasms", name: "ProstaticNeoplasms" },
+    { variable: "Psoriasis", name: "Psoriasis" },
+    { variable: "Schizophrenia", name: "Schizophrenia" },
+    { variable: "Sleep", name: "Sleep" },
+  ];
 
   return (
     <div className={classes.job_form}>
@@ -362,22 +385,24 @@ const DivanForm: React.FC<Props & RouteComponentProps> = (props) => {
           <Grid className={classes.grid} item xs={12} sm={4}>
             <Paper variant="outlined" className={classes.paper}>
               <FormControl
-                  className={classes.formControl}
-                  error={selectIsError(formik, "input_type")}
+                className={classes.formControl}
+                error={selectIsError(formik, "input_type")}
               >
-                <InputLabel htmlFor={"input_type"}>Select Input Type</InputLabel>
+                <InputLabel htmlFor={"input_type"}>
+                  Select Input Type
+                </InputLabel>
                 <NativeSelect
-                    id={"input_type"}
-                    name={"input_type"}
-                    onBlur={formik.handleBlur}
-                    onChange={handleInputTypeChange}
-                    value={formik.values.input_type}
+                  id={"input_type"}
+                  name={"input_type"}
+                  onBlur={formik.handleBlur}
+                  onChange={handleInputTypeChange}
+                  value={formik.values.input_type}
                 >
                   <option aria-label="None" value="" />
                   {InputTypeOptions.map((db, i) => (
-                      <option key={i} value={db.variable}>
-                        {db.name}
-                      </option>
+                    <option key={i} value={db.variable}>
+                      {db.name}
+                    </option>
                   ))}
                 </NativeSelect>
                 {selectErrorHelper(formik, "input_type")}
@@ -389,32 +414,27 @@ const DivanForm: React.FC<Props & RouteComponentProps> = (props) => {
             <h2>Summary statistics column positions</h2>
           </div>
 
-          {
-            inputType === "variant_based"
-              ? generalFileForm(classes, formik, [
-                  {
-                    title: "marker_name",
-                    text:
-                        "the column number of the marker name in the summary statistic file. It can be marker_name, rsid, snpid etc",
-                  }])
-                : generalFileForm(classes, formik, [
-                  {
-                    title: "chr",
-                    text:
-                        "the column number of the chromosome in the summary statistic file. It can be also be chr",
-                  },
-                  {
-                    title: "start_position",
-                    text:
-                        "the column number of the base pair positions in the summary statistic file. It can be bp",
-                  },
-                  {
-                    title: "stop_position",
-                    text:
-                        "the column number of the base pair positions in the summary statistic file.",
-                  }
-                ])
-          }
+          {inputType === "variant_based"
+            ? generalFileForm(classes, formik, [
+                {
+                  title: "marker_name",
+                  text: "the column number of the marker name in the summary statistic file. It can be marker_name, rsid, snpid etc",
+                },
+              ])
+            : generalFileForm(classes, formik, [
+                {
+                  title: "chr",
+                  text: "the column number of the chromosome in the summary statistic file. It can be also be chr",
+                },
+                {
+                  title: "start_position",
+                  text: "the column number of the base pair positions in the summary statistic file. It can be bp",
+                },
+                {
+                  title: "stop_position",
+                  text: "the column number of the base pair positions in the summary statistic file.",
+                },
+              ])}
 
           <div className={classes.header_div}>
             <h2>Tool Parameters</h2>
@@ -434,22 +454,24 @@ const DivanForm: React.FC<Props & RouteComponentProps> = (props) => {
           <Grid className={classes.grid} item xs={12} sm={4}>
             <Paper variant="outlined" className={classes.paper}>
               <FormControl
-                  className={classes.formControl}
-                  error={selectIsError(formik, "variant_type")}
+                className={classes.formControl}
+                error={selectIsError(formik, "variant_type")}
               >
-                <InputLabel htmlFor={"variant_type"}>Select Variant Type</InputLabel>
+                <InputLabel htmlFor={"variant_type"}>
+                  Select Variant Type
+                </InputLabel>
                 <NativeSelect
-                    id={"variant_type"}
-                    name={"variant_type"}
-                    onBlur={formik.handleBlur}
-                    onChange={handleVariantTypeChange}
-                    value={formik.values.variant_type}
+                  id={"variant_type"}
+                  name={"variant_type"}
+                  onBlur={formik.handleBlur}
+                  onChange={handleVariantTypeChange}
+                  value={formik.values.variant_type}
                 >
                   <option aria-label="None" value="" />
                   {VariantTypeOptions.map((db, i) => (
-                      <option key={i} value={db.variable}>
-                        {db.name}
-                      </option>
+                    <option key={i} value={db.variable}>
+                      {db.name}
+                    </option>
                   ))}
                 </NativeSelect>
                 {selectErrorHelper(formik, "variant_type")}
@@ -457,26 +479,53 @@ const DivanForm: React.FC<Props & RouteComponentProps> = (props) => {
             </Paper>
           </Grid>
 
-          {
-            variantType === "known" ?
-                <SelectFieldsElement
-                    classes={classes}
-                    formik={formik}
-                    selectElement={VariantDBOptions}
-                    selectVariable={"variant_db"}
-                    selectName={"Variant Database"}
-                    tooltip={"In case of  the known variants,  users can specify the  variant database such as 1000 genomes, cosmic, or  Ensembl."}
-                />
-                : null
-          }
-
+          {variantType === "known" ? (
+            <SelectFieldsElement
+              classes={classes}
+              formik={formik}
+              selectElement={VariantDBOptions}
+              selectVariable={"variant_db"}
+              selectName={"Variant Database"}
+              tooltip={
+                "In case of  the known variants,  users can specify the  variant database such as 1000 genomes, cosmic, or  Ensembl."
+              }
+            />
+          ) : null}
         </Grid>
         <div className={classes.button_container}>
           {loading ? (
-              <div>
-                <CircularProgress color="secondary" className="progress" />
-                <div>Uploading...</div>
+            <div
+              style={{
+                width: "280px",
+              }}
+            >
+              <CircularProgress color="secondary" className="progress" />
+              <LinearProgress
+                variant="determinate"
+                value={uploadProgress}
+                style={{
+                  margin: "1rem 0",
+                  width: "100%",
+                }}
+              />
+              <div
+                style={{
+                  textAlign: "center",
+                  marginBottom: "1rem",
+                }}
+              >
+                {uploadProgress < 50 && <p>Uploading file...</p>}
+                {uploadProgress >= 50 && uploadProgress < 60 && (
+                  <p>Half way there... Hang on!</p>
+                )}
+                {uploadProgress >= 60 && uploadProgress < 80 && (
+                  <p>Almost there...</p>
+                )}
+                {uploadProgress >= 80 && (
+                  <p>Processing... Job about to be queued</p>
+                )}
               </div>
+            </div>
           ) : (
             <Button
               className={classes.form_button}

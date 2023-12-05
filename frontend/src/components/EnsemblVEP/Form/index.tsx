@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import { FormikValues, useFormik } from "formik";
+import { LinearProgress } from "@material-ui/core";
 import * as Yup from "yup";
 import classes from "../../utility/form_styles.module.scss";
 import { Button, CircularProgress, Grid, Hidden } from "@material-ui/core";
@@ -39,6 +40,7 @@ const EnsemblVEPForm: React.FC<Props & RouteComponentProps> = (props) => {
   const [formValues, setFormValues] = useState<UserFormData>();
   const fileInput = useRef<any>(null);
   const [loading, setLoading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const initialValues = {
     filename: "",
@@ -105,7 +107,8 @@ const EnsemblVEPForm: React.FC<Props & RouteComponentProps> = (props) => {
           "ensemblvep",
           "ensemblvep",
           user.username,
-          props
+          props,
+          setUploadProgress
         );
       } else {
         submitToServer(
@@ -115,7 +118,8 @@ const EnsemblVEPForm: React.FC<Props & RouteComponentProps> = (props) => {
           "ensemblvep/noauth",
           "ensemblvep",
           undefined,
-          props
+          props,
+          setUploadProgress
         );
       }
     },
@@ -125,7 +129,7 @@ const EnsemblVEPForm: React.FC<Props & RouteComponentProps> = (props) => {
     formik.resetForm();
     setUseTest(true);
     setFormValues(testValues);
-    setUploadFile(null)
+    setUploadFile(null);
     fileInput.current.querySelector("input").disabled = true;
   };
 
@@ -223,37 +227,60 @@ const EnsemblVEPForm: React.FC<Props & RouteComponentProps> = (props) => {
           {generalFileForm(classes, formik, [
             {
               title: "chr",
-              text:
-                "the column number of the chromosome in the summary statistic file. It can be also be chr",
+              text: "the column number of the chromosome in the summary statistic file. It can be also be chr",
             },
             {
               title: "start_position",
-              text:
-                "the column number of the base pair positions in the summary statistic file. It can be bp",
+              text: "the column number of the base pair positions in the summary statistic file. It can be bp",
             },
             {
               title: "stop_position",
-              text:
-                  "the column number of the base pair positions in the summary statistic file. It can be bp",
+              text: "the column number of the base pair positions in the summary statistic file. It can be bp",
             },
             {
               title: "alleles",
-              text:
-                  "the column number of the alleles in the summary statistic file.",
+              text: "the column number of the alleles in the summary statistic file.",
             },
             {
               title: "strand",
-              text:
-                  "the column number of the strand in the summary statistic file.",
-            }
+              text: "the column number of the strand in the summary statistic file.",
+            },
           ])}
         </Grid>
         <div className={classes.button_container}>
           {loading ? (
-              <div>
-                <CircularProgress color="secondary" className="progress" />
-                <div>Uploading...</div>
+            <div
+              style={{
+                width: "280px",
+              }}
+            >
+              <CircularProgress color="secondary" className="progress" />
+              <LinearProgress
+                variant="determinate"
+                value={uploadProgress}
+                style={{
+                  margin: "1rem 0",
+                  width: "100%",
+                }}
+              />
+              <div
+                style={{
+                  textAlign: "center",
+                  marginBottom: "1rem",
+                }}
+              >
+                {uploadProgress < 50 && <p>Uploading file...</p>}
+                {uploadProgress >= 50 && uploadProgress < 60 && (
+                  <p>Half way there... Hang on!</p>
+                )}
+                {uploadProgress >= 60 && uploadProgress < 80 && (
+                  <p>Almost there...</p>
+                )}
+                {uploadProgress >= 80 && (
+                  <p>Processing... Job about to be queued</p>
+                )}
               </div>
+            </div>
           ) : (
             <Button
               className={classes.form_button}

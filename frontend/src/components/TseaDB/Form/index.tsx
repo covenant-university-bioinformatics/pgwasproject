@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import { FormikValues, useFormik } from "formik";
+import { LinearProgress } from "@material-ui/core";
 import * as Yup from "yup";
 import classes from "../../utility/form_styles.module.scss";
 import { Button, CircularProgress, Grid, Hidden } from "@material-ui/core";
@@ -40,6 +41,7 @@ const TseaDBForm: React.FC<Props & RouteComponentProps> = (props) => {
   const [formValues, setFormValues] = useState<UserFormData>();
   const fileInput = useRef<any>(null);
   const [loading, setLoading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const initialValues = {
     filename: "",
@@ -50,7 +52,7 @@ const TseaDBForm: React.FC<Props & RouteComponentProps> = (props) => {
     analysisType: "",
     reference_panel: "",
     ratio: "",
-    p_adjust_method: ""
+    p_adjust_method: "",
   };
 
   const testValues = {
@@ -62,7 +64,7 @@ const TseaDBForm: React.FC<Props & RouteComponentProps> = (props) => {
     analysisType: "single_sample",
     reference_panel: "GTEx_t_score",
     ratio: "0.05",
-    p_adjust_method: "bonferroni"
+    p_adjust_method: "bonferroni",
   };
 
   const formik = useFormik<UserFormData>({
@@ -94,7 +96,8 @@ const TseaDBForm: React.FC<Props & RouteComponentProps> = (props) => {
           "tseadb",
           "tseadb",
           user.username,
-          props
+          props,
+          setUploadProgress
         );
       } else {
         submitToServer(
@@ -104,7 +107,8 @@ const TseaDBForm: React.FC<Props & RouteComponentProps> = (props) => {
           "tseadb/noauth",
           "tseadb",
           undefined,
-          props
+          props,
+          setUploadProgress
         );
       }
     },
@@ -114,7 +118,7 @@ const TseaDBForm: React.FC<Props & RouteComponentProps> = (props) => {
     formik.resetForm();
     setUseTest(true);
     setFormValues(testValues);
-    setUploadFile(null)
+    setUploadFile(null);
     fileInput.current.querySelector("input").disabled = true;
   };
 
@@ -156,9 +160,7 @@ const TseaDBForm: React.FC<Props & RouteComponentProps> = (props) => {
     { variable: "none", name: "NONE" },
   ];
 
-  const AnalysisType = [
-    { variable: "single_sample", name: "SINGLE_SAMPLE" },
-  ];
+  const AnalysisType = [{ variable: "single_sample", name: "SINGLE_SAMPLE" }];
 
   const ReferencePanel = [
     { variable: "GTEx_t_score", name: "GTEx_t_score" },
@@ -232,9 +234,8 @@ const TseaDBForm: React.FC<Props & RouteComponentProps> = (props) => {
           {generalFileForm(classes, formik, [
             {
               title: "genes",
-              text:
-                "the column number of the gene name in the summary statistic file. Check test file",
-            }
+              text: "the column number of the gene name in the summary statistic file. Check test file",
+            },
           ])}
 
           <div className={classes.header_div}>
@@ -262,13 +263,13 @@ const TseaDBForm: React.FC<Props & RouteComponentProps> = (props) => {
           />
 
           <CommonTextElement
-              classes={classes}
-              formik={formik}
-              label={"Pvalue Threshold"}
-              textVariable={"ratio"}
-              tooltip={
-                "The threshold to define tissue-specific genes (with top t-score or z-score), the default value is 0.05."
-              }
+            classes={classes}
+            formik={formik}
+            label={"Pvalue Threshold"}
+            textVariable={"ratio"}
+            tooltip={
+              "The threshold to define tissue-specific genes (with top t-score or z-score), the default value is 0.05."
+            }
           />
 
           <SelectFieldsElement
@@ -282,10 +283,38 @@ const TseaDBForm: React.FC<Props & RouteComponentProps> = (props) => {
         </Grid>
         <div className={classes.button_container}>
           {loading ? (
-              <div>
-                <CircularProgress color="secondary" className="progress" />
-                <div>Uploading...</div>
+            <div
+              style={{
+                width: "280px",
+              }}
+            >
+              <CircularProgress color="secondary" className="progress" />
+              <LinearProgress
+                variant="determinate"
+                value={uploadProgress}
+                style={{
+                  margin: "1rem 0",
+                  width: "100%",
+                }}
+              />
+              <div
+                style={{
+                  textAlign: "center",
+                  marginBottom: "1rem",
+                }}
+              >
+                {uploadProgress < 50 && <p>Uploading file...</p>}
+                {uploadProgress >= 50 && uploadProgress < 60 && (
+                  <p>Half way there... Hang on!</p>
+                )}
+                {uploadProgress >= 60 && uploadProgress < 80 && (
+                  <p>Almost there...</p>
+                )}
+                {uploadProgress >= 80 && (
+                  <p>Processing... Job about to be queued</p>
+                )}
               </div>
+            </div>
           ) : (
             <Button
               className={classes.form_button}

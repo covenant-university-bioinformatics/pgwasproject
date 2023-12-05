@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import { FormikValues, useFormik } from "formik";
+import { LinearProgress } from "@material-ui/core";
 import * as Yup from "yup";
 import classes from "../../utility/form_styles.module.scss";
 // import mainClasses from "./index.module.scss";
@@ -70,6 +71,7 @@ const ImputationForm: React.FC<Props> = (props) => {
   const fileInput = useRef<any>(null);
   const [loading, setLoading] = useState(false);
   const [afAvailable, setAfAvailable] = useState<boolean>(true);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const initialValues = {
     filename: "",
@@ -259,7 +261,8 @@ const ImputationForm: React.FC<Props> = (props) => {
           "imputation",
           "imputation",
           user.username,
-          props
+          props,
+          setUploadProgress
         );
       } else {
         results.email = values.email;
@@ -270,7 +273,8 @@ const ImputationForm: React.FC<Props> = (props) => {
           "imputation/noauth",
           "imputation",
           undefined,
-          props
+          props,
+          setUploadProgress
         );
       }
 
@@ -462,33 +466,27 @@ const ImputationForm: React.FC<Props> = (props) => {
           {generalFileForm(classes, formik, [
             {
               title: "marker_name",
-              text:
-                "the column number of the marker name in the summary statistic file. It can be marker_name, rsid, snpid etc",
+              text: "the column number of the marker name in the summary statistic file. It can be marker_name, rsid, snpid etc",
             },
             {
               title: "chr",
-              text:
-                "the column number of the chromosome in the summary statistic file. It can be also be chr",
+              text: "the column number of the chromosome in the summary statistic file. It can be also be chr",
             },
             {
               title: "pos",
-              text:
-                "the column number of the  base pair positions in the summary statistic file. It can be bp",
+              text: "the column number of the  base pair positions in the summary statistic file. It can be bp",
             },
             {
               title: "ref",
-              text:
-                "the column number of the reference or effect allele in the summary statistic file",
+              text: "the column number of the reference or effect allele in the summary statistic file",
             },
             {
               title: "alt",
-              text:
-                "the column number of the alternate allele in the summary statistic file",
+              text: "the column number of the alternate allele in the summary statistic file",
             },
             {
               title: "zscore",
-              text:
-                "the column number of the zscore in the summary statistic file. It can be zscore, z, etc.",
+              text: "the column number of the zscore in the summary statistic file. It can be zscore, z, etc.",
             },
           ])}
           {afAvailable && (
@@ -543,10 +541,38 @@ const ImputationForm: React.FC<Props> = (props) => {
         </Grid>
         <div className={classes.button_container}>
           {loading ? (
-              <div>
-                <CircularProgress color="secondary" className="progress" />
-                <div>Uploading...</div>
+            <div
+              style={{
+                width: "280px",
+              }}
+            >
+              <CircularProgress color="secondary" className="progress" />
+              <LinearProgress
+                variant="determinate"
+                value={uploadProgress}
+                style={{
+                  margin: "1rem 0",
+                  width: "100%",
+                }}
+              />
+              <div
+                style={{
+                  textAlign: "center",
+                  marginBottom: "1rem",
+                }}
+              >
+                {uploadProgress < 50 && <p>Uploading file...</p>}
+                {uploadProgress >= 50 && uploadProgress < 60 && (
+                  <p>Half way there... Hang on!</p>
+                )}
+                {uploadProgress >= 60 && uploadProgress < 80 && (
+                  <p>Almost there...</p>
+                )}
+                {uploadProgress >= 80 && (
+                  <p>Processing... Job about to be queued</p>
+                )}
               </div>
+            </div>
           ) : (
             <Button
               className={classes.form_button}
