@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import { FormikValues, useFormik } from "formik";
+import { LinearProgress } from "@material-ui/core";
 import * as Yup from "yup";
 import classes from "../../utility/form_styles.module.scss";
 import { Button, CircularProgress, Grid, Hidden } from "@material-ui/core";
@@ -61,6 +62,7 @@ const FocusForm: React.FC<Props & RouteComponentProps> = (props) => {
   const [formValues, setFormValues] = useState<UserFormData>();
   const fileInput = useRef<any>(null);
   const [loading, setLoading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const initialValues = {
     filename: "",
@@ -205,7 +207,8 @@ const FocusForm: React.FC<Props & RouteComponentProps> = (props) => {
           "focus",
           "focus_fmap",
           user.username,
-          props
+          props,
+          setUploadProgress
         );
       } else {
         submitToServer(
@@ -215,7 +218,8 @@ const FocusForm: React.FC<Props & RouteComponentProps> = (props) => {
           "focus/noauth",
           "focus_fmap",
           undefined,
-          props
+          props,
+          setUploadProgress
         );
       }
     },
@@ -460,53 +464,43 @@ const FocusForm: React.FC<Props & RouteComponentProps> = (props) => {
           {generalFileForm(classes, formik, [
             {
               title: "marker_name",
-              text:
-                "the column number of the marker name in the summary statistic file. It can be marker_name, rsid, snpid etc",
+              text: "the column number of the marker name in the summary statistic file. It can be marker_name, rsid, snpid etc",
             },
             {
               title: "chr",
-              text:
-                "the column number of the chromosome in the summary statistic file. It can be also be chr",
+              text: "the column number of the chromosome in the summary statistic file. It can be also be chr",
             },
             {
               title: "position",
-              text:
-                "the column number of the base pair positions in the summary statistic file. It can be bp",
+              text: "the column number of the base pair positions in the summary statistic file. It can be bp",
             },
             {
               title: "effect_allele",
-              text:
-                "the column number of the reference or effect allele in the summary statistic file",
+              text: "the column number of the reference or effect allele in the summary statistic file",
             },
             {
               title: "alternate_allele",
-              text:
-                "the column number of the alternate allele in the summary statistic file",
+              text: "the column number of the alternate allele in the summary statistic file",
             },
             {
               title: "freq",
-              text:
-                "the column number of the minor allele frequency in the summary statistic file. It can be also be maf, freq etc.",
+              text: "the column number of the minor allele frequency in the summary statistic file. It can be also be maf, freq etc.",
             },
             {
               title: "beta",
-              text:
-                "the column number of the beta in the summary statistic file. It can be beta, slope etc.",
+              text: "the column number of the beta in the summary statistic file. It can be beta, slope etc.",
             },
             {
               title: "se",
-              text:
-                "the column number of the standard error in the summary statistic file. It can be se, standard_error etc.",
+              text: "the column number of the standard error in the summary statistic file. It can be se, standard_error etc.",
             },
             {
               title: "p_value",
-              text:
-                "the column number of the pvalue in the summary statistic file. It can be p, pvalue, pval_nominal etc.",
+              text: "the column number of the pvalue in the summary statistic file. It can be p, pvalue, pval_nominal etc.",
             },
             {
               title: "sample_size",
-              text:
-                "the column number of the sample size in the summary statistic file. It can be also be n.",
+              text: "the column number of the sample size in the summary statistic file. It can be also be n.",
             },
           ])}
 
@@ -673,10 +667,34 @@ const FocusForm: React.FC<Props & RouteComponentProps> = (props) => {
         </Grid>
         <div className={classes.button_container}>
           {loading ? (
-              <div>
-                <CircularProgress color="secondary" className="progress" />
-                <div>Uploading...</div>
+            <div>
+              <CircularProgress color="secondary" className="progress" />
+              <LinearProgress
+                variant="determinate"
+                value={uploadProgress}
+                style={{
+                  margin: "1rem 0",
+                  width: "100%",
+                }}
+              />
+              <div
+                style={{
+                  textAlign: "center",
+                  marginBottom: "1rem",
+                }}
+              >
+                {uploadProgress < 50 && <p>Uploading file...</p>}
+                {uploadProgress >= 50 && uploadProgress < 60 && (
+                  <p>Half way there... Hang on!</p>
+                )}
+                {uploadProgress >= 60 && uploadProgress < 80 && (
+                  <p>Almost there...</p>
+                )}
+                {uploadProgress >= 80 && (
+                  <p>Processing... Analysis about to be queued</p>
+                )}
               </div>
+            </div>
           ) : (
             <Button
               className={classes.form_button}

@@ -313,7 +313,14 @@ export const CommonFileElement: React.FC<CommonFileElementProps> = ({
             onBlur={handleFileBlur}
             {...textErrorHelper(formik, "filename")}
           />
-          <span>Max 300mb. If you have a file bigger than the limit, please "zip" it. Let there be only one file in the "zip" archive.</span>
+          <span>
+            Max 300mb. If you have a file bigger than the limit, please "zip"
+            it. Let there be only one file in the "zip" archive.
+          </span>
+          <span>
+            Note: It <strong>must</strong> be a <strong>.zip</strong> file not
+            .gz, .gzip, .tar, .bz, .7z etc.{" "}
+          </span>
         </FormControl>
         {/*{!formik.errors.filename && formik.touched.filename && (*/}
         {/*  <Button*/}
